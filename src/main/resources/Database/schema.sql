@@ -333,3 +333,4 @@ create table TaskSubmissionResource(
         REFERENCES TaskSubmission(student_id, task_id)
 );
 
+ALTER TABLE LectureResouruce RENAME TO lectureresource;
