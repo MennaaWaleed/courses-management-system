@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="TaskResource")
+@Table(name="taskresource")
 public class TaskResource {
 
     @Id
@@ -24,7 +24,7 @@ public class TaskResource {
     @Column(name="name", nullable=false, length=200)
     private String name;
 
-    @Column(name="fileUrl", nullable=false, length=1000)
+    @Column(name="fileurl", nullable=false, length=1000)
     private String fileUrl;
 
     private Long size;
@@ -33,6 +33,6 @@ public class TaskResource {
     private String type;
 
     @CreationTimestamp
-    @Column(name="createdAt", nullable=false, updatable=false)
+    @Column(name="createdat", nullable=false, updatable=false)
     private ZonedDateTime createdAt;
 }

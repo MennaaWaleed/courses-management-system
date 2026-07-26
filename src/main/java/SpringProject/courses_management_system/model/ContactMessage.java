@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="ContactMessage")
+@Table(name="contactmessage")
 public class ContactMessage {
 
     @Id
@@ -33,6 +33,6 @@ public class ContactMessage {
     private boolean read = false;
 
     @CreationTimestamp
-    @Column(name="createdAt", nullable=false, updatable=false)
+    @Column(name="createdat", nullable=false, updatable=false)
     private ZonedDateTime createdAt;
 }

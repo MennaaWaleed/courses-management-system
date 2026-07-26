@@ -24,7 +24,7 @@ public class LectureResource {
     @Column(name="name", nullable=false, length=200)
     private String name;
 
-    @Column(name="fileUrl", nullable=false, length=1000)
+    @Column(name="fileurl", nullable=false, length=1000)
     private String fileUrl;
 
     @Column(name="size", nullable=false)
@@ -34,6 +34,6 @@ public class LectureResource {
     private String type;
 
     @CreationTimestamp
-    @Column(name="createdAt", nullable=false, updatable=false)
+    @Column(name="createdat", nullable=false, updatable=false)
     private ZonedDateTime createdAt;
 }

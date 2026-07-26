@@ -24,10 +24,10 @@ public class Certificate {
     @JoinColumn(name="batch_id", nullable=false)
     private CourseBatch courseBatch;
 
-    @Column(name="certificateUrl", nullable=false, length=1000)
+    @Column(name="certificateurl", nullable=false, length=1000)
     private String certificateUrl;
 
     @CreationTimestamp
-    @Column(name="issuedAt", nullable=false, updatable=false)
+    @Column(name="issuedat", nullable=false, updatable=false)
     private ZonedDateTime issuedAt;
 }

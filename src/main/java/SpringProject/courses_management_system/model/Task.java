@@ -23,7 +23,7 @@ public class Task {
     @Column(name="Title", nullable=false, length=500)
     private String title;
 
-    @Column(name="dueDate", nullable=false)
+    @Column(name="duedate", nullable=false)
     private ZonedDateTime dueDate;
 
     @Column(name="published", nullable=false)

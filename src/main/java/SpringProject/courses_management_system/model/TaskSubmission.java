@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 
 @Data
 @Entity
-@Table(name="TaskSubmission")
+@Table(name="tasksubmission")
 public class TaskSubmission {
 
     @EmbeddedId
@@ -35,6 +35,6 @@ public class TaskSubmission {
     private BigDecimal grade;
 
     @CreationTimestamp
-    @Column(name="submittedAt", nullable=false, updatable=false)
+    @Column(name="submittedat", nullable=false, updatable=false)
     private ZonedDateTime submittedAt;
 }

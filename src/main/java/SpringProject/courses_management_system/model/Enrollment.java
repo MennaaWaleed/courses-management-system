@@ -32,19 +32,19 @@ public class Enrollment {
     @Column(name="status", nullable=false, length=50)
     private String status;
 
-    @Column(name="amountPaid", nullable=false, precision=12, scale=5)
+    @Column(name="amountpaid", nullable=false, precision=12, scale=5)
     private BigDecimal amountPaid = BigDecimal.ZERO;
 
-    @Column(name="paymentStatus", nullable=false, length=50)
+    @Column(name="paymentstatus", nullable=false, length=50)
     private String paymentStatus;
 
-    @Column(name="deliveryMode", nullable=false, length=50)
+    @Column(name="deliverymode", nullable=false, length=50)
     private String deliveryMode;
 
-    @Column(name="meetingLink", length=1000)
+    @Column(name="meetinglink", length=1000)
     private String meetingLink;
 
     @CreationTimestamp
-    @Column(name="enrolledAt", nullable=false, updatable=false)
+    @Column(name="enrolledat", nullable=false, updatable=false)
     private ZonedDateTime enrolledAt;
 }
