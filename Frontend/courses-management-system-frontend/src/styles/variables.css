@@ -1,0 +1,19 @@
+
+
+:root {
+    --primary-color: #0E9F8A;
+    --primary-dark: #0A6D60;
+    --text-color: #222222;
+    --text-light: #6B7280;
+    --background-color: #FFFFFF;
+    --border-color: #E5E7EB;
+
+
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+
+
+}
