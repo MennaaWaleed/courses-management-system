@@ -1,0 +1,131 @@
+.navbar {
+   
+  
+box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-color: white;
+    z-index: 1000;
+    border-bottom: 3px solid  var(--primary-color);
+}
+.navbar__container{
+     display: flex;
+       justify-content: space-between;
+    align-items: center;
+ max-width: 1320px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.navbar__logo{
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.navbar__logo img{
+height: 55px;
+width: auto;
+}
+/* .navbar__title{
+   margin: 0;
+    line-height: 1;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-color);
+    white-space: nowrap;
+} */
+/* ul */
+.navbar__links{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+
+    display: flex;
+    gap:45px ;
+
+}
+.navbar__links a{
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 540;
+    
+    color: var(--text-color);
+   transition: all 0.3s ease;
+   position: relative;
+}
+.navbar__links a:hover {
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+    
+}
+.navbar__links a::after{
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    bottom:-6px;
+
+    width:0;
+
+    height:2px;
+
+    background:var(--primary-color);
+
+    transform:translateX(-50%);
+
+    transition:width .3s ease;
+}
+.navbar__links a:hover::after{
+    width:100%;
+}
+
+.navbar__actions{
+    display: flex;
+    gap : 10px;
+}
+.navbar__login{
+ background-color: white;
+ border: 1px solid var(--primary-color);
+ color: var(--primary-color);
+padding: 10px 22px;
+ border-radius: var(--radius-md);
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-weight: 600;
+}
+.navbar__login:hover{
+    transform: translateY(-2px);
+    background-color: var(--primary-color);
+    color: white;
+         box-shadow: 0 8px 20px rgba(16,185,129,.25);
+
+}
+.navbar__register{
+    background-color: var(--primary-color);
+ border: 1px solid  var(--primary-color);
+ color: white;
+padding: 10px 22px;
+ border-radius: var(--radius-md);
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-weight: 600;
+
+}
+.navbar__register:hover{
+    transform: translateY(-2px);
+    background-color: var(--primary-dark);
+    color: white;
+     box-shadow: 0 8px 20px rgba(16,185,129,.25);
+}
+.navbar__links a:focus-visible,
+.navbar__login:focus-visible,
+.navbar__register:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
