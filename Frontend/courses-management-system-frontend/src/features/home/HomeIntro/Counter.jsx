@@ -1,31 +1,38 @@
 import { useEffect, useState } from "react";
 
-function Counter({ end, duration = 1500, suffix = "" }) {
+function Counter({
+    end,
+    duration = 1500,
+    suffix = "",
+    start = false,
+}) {
 
     const [count, setCount] = useState(0);
 
     useEffect(() => {
 
-        let start = 0;
+        if (!start) return;
+
+        let current = 0;
 
         const increment = end / (duration / 16);
 
         const timer = setInterval(() => {
 
-            start += increment;
+            current += increment;
 
-            if (start >= end) {
-                start = end;
+            if (current >= end) {
+                current = end;
                 clearInterval(timer);
             }
 
-            setCount(Math.floor(start));
+            setCount(Math.floor(current));
 
         }, 16);
 
         return () => clearInterval(timer);
 
-    }, [end, duration]);
+    }, [start, end, duration]);
 
     return (
         <h3>

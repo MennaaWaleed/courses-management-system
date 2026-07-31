@@ -40,17 +40,17 @@ const yearsOfExperience = currentYear - 2010;
                     
             <div className="home-intro__stats reveal reveal-5">
                 <div className="stat">
-                    <Counter end={30} suffix="K+" />
+                    <Counter end={30} suffix="K+"  start={true}/>
                     <p>Students Trained</p>
                 </div>
 
                 <div className="stat">
-                    <Counter end={yearsOfExperience} suffix="+" />
+                    <Counter end={yearsOfExperience} suffix="+" start={true} />
                     <p>Years Experience</p>
                 </div>
 
                 <div className="stat">
-                     <Counter end={20} suffix="+" />
+                     <Counter end={20} suffix="+" start={true}/>
                     <p>Professional Courses</p>
                 </div>
             </div>
