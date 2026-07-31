@@ -150,7 +150,7 @@
 .statistics__card:hover{
 
     transform:translateY(-8px);
-
+    scale: 105%;
     box-shadow:
         0 24px 55px rgba(16,185,129,.15);
 
