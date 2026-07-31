@@ -10,6 +10,7 @@ box-shadow: 0 2px 12px rgba(0,0,0,.06);
     background-color: white;
     z-index: 1000;
     border-bottom: 3px solid  var(--primary-color);
+  
 }
 .navbar__container{
      display: flex;
@@ -47,8 +48,10 @@ width: auto;
 
     display: flex;
     gap:45px ;
+  
 
 }
+
 .navbar__links a{
     display: inline-block;
     text-decoration: none;
@@ -57,6 +60,7 @@ width: auto;
     color: var(--text-color);
    transition: all 0.3s ease;
    position: relative;
+   
 }
 .navbar__links a:hover {
     color: var(--primary-dark);
@@ -128,4 +132,277 @@ padding: 10px 22px;
 .navbar__register:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
+}
+
+
+
+.navbar__menu-btn{
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    background: transparent;
+    border: none;
+
+    color: var(--text-color);
+
+    cursor: pointer;
+
+    transition: .3s ease;
+}
+
+.navbar__menu-btn:hover{
+    color: var(--primary-color);
+}
+
+
+.navbar__drawer{
+
+    display: none;
+
+}
+
+.navbar__overlay{
+
+    display: none;
+
+}
+
+
+
+@media (max-width: 992px){
+
+    /* Desktop */
+
+    .navbar__links,
+    .navbar__actions{
+        display: none;
+    }
+
+    /* Menu Button */
+
+    .navbar__menu-btn{
+        display: flex;
+    }
+
+    /* Overlay */
+
+ 
+
+    /* Drawer */
+
+    .navbar__drawer{
+
+        position: fixed;
+
+        top: 0;
+        right: -100%;
+
+        width: min(280px,85%);
+        height: 100vh;
+
+        background: #fff;
+
+        display: flex;
+        flex-direction: column;
+
+        padding: 24px;
+
+        border-radius: 24px 0 0 24px;
+
+        box-shadow: -12px 0 40px rgba(0,0,0,.12);
+
+        transition: right .35s ease;
+
+        z-index: 1999;
+
+    }
+
+    .navbar__drawer.active{
+        right: 0;
+    }
+
+    /* Header */
+
+    .navbar__drawer-header{
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding-bottom: 24px;
+        margin-bottom: 32px;
+
+        border-bottom: 1px solid #eef2f7;
+
+    }
+       .navbar__overlay{
+            display: flex;
+        position: fixed;
+       top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+        background: rgba(15,23,42,.35);
+
+        backdrop-filter: blur(5px);
+
+        animation: fadeOverlay .35s ease;
+
+        z-index: 1998;
+
+    }
+
+    .navbar__drawer-header img{
+
+        height: 38px;
+
+    }
+
+    .navbar__drawer-close{
+
+        width: 42px;
+        height: 42px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: none;
+        background: transparent;
+
+        border-radius: 50%;
+
+        cursor: pointer;
+
+        transition: .3s ease;
+
+    }
+
+    .navbar__drawer-close:hover{
+
+        background: #f3f4f6;
+
+        color: var(--primary-color);
+
+        transform: rotate(90deg);
+
+    }
+
+    /* Links */
+
+    .navbar__drawer-links{
+
+        list-style: none;
+
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 32px;
+
+    }
+
+    .navbar__drawer-links li{
+
+        opacity: 0;
+
+        transform: translateX(20px);
+
+        animation: drawerItem .4s forwards;
+
+    }
+
+    .navbar__drawer-links li:nth-child(1){animation-delay:.1s;}
+    .navbar__drawer-links li:nth-child(2){animation-delay:.18s;}
+    .navbar__drawer-links li:nth-child(3){animation-delay:.26s;}
+    .navbar__drawer-links li:nth-child(4){animation-delay:.34s;}
+
+    .navbar__drawer-links a{
+
+        text-decoration: none;
+
+        color: var(--text-color);
+
+        font-size: 19px;
+
+        font-weight: 600;
+
+        transition: .3s ease;
+
+    }
+
+    .navbar__drawer-links a:hover{
+
+        color: var(--primary-color);
+
+    }
+
+    /* Buttons */
+
+    .navbar__drawer-actions{
+
+        margin-top: auto;
+
+        padding-top: 32px;
+
+        border-top: 1px solid #eef2f7;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 16px;
+
+    }
+
+    .navbar__drawer-actions button{
+
+        width: 100%;
+
+        padding: 14px 0;
+
+    }
+
+}
+@keyframes fadeOverlay{
+
+    from{
+        opacity:0;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+@keyframes drawerItem{
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0);
+
+    }
+
+}
+
+.navbar__links a.active{
+
+    color: var(--primary-color);
+
+}
+
+.navbar__links a.active::after{
+
+    width: 100%;
+
 }

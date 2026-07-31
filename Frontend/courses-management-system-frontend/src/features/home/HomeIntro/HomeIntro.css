@@ -231,21 +231,21 @@ transform:scale(1.02);
     top: 30px;
     left: -40px;
 
-    animation-delay: 0s;
+    animation-delay: 0.8s;
 }
 
 .floating-card--courses{
     bottom: 45px;
     right: -35px;
 
-    animation-delay: .8s;
+    animation-delay: 0s;
 }
 
 .floating-card--autodesk{
     bottom: -25px;
-    left: 50%;
+    left: 20%;
 
-    transform: translateX(-50%);
+    /* transform: translateX(-50%); */
 
     font-weight: 600;
 
@@ -268,11 +268,7 @@ transform:translateY(0);
 
 }
 
-.floating-card{
 
-animation:float 4s ease-in-out infinite;
-
-}
 
 
 @keyframes blobFloat{
@@ -355,5 +351,190 @@ animation:float 4s ease-in-out infinite;
 .reveal-6{
 
     animation-delay:1s;
+
+}
+
+
+
+@media (max-width:992px){
+
+.home-intro{
+
+    padding:80px 0;
+
+}
+
+.home-intro__container{
+
+    grid-template-columns:1fr;
+
+    gap:70px;
+
+    text-align:center;
+
+}
+
+.home-intro__content{
+
+    order:1;
+
+}
+
+.home-intro__image{
+
+    order:2;
+
+}
+
+.home-intro__description{
+
+    margin-inline:auto;
+
+}
+
+.home-intro__actions{
+
+    justify-content:center;
+
+}
+
+.home-intro__stats{
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+}
+
+.home-intro__badge{
+
+    margin-inline:auto;
+
+}
+
+}
+
+
+
+
+@media (max-width:768px){
+
+
+.floating-card{
+
+    display:none;
+
+}
+
+.home-intro__blob{
+
+    width:300px;
+    height:300px;
+
+}
+
+.home-intro{
+
+    min-height:auto;
+
+    padding:60px 0;
+
+}
+
+.home-intro__container{
+
+    padding:0 20px;
+
+}
+
+.home-intro__title{
+
+    font-size:34px;
+
+}
+
+.home-intro__description{
+
+    font-size:16px;
+
+}
+
+.home-intro__actions{
+
+    flex-direction:column;
+
+    align-items:center;
+
+    width:100%;
+
+}
+
+.home-intro__actions button{
+
+    width:100%;
+
+    max-width:320px;
+
+}
+
+.home-intro__stats{
+
+    gap:20px;
+
+}
+
+.stat{
+
+    width:150px;
+
+    padding:18px;
+
+}
+
+.stat h3{
+
+    font-size:34px;
+
+}
+
+}
+
+
+
+@media (max-width:480px){
+
+.home-intro__title{
+
+    font-size:28px;
+
+    line-height:1.2;
+
+}
+
+.home-intro__description{
+
+    font-size:15px;
+
+}
+
+.home-intro__stats{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+}
+
+.stat{
+
+    width:100%;
+
+}
+
+.home-intro__hero-image{
+
+    border-radius:20px;
+
+}
 
 }
