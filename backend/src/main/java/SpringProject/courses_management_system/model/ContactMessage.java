@@ -29,10 +29,13 @@ public class ContactMessage {
     @Column(name="message", nullable=false, columnDefinition="TEXT")
     private String message;
 
-    @Column(name="read", nullable=false)
-    private boolean read = false;
-
     @CreationTimestamp
     @Column(name="createdat", nullable=false, updatable=false)
     private ZonedDateTime createdAt;
+
+    @Column(name="email",nullable=false, length=255)
+    private String email;
+
+    @Column(name="phone",nullable=false, length=20)
+    private String phone;
 }
