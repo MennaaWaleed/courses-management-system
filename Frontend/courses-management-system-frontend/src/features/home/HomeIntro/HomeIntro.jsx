@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./HomeIntro.css"
 import introImage from "../../../assets/images/intro_img.png";
 import { GraduationCap, CalendarClock, Award } from "lucide-react";
@@ -5,6 +6,7 @@ import Counter from "./Counter";
 function HomeIntro(){
 const currentYear = new Date().getFullYear();
 const yearsOfExperience = currentYear - 2010;
+const navigate = useNavigate();
 
     return (
 
@@ -32,7 +34,10 @@ const yearsOfExperience = currentYear - 2010;
                             Explore Courses
                         </button>
 
-                        <button className="btn btn--secondary">
+                        <button
+                            className="btn btn--secondary"
+                            onClick={() => navigate("/contact")}
+                        >
                             Contact Us
                         </button>
 

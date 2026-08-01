@@ -1,0 +1,132 @@
+
+.contact-page {
+    min-height: 100vh;
+    background: #f5f7fb;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 120px 20px 60px;
+}
+
+.contact-card {
+    width: 100%;
+    max-width: 1000px;
+
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+    border-top: 6px solid var(--primary-color);
+}
+
+
+.contact-header {
+    background: linear-gradient(
+            135deg,
+            var(--primary-color),
+            var(--primary-dark)
+    );
+
+    color: white;
+
+    padding: 50px 40px;
+}
+
+.contact-header h1 {
+    margin-bottom: 16px;
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+}
+
+.contact-header p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+.contact-form {
+    padding: 40px;
+}
+
+.form-row {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 14px 16px;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--radius-md);
+
+    font-size: 16px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    transition: .3s;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    border-color: var(--primary-color);
+
+    box-shadow: 0 0 0 3px rgba(14,159,138,.15);
+
+}
+
+.send-btn {
+
+    background: var(--primary-color);
+
+    color: white;
+
+    border: none;
+
+    padding: 15px 30px;
+
+    border-radius: var(--radius-md);
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.send-btn:hover {
+
+    background: var(--primary-dark);
+
+    transform: translateY(-2px);
+
+}
