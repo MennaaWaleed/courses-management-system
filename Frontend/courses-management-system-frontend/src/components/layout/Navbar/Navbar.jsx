@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import logo from "../../../assets/images/logo.png";
-
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -12,7 +12,7 @@ function Navbar() {
         { title: "Home", href: "/" },
         { title: "Categories", href: "/" },
         { title: "About", href: "/" },
-        { title: "Contact", href: "/" }
+        { title: "Contact", href: "/contact" }
     ];
  
     // Lock body scroll when the mobile drawer is open
@@ -83,14 +83,30 @@ function Navbar() {
         </a>
 
 
+                {/*<ul className="navbar__links">*/}
+
+                {/*    {links.map((link) => (*/}
+
+                {/*        <li key={link.title}>*/}
+                {/*            <Link to={link.href}>*/}
+                {/*                {link.title}*/}
+                {/*            </Link>*/}
+                {/*        </li>*/}
+
+                {/*    ))}*/}
+
+                {/*</ul>*/}
                 <ul className="navbar__links">
 
                     {links.map((link) => (
 
                         <li key={link.title}>
-                            <a href={link.href}>
+                            <Link
+                                to={link.href}
+                                onClick={() => console.log("Clicked:", link.title)}
+                            >
                                 {link.title}
-                            </a>
+                            </Link>
                         </li>
 
                     ))}

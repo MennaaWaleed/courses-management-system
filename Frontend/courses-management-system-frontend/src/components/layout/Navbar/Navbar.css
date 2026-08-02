@@ -31,15 +31,7 @@ gap: 8px;
 height: 55px;
 width: auto;
 }
-/* .navbar__title{
-   margin: 0;
-    line-height: 1;
-    font-size: 17px;
-    font-weight: 500;
-    color: var(--text-color);
-    white-space: nowrap;
-} */
-/* ul */
+
 .navbar__links{
     list-style: none;
     margin: 0;
