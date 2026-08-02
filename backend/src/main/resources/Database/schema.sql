@@ -343,3 +343,16 @@ ADD COLUMN email VARCHAR(255) NOT NULL;
 
 ALTER TABLE ContactMessage
 ADD COLUMN phone VARCHAR(20);
+
+ALTER TABLE ContactMessage
+DROP CONSTRAINT contactmessage_type_check;
+
+ALTER TABLE ContactMessage
+ADD CONSTRAINT contactmessage_type_check
+CHECK (type IN (
+    'GENERAL',
+    'QUESTION',
+    'COMPLAINT',
+    'SUGGESTION',
+    'TECHNICAL'
+));
