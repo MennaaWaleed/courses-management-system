@@ -1,6 +1,82 @@
 import "../styles/ContactUs.css";
+import { useState } from "react";
+
 
 function ContactUs() {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        title: "",
+        type: "",
+        message: ""
+    });
+
+    const [responseMessage, setResponseMessage] = useState("");
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [errors, setErrors] = useState({});
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+
+        setErrors({
+            ...errors,
+            [name]: ""
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        setErrors({});
+        setResponseMessage("");
+        e.preventDefault();
+        setResponseMessage("");
+
+        try {
+            const response = await fetch("http://localhost:8080/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setResponseMessage(data.message);
+                setIsSuccess(true);
+
+                setFormData({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    title: "",
+                    type: "",
+                    message: ""
+                });
+
+                setErrors({});
+            }
+            // else {
+            //     setErrors(data);
+            //     setIsSuccess(false);
+            // }
+            else {
+                setErrors(data);
+                setResponseMessage("");
+            }
+
+        } catch (error) {
+            console.error(error);
+            setResponseMessage("Something went wrong.");
+            setIsSuccess(false);
+        }
+    };
+
     return (
         <div className="contact-page">
 
@@ -17,11 +93,12 @@ function ContactUs() {
                     </p>
                 </div>
 
-                {/* Form */}
 
-                <form className="contact-form">
+                <form
+                    className="contact-form"
+                    onSubmit={handleSubmit}
+                >
 
-                    {/* Row 1 */}
 
                     <div className="form-row">
 
@@ -30,8 +107,15 @@ function ContactUs() {
 
                             <input
                                 type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
                                 placeholder="Enter your full name"
                             />
+
+                            {errors.name && (
+                                <p className="field-error">{errors.name}</p>
+                            )}
                         </div>
 
                         <div className="form-group">
@@ -39,13 +123,18 @@ function ContactUs() {
 
                             <input
                                 type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
                                 placeholder="Enter your email"
                             />
+                            {errors.email && (
+                                <p className="field-error">{errors.email}</p>
+                            )}
                         </div>
 
                     </div>
 
-                    {/* Row 2 */}
 
                     <div className="form-row">
 
@@ -54,8 +143,14 @@ function ContactUs() {
 
                             <input
                                 type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
                                 placeholder="Enter your phone number"
                             />
+                            {errors.phone && (
+                                <p className="field-error">{errors.phone}</p>
+                            )}
                         </div>
 
                         <div className="form-group">
@@ -63,19 +158,28 @@ function ContactUs() {
 
                             <input
                                 type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
                                 placeholder="Message title"
                             />
+                            {errors.title && (
+                                <p className="field-error">{errors.title}</p>
+                            )}
                         </div>
 
                     </div>
 
-                    {/* Type */}
 
                     <div className="form-group">
 
                         <label>Type</label>
 
-                        <select defaultValue="">
+                        <select
+                            name="type"
+                            value={formData.type}
+                            onChange={handleChange}
+                        >
                             <option value="" disabled>
                                 Select a type
                             </option>
@@ -100,6 +204,9 @@ function ContactUs() {
                                 Complaint
                             </option>
                         </select>
+                        {errors.type && (
+                            <p className="field-error">{errors.type}</p>
+                        )}
 
                     </div>
 
@@ -110,11 +217,25 @@ function ContactUs() {
                         <label>Message</label>
 
                         <textarea
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
                             rows="6"
                             placeholder="Write your message..."
                         ></textarea>
+                        {errors.message && (
+                            <p className="field-error">{errors.message}</p>
+                        )}
 
                     </div>
+
+                    {/* Response Message */}
+
+                    {responseMessage && (
+                        <div className={isSuccess ? "success-message" : "error-message"}>
+                            {responseMessage}
+                        </div>
+                    )}
 
                     {/* Button */}
 
