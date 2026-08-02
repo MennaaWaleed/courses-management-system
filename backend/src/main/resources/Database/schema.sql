@@ -334,3 +334,16 @@ create table TaskSubmissionResource(
 );
 
 ALTER TABLE LectureResouruce RENAME TO lectureresource;
+
+ALTER TABLE ContactMessage
+DROP COLUMN read;
+
+ALTER TABLE ContactMessage
+ADD COLUMN email VARCHAR(255) NOT NULL;
+
+ALTER TABLE ContactMessage
+ADD COLUMN phone VARCHAR(20);
+
+ALTER TABLE category
+ADD COLUMN short_description VARCHAR(500) NOT NULL;
+

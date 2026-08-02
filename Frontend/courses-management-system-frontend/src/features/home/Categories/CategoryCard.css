@@ -1,0 +1,174 @@
+.category-card{
+
+    position:relative;
+
+    height:430px;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    cursor:pointer;
+
+    box-shadow:0 15px 40px rgba(15,23,42,.08);
+
+    transition:.4s ease;
+
+}
+
+.category-card:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 35px 70px rgba(16,185,129,.20);
+
+}
+
+.category-card__image{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:transform .7s ease;
+
+}
+
+.category-card:hover .category-card__image{
+
+    transform:scale(1.08);
+
+}
+
+.category-card__overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    padding:34px;
+
+    background:
+    linear-gradient(
+        to top,
+        rgba(15,23,42,.95) 0%,
+        rgba(15,23,42,.65) 35%,
+        rgba(15,23,42,.15) 65%,
+        transparent 100%
+    );
+
+    transition:.45s ease;
+
+}
+
+.category-card:hover .category-card__overlay{
+
+    background:
+    linear-gradient(
+        to top,
+        rgba(16,185,129,.92) 0%,
+        rgba(15,23,42,.45) 45%,
+        rgba(15,23,42,.12) 75%,
+        transparent 100%
+    );
+
+}
+
+.category-card__content{
+
+    color:white;
+
+    transition:.35s ease;
+
+}
+
+.category-card:hover .category-card__content{
+
+    transform:translateY(-10px);
+
+}
+
+.category-card__content h3{
+
+    margin:0;
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.category-card__content p{
+
+    margin:14px 0 0;
+
+    line-height:1.7;
+
+    color:rgba(255,255,255,.92);
+
+}
+
+.category-card__link{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    margin-top:24px;
+
+    font-weight:700;
+
+    transition:.35s ease;
+
+}
+
+.category-card:hover .category-card__link{
+
+    transform:translateX(8px);
+
+}
+
+
+.category-card{
+
+    opacity:0;
+
+    transform:translateY(60px) scale(.94);
+
+}
+
+.categories.show .category-card{
+
+    animation:categoryCard .75s forwards;
+
+}
+
+@keyframes categoryCard{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(60px) scale(.94);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}

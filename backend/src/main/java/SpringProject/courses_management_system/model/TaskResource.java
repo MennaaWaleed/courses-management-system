@@ -24,7 +24,7 @@ public class TaskResource {
     @Column(name="name", nullable=false, length=200)
     private String name;
 
-    @Column(name="fileurl", nullable=false, length=1000)
+    @Column(name="file_url", nullable=false, length=1000)
     private String fileUrl;
 
     private Long size;
