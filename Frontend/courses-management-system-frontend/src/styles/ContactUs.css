@@ -87,6 +87,21 @@
 
     transition: .3s;
 }
+.form-group textarea{
+    resize: vertical;
+    min-height: 140px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width: 100%;
+    box-sizing: border-box;
+}
+.success-message,
+.error-message{
+    word-break: break-word;
+}
 
 .form-group textarea {
     resize: vertical;
@@ -158,4 +173,106 @@
     color: red;
     font-size: 14px;
     margin-top: 4px;
+}
+
+/* ===========================
+   Tablet
+=========================== */
+
+@media (max-width: 768px) {
+
+    .contact-page {
+        padding: 100px 15px 40px;
+    }
+
+    .contact-card {
+        max-width: 100%;
+    }
+
+    .contact-header {
+        padding: 35px 25px;
+    }
+
+    .contact-header h1 {
+        font-size: 36px;
+    }
+
+    .contact-header p {
+        font-size: 18px;
+    }
+
+    .contact-form {
+        padding: 30px 25px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+        margin-bottom: 0;
+    }
+
+    .send-btn {
+        width: 100%;
+    }
+}
+
+
+/* ===========================
+   Mobile
+=========================== */
+
+@media (max-width: 480px) {
+
+    .contact-page {
+        padding: 90px 10px 30px;
+    }
+
+    .contact-card {
+        border-radius: 12px;
+    }
+
+    .contact-header {
+        padding: 25px 20px;
+    }
+
+    .contact-header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .contact-header p {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .contact-form {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .send-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    .success-message,
+    .error-message {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .field-error {
+        font-size: 12px;
+    }
 }
