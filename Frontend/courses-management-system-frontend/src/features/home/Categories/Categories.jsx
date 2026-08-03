@@ -2,7 +2,8 @@ import "./Categories.css";
 import CategoryCard from "./CategoryCard";
 
 import { getCategories } from "../../../api/categoryApi";
-import { useEffect, useRef, useState } from "react";
+import { useState ,useRef,useEffect} from "react";
+import { useInView } from "react-intersection-observer";
 
 function Categories() {
     const [showCards, setShowCards] = useState(false);
@@ -10,25 +11,10 @@ function Categories() {
 
     const sectionRef = useRef(null);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setShowCards(true);
-                    observer.disconnect();
-                }
-            },
-            {
-                threshold: 0.2,
-            }
-        );
-
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
-
-        return () => observer.disconnect();
-    }, []);
+ const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+});
 
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -70,11 +56,11 @@ if (loading) {
     );
 }
 
+console.log(categories);
     return (
-        <section
-            ref={sectionRef}
-            className={`categories ${showCards ? "show" : ""}`}
-        >
+                <section  ref={ref}  className={`categories ${inView ? "show" : ""}`}   >
+
+
             <div className="categories__container">
 
                 <div className="categories__header">

@@ -68,13 +68,13 @@ public class CategoryService {
 
 
 
-        category = new Category();
-        category.setCategoryName("Structure");
-        category.setDescription("Develop structural engineering skills using Revit Structure and industry-standard analysis software. Learn reinforced concrete, steel structures, detailing, and BIM coordination through practical engineering projects.");
-        category.setShortDescription("Structural Analysis & BIM Modeling");
-
-        category.setImageUrl("/images/categories/structure.png");
-        categoryRepository.save(category);
+//        category = new Category();
+//        category.setCategoryName("Structure");
+//        category.setDescription("Develop structural engineering skills using Revit Structure and industry-standard analysis software. Learn reinforced concrete, steel structures, detailing, and BIM coordination through practical engineering projects.");
+//        category.setShortDescription("Structural Analysis & BIM Modeling");
+//
+//        category.setImageUrl("/images/categories/structure.png");
+//        categoryRepository.save(category);
 
         return categoryRepository.findAll();
 
