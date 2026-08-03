@@ -22,4 +22,8 @@ public class Category {
 
     @Column(name="image_url",nullable=false,length=500)
     private String imageUrl;
+
+    @Column(name = "short_description", nullable = false, length = 150)
+    private String shortDescription;
+
 }
