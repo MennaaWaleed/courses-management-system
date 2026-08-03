@@ -356,3 +356,7 @@ CHECK (type IN (
     'SUGGESTION',
     'TECHNICAL'
 ));
+
+
+ALTER TABLE category
+ADD COLUMN short_description VARCHAR(500) NOT NULL;
