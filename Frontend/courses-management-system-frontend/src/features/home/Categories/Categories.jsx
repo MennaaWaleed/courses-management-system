@@ -46,15 +46,6 @@ function Categories() {
 }, []);
 
 
-if (loading) {
-    return (
-        <section className="categories">
-            <div className="categories__container">
-                <h2>Loading...</h2>
-            </div>
-        </section>
-    );
-}
 
 console.log(categories);
     return (
@@ -78,17 +69,36 @@ console.log(categories);
                 </div>
 
                 <div className="categories__grid">
-                    {categories.map((category, index) => (
-                        <CategoryCard
-                            key={category.id}
-                            category={category}
-                            index={index}
-                            active={activeCard === index}
-                            activeIndex={activeCard}
-                            onHover={() => setActiveCard(index)}
-                            onLeave={() => setActiveCard(null)}
-                        />
-                    ))}
+
+                    {loading ? (
+
+                        [...Array(6)].map((_, index) => (
+
+                            <div
+                                key={index}
+                                className="category-skeleton"
+                            ></div>
+
+                        ))
+
+                    ) : (
+
+                        categories.map((category, index) => (
+
+                            <CategoryCard
+                                key={category.id}
+                                category={category}
+                                index={index}
+                                active={activeCard === index}
+                                activeIndex={activeCard}
+                                onHover={() => setActiveCard(index)}
+                                onLeave={() => setActiveCard(null)}
+                            />
+
+                        ))
+
+                    )}
+
                 </div>
 
             </div>

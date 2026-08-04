@@ -105,3 +105,59 @@
     }
 
 }
+
+
+
+/*  Skeleton Loading */
+
+.category-skeleton{
+
+    height:430px;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    background:#edf2f7;
+
+}
+
+.category-skeleton::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    transform:translateX(-100%);
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            transparent,
+
+            rgba(255,255,255,.65),
+
+            transparent
+
+        );
+
+    animation:skeletonLoading 1.2s infinite;
+
+}
+
+@keyframes skeletonLoading{
+
+    100%{
+
+        transform:translateX(100%);
+
+    }
+
+}
