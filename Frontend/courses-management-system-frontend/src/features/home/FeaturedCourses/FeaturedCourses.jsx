@@ -1,5 +1,16 @@
 import "./FeaturedCourses.css";
 import CourseCard from "./CourseCard";
+import revitIcon from "../../../assets/icons/autodesk-revit-icon.png";
+import civilIcon from "../../../assets/icons/autodesk-civil-3d-icon.png";
+import cadIcon from "../../../assets/icons/autocad-icon.png";
+import maxIcon from "../../../assets/icons/autodesk-3ds-max-icon.png";
+
+
+import revitImg from "../../../assets/Courses_img/Revit_Archi9.png";
+import civilImg from "../../../assets/Courses_img/CIVIL_3D.png";
+import cadImg from "../../../assets/Courses_img/AutoCAD_2D.png";
+import InteriorImg from "../../../assets/Courses_img/Interior_Design_Diploma.png";
+
 
 function FeaturedCourses() {
 
@@ -10,24 +21,36 @@ function FeaturedCourses() {
             category: "BIM",
             duration: "60 Hours",
             description: "Professional BIM Modeling & Documentation",
-            image: "https://picsum.photos/600/800?1",
+            image: revitImg,
+            icon: revitIcon,
         },
         {
             id: 2,
             title: "Civil 3D",
             category: "Infrastructure",
-            duration: "50 Hours",
+            duration: "30 Hours",
             description: "Road Design & Land Development",
-            image: "https://picsum.photos/600/800?2",
+            image: civilImg,
+            icon: civilIcon,
         },
-        {
-            id: 3,
-            title: "Primavera P6",
-            category: "Project Management",
-            duration: "36 Hours",
-            description: "Planning, Scheduling & Resource Management",
-            image: "https://picsum.photos/600/800?3",
-        },
+      {
+    id: 3,
+    title: "AutoCAD 2D",
+    category: "Drafting",
+    duration: "30 Hours",
+    description: "2D Technical Drawing & Drafting",
+    image: cadImg,
+    icon: cadIcon,
+},
+     {
+    id: 4,
+    title: "Interior Design Diploma",
+    category: "Interior Design",
+    duration: "120 Hours",
+    description: "3ds Max, Rendering & Finishing",
+    image: InteriorImg,
+    icon: maxIcon,
+},
     ];
 
     return (

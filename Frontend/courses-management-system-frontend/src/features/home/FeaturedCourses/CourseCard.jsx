@@ -40,9 +40,19 @@ function CourseCard({ course }) {
             {course.category}
         </span>
 
-        <h3>{course.title}</h3>
+        <div className="course-card__title">
 
-        <p>{course.description}</p>
+    <img
+        src={course.icon}
+        alt=""
+        className="course-card__icon"
+    />
+
+    <h3>{course.title}</h3>
+
+</div>
+
+        {/* <p>{course.description}</p> */}
 
         <div className="course-card__footer">
 
