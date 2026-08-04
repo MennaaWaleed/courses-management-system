@@ -4,6 +4,7 @@ import SpringProject.courses_management_system.dto.auth.LoginRequest;
 import SpringProject.courses_management_system.dto.auth.LoginResponse;
 import SpringProject.courses_management_system.dto.auth.RegisterRequest;
 import SpringProject.courses_management_system.dto.auth.RegisterResponse;
+import SpringProject.courses_management_system.model.Role;
 import SpringProject.courses_management_system.model.User;
 import SpringProject.courses_management_system.repository.UserRepository;
 import SpringProject.courses_management_system.security.CustomUserDetails;
@@ -64,7 +65,7 @@ public class AuthenticationService {
 
         user.setPhoneNumber(request.getPhone());
 
-        user.setRole("STUDENT");
+        user.setRole(Role.STUDENT);
 
         user.setEnabled(true);
 
