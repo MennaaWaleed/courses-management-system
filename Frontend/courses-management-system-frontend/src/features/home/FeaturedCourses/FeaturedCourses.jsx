@@ -1,57 +1,69 @@
 import "./FeaturedCourses.css";
 import CourseCard from "./CourseCard";
-import revitIcon from "../../../assets/icons/autodesk-revit-icon.png";
-import civilIcon from "../../../assets/icons/autodesk-civil-3d-icon.png";
-import cadIcon from "../../../assets/icons/autocad-icon.png";
-import maxIcon from "../../../assets/icons/autodesk-3ds-max-icon.png";
+
+import { useEffect, useState } from "react";
+import { getFeaturedCourses } from "../../../api/courseApi";
 
 
-import revitImg from "../../../assets/Courses_img/Revit_Archi9.png";
-import civilImg from "../../../assets/Courses_img/CIVIL_3D.png";
-import cadImg from "../../../assets/Courses_img/AutoCAD_2D.png";
-import InteriorImg from "../../../assets/Courses_img/Interior_Design_Diploma.png";
+
+
+
+// import revitIcon from "../../../assets/icons/autodesk-revit-icon.png";
+// import civilIcon from "../../../assets/icons/autodesk-civil-3d-icon.png";
+// import cadIcon from "../../../assets/icons/autocad-icon.png";
+// import maxIcon from "../../../assets/icons/autodesk-3ds-max-icon.png";
+
+
+// import revitImg from "../../../assets/Courses_img/Revit_Archi9.png";
+// import civilImg from "../../../assets/Courses_img/CIVIL_3D.png";
+// import cadImg from "../../../assets/Courses_img/AutoCAD_2D.png";
+// import InteriorImg from "../../../assets/Courses_img/Interior_Design_Diploma.png";
 
 
 function FeaturedCourses() {
 
-    const courses = [
-        {
-            id: 1,
-            title: "Revit Architecture",
-            category: "BIM",
-            duration: "60 Hours",
-            description: "Professional BIM Modeling & Documentation",
-            image: revitImg,
-            icon: revitIcon,
-        },
-        {
-            id: 2,
-            title: "Civil 3D",
-            category: "Infrastructure",
-            duration: "30 Hours",
-            description: "Road Design & Land Development",
-            image: civilImg,
-            icon: civilIcon,
-        },
-      {
-    id: 3,
-    title: "AutoCAD 2D",
-    category: "Drafting",
-    duration: "30 Hours",
-    description: "2D Technical Drawing & Drafting",
-    image: cadImg,
-    icon: cadIcon,
-},
-     {
-    id: 4,
-    title: "Interior Design Diploma",
-    category: "Interior Design",
-    duration: "120 Hours",
-    description: "3ds Max, Rendering & Finishing",
-    image: InteriorImg,
-    icon: maxIcon,
-},
-    ];
+   const [courses, setCourses] = useState([]);
+const [loading, setLoading] = useState(true);
+
+
+
+useEffect(() => {
+
+    const fetchCourses = async () => {
+
+        try {
+
+            const response = await getFeaturedCourses();
+
+            setCourses(response.data);
+
+        } catch (error) {
+
+            console.error(error);
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    fetchCourses();
+
+}, []);
+
+
+
+if (loading) {
+    return (
+        <section className="featured-courses">
+            <div className="featured-courses__container">
+                <h2>Loading...</h2>
+            </div>
+        </section>
+    );
+}
 
     return (
 

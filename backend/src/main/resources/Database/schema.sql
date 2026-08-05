@@ -360,3 +360,10 @@ CHECK (type IN (
 
 ALTER TABLE category
 ADD COLUMN short_description VARCHAR(500) NOT NULL;
+
+
+ALTER TABLE course
+ADD COLUMN short_description VARCHAR(500) NOT NULL;
+
+ALTER TABLE course
+ADD COLUMN icon_url VARCHAR(500);
