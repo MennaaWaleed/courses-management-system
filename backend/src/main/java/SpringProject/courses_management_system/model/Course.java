@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
+
 public class Course {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
@@ -41,10 +42,16 @@ public class Course {
     @Column(name="image_url", length=500)
     private String imageUrl;
 
+    @Column(name="icon_url", length=500)
+    private String iconUrl;
+
     @Column(name="price", nullable=false)
     private int price;
 
     @Column(name="featured", nullable=false)
     private boolean featured;
+
+    @Column(name = "short_description", nullable = false, length = 150)
+    private String shortDescription;
 }
 
