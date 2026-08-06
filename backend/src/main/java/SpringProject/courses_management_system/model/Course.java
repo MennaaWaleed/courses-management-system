@@ -1,5 +1,6 @@
 package SpringProject.courses_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,6 +10,9 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name="course")
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Course {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
