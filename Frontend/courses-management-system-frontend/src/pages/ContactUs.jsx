@@ -61,10 +61,6 @@ function ContactUs() {
 
                 setErrors({});
             }
-            // else {
-            //     setErrors(data);
-            //     setIsSuccess(false);
-            // }
             else {
                 setErrors(data);
                 setResponseMessage("");
