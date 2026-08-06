@@ -1,5 +1,6 @@
 package SpringProject.courses_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name="course")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler","category"})
 public class Course {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
@@ -37,10 +39,16 @@ public class Course {
     @Column(name="image_url", length=500)
     private String imageUrl;
 
+    @Column(name="icon_url", length=500)
+    private String iconUrl;
+
     @Column(name="price", nullable=false)
     private int price;
 
     @Column(name="featured", nullable=false)
     private boolean featured;
+
+    @Column(name = "short_description", nullable = false, length = 150)
+    private String shortDescription;
 }
 
