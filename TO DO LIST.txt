@@ -1,0 +1,5 @@
+To do list:
+
+-check if the password in register is strong
+-check if the email in register exists
+-edit the contact us page
