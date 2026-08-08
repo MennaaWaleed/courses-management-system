@@ -12,4 +12,5 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
 
     List<Course> findByFeaturedTrueAndPublishedTrue();
+    List<Course> findByPublishedTrue();
 }

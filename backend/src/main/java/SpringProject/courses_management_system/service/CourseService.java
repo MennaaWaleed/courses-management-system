@@ -5,6 +5,7 @@ import SpringProject.courses_management_system.model.Course;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import SpringProject.courses_management_system.repository.CourseRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,5 +28,13 @@ public class CourseService {
 
 
         return courseRepository.findByFeaturedTrueAndPublishedTrue();
+    }
+
+
+
+
+    public List<Course> getAllCourses(){
+
+        return courseRepository.findByPublishedTrue();
     }
     }

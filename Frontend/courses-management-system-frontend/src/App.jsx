@@ -3,6 +3,7 @@ import Navbar from "./components/layout/Navbar/Navbar";
 
 import HomePage from "./pages/HomePage";
 import ContactUs from "./pages/ContactUs";
+import Courses from "./pages/Courses/Courses";
 import Login from "./features/auth/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
@@ -31,6 +32,9 @@ function App() {
                     path="/auth/register"
                     element={<Register setIsLoggedIn={setIsLoggedIn} />}
                 />
+
+                <Route path="/courses" element={<Courses />} />
+                
             </Routes>
         </>
     );

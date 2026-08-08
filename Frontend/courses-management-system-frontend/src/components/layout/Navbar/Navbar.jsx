@@ -10,7 +10,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
 
     const links = [
         { title: "Home", href: "/" },
-        { title: "Categories", href: "/" },
+        { title: "Courses", href: "/courses" },
         { title: "About", href: "/" },
         { title: "Contact", href: "/contact" }
     ];
@@ -165,7 +165,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 <div
                     className="navbar__overlay"
                     onClick={() => {
-                        console.log("overlay clicked");
                         setMenuOpen(false);
                     }}
                 />

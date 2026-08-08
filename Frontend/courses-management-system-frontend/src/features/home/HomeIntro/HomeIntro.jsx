@@ -30,7 +30,9 @@ const navigate = useNavigate();
 
                     <div className="home-intro__actions reveal reveal-4">
 
-                        <button className="btn btn--primary">
+                        <button className="btn btn--primary"
+                          onClick={() => navigate("/courses")}
+                          >
                             Explore Courses
                         </button>
 

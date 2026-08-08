@@ -1,10 +1,10 @@
 import "./CourseCard.css";
 
-function CourseCard({ course }) {
+function CourseCard({ course, variant = "default" }) {
 const BASE_URL = "http://localhost:8080";
     return (
 
-   <article className="course-card">
+   <article className={`course-card course-card--${variant}`}>
 
     <div className="course-card__stack">
         <span className="course-card__layer"></span>

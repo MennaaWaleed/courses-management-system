@@ -32,4 +32,9 @@ public class CourseController {
 
 
     }
+    @GetMapping
+    private List<Course> getAllCourses(){
+
+        return courseService.getAllCourses();
+    }
 }

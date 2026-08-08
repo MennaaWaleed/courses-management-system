@@ -1,5 +1,5 @@
 import "./CategoryCard.css";
-
+import { useNavigate } from "react-router-dom";
 function CategoryCard({
     category,
     index,
@@ -8,7 +8,11 @@ function CategoryCard({
     onHover,
     onLeave,
 }) {
+
+    const navigate = useNavigate();
     return (
+
+        
         <article
             className={`
                 category-card
@@ -20,6 +24,13 @@ function CategoryCard({
             }}
             onMouseEnter={onHover}
             onMouseLeave={onLeave}
+            onClick={() => {
+    navigate(
+        `/courses?category=${encodeURIComponent(
+            category.categoryName
+        )}`
+    );
+}}
         >
             {/* الخلفية اللي هتدي إحساس Stack */}
             <div className="category-card__stack">
