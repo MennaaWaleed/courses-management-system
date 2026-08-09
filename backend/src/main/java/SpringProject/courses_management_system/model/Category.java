@@ -2,10 +2,17 @@ package SpringProject.courses_management_system.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name="category")
 public class Category {
@@ -25,5 +32,7 @@ public class Category {
 
     @Column(name = "short_description", nullable = false, length = 150)
     private String shortDescription;
+
+
 
 }

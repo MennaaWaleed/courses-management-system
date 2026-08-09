@@ -37,7 +37,7 @@ const BASE_URL = "http://localhost:8080";
     <div className="course-card__content">
 
         <span className="course-card__category">
-            {course.category.categoryName}
+            {course.categories?.map(category => category.categoryName).join(" • ")}
         </span>
 
         <div className="course-card__title">

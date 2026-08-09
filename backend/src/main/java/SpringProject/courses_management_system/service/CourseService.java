@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,10 @@ public class CourseService {
 
 
     public List<Course> getAllCourses(){
+
+        Optional<Course> course= courseRepository.findById(UUID.fromString("4f7b3d39-a03d-4a96-8106-90ff4044d42e"));
+
+
 
         return courseRepository.findByPublishedTrue();
     }

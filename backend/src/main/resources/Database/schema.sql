@@ -367,3 +367,50 @@ ADD COLUMN short_description VARCHAR(500) NOT NULL;
 
 ALTER TABLE course
 ADD COLUMN icon_url VARCHAR(500);
+
+
+select * from users;
+
+-------------- new --------------
+CREATE TABLE course_category (
+    course_id UUID NOT NULL,
+    category_id UUID NOT NULL,
+
+    CONSTRAINT pk_course_category
+        PRIMARY KEY (course_id, category_id),
+
+    CONSTRAINT fk_course_category_course
+        FOREIGN KEY (course_id)
+        REFERENCES course(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_course_category_category
+        FOREIGN KEY (category_id)
+        REFERENCES category(id)
+        ON DELETE RESTRICT
+);
+
+
+
+
+ALTER TABLE course
+DROP CONSTRAINT fk_course_category;
+
+
+ALTER TABLE course
+DROP COLUMN category_id;
+
+
+
+
+
+INSERT INTO course_category (course_id, category_id)
+VALUES
+('4f7b3d39-a03d-4a96-8106-90ff4044d42e', '23e8f58a-724f-4a91-ba7c-982860b68d95'),
+('e357a565-b55a-41fa-bd2a-e5974cef8632', 'd7cdd83f-6017-4f5a-a38f-9177d55819f0'),
+('507a8f8a-a864-40df-9f61-4b3160d5edcb', '23e8f58a-724f-4a91-ba7c-982860b68d95'),
+('507a8f8a-a864-40df-9f61-4b3160d5edcb', 'e42f537a-26a3-46a9-9885-d432057c67fc'),
+('3156832d-99ad-452a-9d1b-ead993011f66', '23e8f58a-724f-4a91-ba7c-982860b68d95')
+;
+
+select * from course_category;

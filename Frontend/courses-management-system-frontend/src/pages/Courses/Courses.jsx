@@ -62,32 +62,29 @@ function Courses() {
     /* =========================
        CATEGORIES
     ========================= */
-
-    const categories = [
-        "All",
-        ...new Set(
-            courses
-                .map(
-                    course =>
-                        course.category?.categoryName
-                )
-                .filter(Boolean)
-        )
-    ];
+const categories = [
+    "All",
+    ...new Set(
+        courses
+            .flatMap(course =>
+                course.categories?.map(category => category.categoryName) || []
+            )
+    )
+];
 
 
     /* =========================
        FILTERED COURSES
     ========================= */
-
-    const filteredCourses =
-        activeCategory === "All"
-            ? courses
-            : courses.filter(
-                course =>
-                    course.category?.categoryName ===
-                    activeCategory
-            );
+const filteredCourses =
+    activeCategory === "All"
+        ? courses
+        : courses.filter(course =>
+            course.categories?.some(
+                category =>
+                    category.categoryName === activeCategory
+            )
+        );
 
 
     /* =========================
