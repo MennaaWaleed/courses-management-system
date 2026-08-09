@@ -57,7 +57,7 @@ public class Course {
     @Column(name="featured", nullable=false)
     private boolean featured;
 
-    @Column(name = "short_description", nullable = false, length = 150)
+    @Column(name = "short_description", nullable = false, length = 500)
     private String shortDescription;
 }
 
