@@ -9,19 +9,31 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class CourseRequest {
+public class CourseResponse {
+
+    private UUID id;
+
     private String courseName;
+
     private String description;
+
     private String shortDescription;
 
     private Set<UUID> categoryIds;
 
     private boolean published;
+
     private BigDecimal courseHours;
+
     private int lectureCount;
+
     private String imageUrl;
+
     private String iconUrl;
+
     private int price;
+
     private boolean featured;
+
     private String content_url;
 }

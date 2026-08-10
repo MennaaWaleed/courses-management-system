@@ -414,3 +414,8 @@ VALUES
 ;
 
 select * from course_category;
+
+
+----------------------new----------------
+ALTER TABLE course
+    ADD COLUMN content_url VARCHAR(1000);

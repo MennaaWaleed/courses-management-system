@@ -1,7 +1,10 @@
 package SpringProject.courses_management_system.service;
 
 import SpringProject.courses_management_system.dto.Category.CategoryRequest;
+import SpringProject.courses_management_system.dto.Category.CategoryResponse;
+import SpringProject.courses_management_system.dto.Course.CourseResponse;
 import SpringProject.courses_management_system.model.Category;
+import SpringProject.courses_management_system.model.Course;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,8 +26,20 @@ public class CategoryService {
 
         return categoryRepository.findAll();
     }
+    private CategoryResponse convertToResponse(Category category) {
 
-    public Category createCategory(CategoryRequest request) {
+        CategoryResponse response = new CategoryResponse();
+
+        response.setId(category.getId());
+        response.setCategoryName(category.getCategoryName());
+        response.setCategoryDescription(category.getDescription());
+        response.setCategoryImageUrl(category.getImageUrl());
+        response.setCategoryShortDescription(category.getShortDescription());
+
+        return response;
+    }
+
+    public CategoryResponse createCategory(CategoryRequest request) {
 
         Category category = new Category();
 
@@ -32,16 +47,19 @@ public class CategoryService {
         category.setDescription(request.getCategoryDescription());
         category.setShortDescription(request.getShortDescription());
         category.setImageUrl(request.getCategoryImageUrl());
-        return categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
+
+        return convertToResponse(savedCategory);
     }
 
-    public Category getCategoryById(UUID id) {
-        return categoryRepository.findById(id)
+    public CategoryResponse getCategoryById(UUID id) {
+        Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        return convertToResponse(category);
     }
 
-//    @PutMapping("/{id}")
-    public Category updateCategory(UUID id, CategoryRequest request) {
+    public CategoryResponse updateCategory(UUID id, CategoryRequest request) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -51,17 +69,15 @@ public class CategoryService {
         category.setShortDescription(request.getShortDescription());
         category.setImageUrl(request.getCategoryImageUrl());
 
-        return categoryRepository.save(category);
+        Category updatedCategory = categoryRepository.save(category);
+
+        return convertToResponse(updatedCategory);
     }
 
     public void deleteCategory(UUID id) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-
         categoryRepository.delete(category);
     }
-
-
-
 }

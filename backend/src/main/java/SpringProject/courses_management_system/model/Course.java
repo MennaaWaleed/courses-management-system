@@ -59,5 +59,8 @@ public class Course {
 
     @Column(name = "short_description", nullable = false, length = 500)
     private String shortDescription;
+
+    @Column(name="content_url",nullable=false, length=1000)
+    private String content_url;
 }
 
