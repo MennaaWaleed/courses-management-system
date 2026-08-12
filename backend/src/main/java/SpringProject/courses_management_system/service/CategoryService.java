@@ -35,6 +35,7 @@ public class CategoryService {
         response.setCategoryDescription(category.getDescription());
         response.setCategoryImageUrl(category.getImageUrl());
         response.setCategoryShortDescription(category.getShortDescription());
+        response.setPublished(category.isPublished());
 
         return response;
     }
@@ -59,6 +60,19 @@ public class CategoryService {
         return convertToResponse(category);
     }
 
+    public CategoryResponse togglePublished(UUID id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        category.setPublished(!category.isPublished());
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return convertToResponse(savedCategory);
+    }
+
+
     public CategoryResponse updateCategory(UUID id, CategoryRequest request) {
 
         Category category = categoryRepository.findById(id)
@@ -80,4 +94,15 @@ public class CategoryService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         categoryRepository.delete(category);
     }
+
+    public List<CategoryResponse> getPublishedCategories() {
+
+        List<Category> categories =
+                categoryRepository.findByPublishedTrue();
+
+        return categories.stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
 }

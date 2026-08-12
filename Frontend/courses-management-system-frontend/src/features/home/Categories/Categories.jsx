@@ -1,7 +1,10 @@
 import "./Categories.css";
 import CategoryCard from "./CategoryCard";
 
-import { getCategories } from "../../../api/categoryApi";
+import {
+    getCategories,
+    getPublishedCategories
+} from "../../../api/categoryApi";
 import { useState ,useRef,useEffect} from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -21,29 +24,29 @@ function Categories() {
 
     useEffect(() => {
 
-    const fetchCategories = async () => {
+        const fetchCategories = async () => {
 
-        try {
+            try {
 
-            const response = await getCategories();
+                const response = await getPublishedCategories();
 
-            setCategories(response.data);
+                setCategories(response.data);
 
-        } catch (error) {
+            } catch (error) {
 
-            console.error(error);
+                console.error(error);
 
-        } finally {
+            } finally {
 
-            setLoading(false);
+                setLoading(false);
 
-        }
+            }
 
-    };
+        };
 
-    fetchCategories();
+        fetchCategories();
 
-}, []);
+    }, []);
 
 
 

@@ -13,4 +13,5 @@ public class CategoryResponse {
     private String categoryDescription;
     private String categoryImageUrl;
     private String categoryShortDescription;
+    private boolean published;
 }

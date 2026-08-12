@@ -7,6 +7,8 @@ import Courses from "./pages/Courses/Courses";
 import Login from "./features/auth/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
+import AdminRoute from "./components/auth/AdminRoute";
+import AdminCategories from "./features/Admin/AdminCategories";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -16,6 +18,8 @@ function App() {
 
     const handleLogout = () => {
         sessionStorage.removeItem("token");
+        sessionStorage.removeItem("role");
+
         setIsLoggedIn(false);
     };
 
@@ -23,19 +27,34 @@ function App() {
         <>
             <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
 
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/contact" element={<ContactUs />} />
+            <main className="main-content">
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/contact" element={<ContactUs />} />
 
-                <Route path="/auth/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-                <Route
-                    path="/auth/register"
-                    element={<Register setIsLoggedIn={setIsLoggedIn} />}
-                />
+                    <Route
+                        path="/auth/login"
+                        element={<Login setIsLoggedIn={setIsLoggedIn} />}
+                    />
 
-                <Route path="/courses" element={<Courses />} />
-                
-            </Routes>
+                    <Route
+                        path="/auth/register"a
+                        element={<Register setIsLoggedIn={setIsLoggedIn} />}
+                    />
+
+                    <Route path="/courses" element={<Courses />} />
+
+                    <Route
+                        path="/admin/categories"
+                        element={
+                            <AdminRoute>
+                                <AdminCategories />
+                            </AdminRoute>
+                        }
+                    />
+
+                </Routes>
+            </main>
         </>
     );
 }

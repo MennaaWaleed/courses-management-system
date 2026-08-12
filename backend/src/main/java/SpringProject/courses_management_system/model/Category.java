@@ -33,6 +33,7 @@ public class Category {
     @Column(name = "short_description", nullable = false, length = 500)
     private String shortDescription;
 
-
+    @Column(name = "published", nullable = false)
+    private boolean published = false;
 
 }

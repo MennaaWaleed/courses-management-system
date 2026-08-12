@@ -29,6 +29,8 @@ function Login({setIsLoggedIn}) {
             console.log(response.data);
 
             sessionStorage.setItem("token", response.data.token);
+            sessionStorage.setItem("role", response.data.role);
+
 
             setSuccessMessage("Login successful!");
             setIsLoggedIn(true);

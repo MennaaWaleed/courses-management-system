@@ -30,6 +30,11 @@ public class CategoryController {
         return categoryService.createCategory(request);
     }
 
+    @PutMapping("/{id}/publish")
+    public CategoryResponse togglePublished(@PathVariable UUID id) {
+        return categoryService.togglePublished(id);
+    }
+
     @GetMapping("/{id}")
     public CategoryResponse getCategoryById(@PathVariable UUID id) {
         return categoryService.getCategoryById(id);
@@ -43,9 +48,15 @@ public class CategoryController {
         return categoryService.updateCategory(id, request);
     }
 
+    @GetMapping("/published")
+    public List<CategoryResponse> getPublishedCategories() {
+        return categoryService.getPublishedCategories();
+    }
+
+
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable UUID id) {
-
         categoryService.deleteCategory(id);
     }
+
 }

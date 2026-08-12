@@ -419,3 +419,6 @@ select * from course_category;
 ----------------------new----------------
 ALTER TABLE course
     ADD COLUMN content_url VARCHAR(1000);
+
+ALTER TABLE category
+    ADD COLUMN published BOOLEAN NOT NULL DEFAULT FALSE;
