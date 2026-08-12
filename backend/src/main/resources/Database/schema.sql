@@ -465,3 +465,4 @@ CREATE TABLE course_registrations (
 
 CREATE INDEX idx_course_registrations_course_id
 ON course_registrations(course_id);
+

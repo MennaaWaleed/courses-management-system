@@ -1,6 +1,7 @@
 import "./CourseDetails.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import {
     getCourseById,
     getRelatedCourses
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 
 import CourseCard from "../../../features/Home/FeaturedCourses/CourseCard";
-
+import CourseRegistration from "../../../features/CourseRegistration/CourseRegistration";
 function CourseDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -28,6 +29,8 @@ function CourseDetails() {
 
     const [loading, setLoading] = useState(true);
     const [relatedLoading, setRelatedLoading] = useState(true);
+
+const [showRegistration, setShowRegistration] = useState(false);
 
     const [error, setError] = useState("");
 
@@ -272,6 +275,7 @@ function CourseDetails() {
                                     <button
                                         type="button"
                                         className="course-details__register-button"
+                                        onClick={() => setShowRegistration(true)}
                                     >
                                         Contact Us to Enroll
                                     </button>
@@ -323,8 +327,19 @@ function CourseDetails() {
                     </div>
                 </section>
             )}
+
+
+                        {showRegistration && (
+                        <CourseRegistration
+                            course={course}
+                            onClose={() => setShowRegistration(false)}
+                        />
+                        )}
         </main>
     );
+
+
+
 }
 
 export default CourseDetails;

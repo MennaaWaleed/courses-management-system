@@ -6,10 +6,13 @@ export const getFeaturedCourses = () =>
 export const getCourses = () =>
     api.get("/api/courses");
 
-
 export const getCourseById = (id) =>
     api.get(`/api/courses/${id}`);
 
 export const getRelatedCourses = (id) => {
     return api.get(`/api/courses/${id}/related`);
+};
+
+export const registerForCourse = (data) => {
+    return api.post("/api/course-registrations", data);
 };
