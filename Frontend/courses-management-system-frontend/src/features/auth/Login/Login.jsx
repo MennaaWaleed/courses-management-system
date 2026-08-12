@@ -36,7 +36,13 @@ function Login({setIsLoggedIn}) {
             setIsLoggedIn(true);
 
             setTimeout(() => {
-                navigate("/");
+
+                if (response.data.role === "ADMIN") {
+                    navigate("/admin/categories");
+                } else {
+                    navigate("/");
+                }
+
             }, 1000);
 
         } catch (error) {

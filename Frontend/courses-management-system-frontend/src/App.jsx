@@ -1,6 +1,5 @@
-import { useState } from "react"; // 1. Removed useEffect
+import { useState } from "react";
 import Navbar from "./components/layout/Navbar/Navbar";
-
 import HomePage from "./pages/HomePage";
 import ContactUs from "./pages/ContactUs";
 import Courses from "./pages/Courses/Courses";
@@ -9,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminCategories from "./features/Admin/AdminCategories";
+import EditCategory from "./features/EditCategory/EditCategory";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -51,6 +51,11 @@ function App() {
                                 <AdminCategories />
                             </AdminRoute>
                         }
+                    />
+
+                    <Route
+                        path="/admin/categories/:id/edit"
+                        element={<EditCategory />}
                     />
 
                 </Routes>

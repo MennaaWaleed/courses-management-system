@@ -1,11 +1,11 @@
 package SpringProject.courses_management_system.controller;
-
-
 import SpringProject.courses_management_system.dto.Category.CategoryRequest;
 import SpringProject.courses_management_system.dto.Category.CategoryResponse;
 import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.service.CategoryService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,12 +40,22 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-    @PutMapping("/{id}")
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public CategoryResponse updateCategory(
             @PathVariable UUID id,
-            @RequestBody CategoryRequest request) {
+            @RequestPart("categoryName") String categoryName,
+            @RequestPart("categoryDescription") String categoryDescription,
+            @RequestPart("shortDescription") String shortDescription,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
 
-        return categoryService.updateCategory(id, request);
+        return categoryService.updateCategory(
+                id,
+                categoryName,
+                categoryDescription,
+                shortDescription,
+                image
+        );
     }
 
     @GetMapping("/published")
@@ -53,10 +63,14 @@ public class CategoryController {
         return categoryService.getPublishedCategories();
     }
 
-
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategory(id);
     }
 
+    @PostMapping("/upload-image")
+    public String uploadImage(@RequestParam("image") MultipartFile image) {
+
+        return categoryService.uploadImage(image);
+    }
 }

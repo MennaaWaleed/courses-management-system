@@ -1,22 +1,63 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../../api/categoryApi";
+import {deleteCategory,getCategories, toggleCategoryPublished} from "../../api/categoryApi";
 import "./AdminCategories.css";
-import api from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 function AdminCategories() {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const deleteCategory = async (id) => {
+
+    const navigate = useNavigate();
+
+    const [categoryToDelete, setCategoryToDelete] = useState(null);
+    // const handleDelete = async () => {
+    //     if (!categoryToDelete) {
+    //         return;
+    //     }
+    //
+    //     try {
+    //         await deleteCategory(categoryToDelete.id);
+    //
+    //         setCategories((prevCategories) =>
+    //             prevCategories.filter(
+    //                 (category) => category.id !== categoryToDelete.id
+    //             )
+    //         );
+    //         setCategoryToDelete(null);
+    //
+    //     } catch (error) {
+    //         console.error("Error deleting category:", error);
+    //     }
+    // };
+
+    const handleDelete = async () => {
+        if (!categoryToDelete) {
+            return;
+        }
+
+        console.log("Deleting category:", categoryToDelete.id);
+
         try {
-            await api.delete(`/categories/${id}`);
+            const response = await deleteCategory(categoryToDelete.id);
+
+            console.log("Delete response:", response);
 
             setCategories((prevCategories) =>
-                prevCategories.filter((category) => category.id !== id)
+                prevCategories.filter(
+                    (category) => category.id !== categoryToDelete.id
+                )
             );
+
+            setCategoryToDelete(null);
 
         } catch (error) {
             console.error("Error deleting category:", error);
+
+            if (error.response) {
+                console.error("Status:", error.response.status);
+                console.error("Data:", error.response.data);
+            }
         }
     };
 
@@ -35,8 +76,16 @@ function AdminCategories() {
         fetchCategories();
     }, []);
 
-    const togglePublished = (id) => {
-        console.log("Toggling publish status for category ID:", id);
+    const togglePublished = async (id) => {
+        try {
+            await toggleCategoryPublished(id);
+
+            const response = await getCategories();
+            setCategories(response.data);
+
+        } catch (error) {
+            console.error("Error updating publish status:", error);
+        }
     };
 
     if (loading) {
@@ -91,7 +140,12 @@ function AdminCategories() {
 
                         <div className="category-actions">
 
-                            <button className="btn edit-button">
+                            <button
+                                className="btn edit-button"
+                                onClick={() =>
+                                    navigate(`/admin/categories/${category.id}/edit`)
+                                }
+                            >
                                 Edit
                             </button>
 
@@ -108,7 +162,7 @@ function AdminCategories() {
 
                             <button
                                 className="btn delete-button"
-                                onClick={() => deleteCategory(category.id)}
+                                onClick={() => setCategoryToDelete(category)}
                             >
                                 Delete
                             </button>
@@ -117,6 +171,44 @@ function AdminCategories() {
                     </div>
                 ))}
             </div>
+            {categoryToDelete && (
+                <div className="modal-overlay">
+
+                    <div className="delete-modal">
+
+                        <h2>Delete Category?</h2>
+
+                        <p>
+                            Are you sure you want to delete{" "}
+                            <strong>{categoryToDelete.categoryName}</strong>?
+                        </p>
+
+                        <p className="delete-warning">
+                            This action cannot be undone.
+                        </p>
+
+                        <div className="modal-actions">
+
+                            <button
+                                className="cancel-button"
+                                onClick={() => setCategoryToDelete(null)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="confirm-delete-button"
+                                onClick={handleDelete}
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 }
