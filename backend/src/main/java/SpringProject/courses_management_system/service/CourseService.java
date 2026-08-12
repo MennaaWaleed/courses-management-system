@@ -4,8 +4,10 @@ import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.model.Course;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import SpringProject.courses_management_system.repository.CourseRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,4 +44,15 @@ public class CourseService {
 
         return courseRepository.findByPublishedTrue();
     }
+
+  
+    public Optional<Course> getCourseById( UUID id) {
+        return courseRepository.findByIdAndPublishedTrue(id);
+    }
+
+    public List<Course> getRelatedCourses(UUID courseId) {
+
+        return courseRepository.findRelatedCourses(courseId);
+    }
+
     }

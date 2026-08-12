@@ -7,6 +7,7 @@ import Courses from "./pages/Courses/Courses";
 import Login from "./features/auth/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
+import CourseDetails from "./pages/Courses/CourseDetails/CourseDetails";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -34,7 +35,7 @@ function App() {
                 />
 
                 <Route path="/courses" element={<Courses />} />
-                
+                <Route path="/courses/:id" element={<CourseDetails />} />
             </Routes>
         </>
     );

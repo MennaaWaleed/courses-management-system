@@ -1,7 +1,15 @@
-import axiosInstance from "./axiosInstance";
+import api from "./axios";
 
 export const getFeaturedCourses = () =>
-    axiosInstance.get("/courses/featured");
+    api.get("/api/courses/featured");
 
 export const getCourses = () =>
-    axiosInstance.get("/courses");
+    api.get("/api/courses");
+
+
+export const getCourseById = (id) =>
+    api.get(`/api/courses/${id}`);
+
+export const getRelatedCourses = (id) => {
+    return api.get(`/api/courses/${id}/related`);
+};
