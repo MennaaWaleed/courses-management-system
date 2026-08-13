@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
     getCategoryById,
     updateCategory
-} from "../../api/categoryApi";
+} from "../../../api/categoryApi.js";
 
 import "./EditCategory.css";
 

@@ -8,8 +8,8 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminCategories from "./features/Admin/AdminCategories";
-import EditCategory from "./features/EditCategory/EditCategory";
-
+import EditCategory from "./features/Admin/EditCategory/EditCategory";
+import CreateCategory from "./features/Admin/CreateCategory/ CreateCategory";
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const token = sessionStorage.getItem("token");
@@ -56,6 +56,11 @@ function App() {
                     <Route
                         path="/admin/categories/:id/edit"
                         element={<EditCategory />}
+                    />
+
+                    <Route
+                        path="/admin/categories/create"
+                        element={<CreateCategory />}
                     />
 
                 </Routes>

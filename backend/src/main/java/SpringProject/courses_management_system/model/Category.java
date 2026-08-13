@@ -36,4 +36,7 @@ public class Category {
     @Column(name = "published", nullable = false)
     private boolean published = false;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
 }

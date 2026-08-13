@@ -25,9 +25,20 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
-    @PostMapping
-    public CategoryResponse createCategory(@RequestBody CategoryRequest request) {
-        return categoryService.createCategory(request);
+    @PostMapping(consumes = "multipart/form-data")
+    public CategoryResponse createCategory(
+            @RequestParam String categoryName,
+            @RequestParam String categoryDescription,
+            @RequestParam String shortDescription,
+            @RequestParam(required = false) MultipartFile image
+    ) {
+
+        return categoryService.createCategory(
+                categoryName,
+                categoryDescription,
+                shortDescription,
+                image
+        );
     }
 
     @PutMapping("/{id}/publish")

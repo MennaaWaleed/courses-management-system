@@ -11,25 +11,6 @@ function AdminCategories() {
     const navigate = useNavigate();
 
     const [categoryToDelete, setCategoryToDelete] = useState(null);
-    // const handleDelete = async () => {
-    //     if (!categoryToDelete) {
-    //         return;
-    //     }
-    //
-    //     try {
-    //         await deleteCategory(categoryToDelete.id);
-    //
-    //         setCategories((prevCategories) =>
-    //             prevCategories.filter(
-    //                 (category) => category.id !== categoryToDelete.id
-    //             )
-    //         );
-    //         setCategoryToDelete(null);
-    //
-    //     } catch (error) {
-    //         console.error("Error deleting category:", error);
-    //     }
-    // };
 
     const handleDelete = async () => {
         if (!categoryToDelete) {
@@ -104,7 +85,10 @@ function AdminCategories() {
             <div className="admin-header">
                 <h1>Categories</h1>
 
-                <button className="create-category-button">
+                <button
+                    className="create-category-button"
+                    onClick={() => navigate("/admin/categories/create")}
+                >
                     + Create New Category
                 </button>
             </div>

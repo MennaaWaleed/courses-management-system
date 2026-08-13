@@ -422,3 +422,8 @@ ALTER TABLE course
 
 ALTER TABLE category
     ADD COLUMN published BOOLEAN NOT NULL DEFAULT FALSE;
+
+
+----------------------new-----------------
+ALTER TABLE category
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;

@@ -1,12 +1,10 @@
 package SpringProject.courses_management_system.service;
 
-import SpringProject.courses_management_system.dto.Category.CategoryRequest;
 import SpringProject.courses_management_system.dto.Category.CategoryResponse;
 import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,8 +25,10 @@ public class CategoryService {
 
     public List<Category> getAllCategories() {
 
-        return categoryRepository.findAll();
+        return categoryRepository.findByIsDeletedFalse();
     }
+
+
     private CategoryResponse convertToResponse(Category category) {
 
         CategoryResponse response = new CategoryResponse();
@@ -43,18 +43,69 @@ public class CategoryService {
         return response;
     }
 
-    public CategoryResponse createCategory(CategoryRequest request) {
+
+    public CategoryResponse createCategory(
+            String categoryName,
+            String categoryDescription,
+            String shortDescription,
+            MultipartFile image
+    ) {
 
         Category category = new Category();
 
-        category.setCategoryName(request.getCategoryName());
-        category.setDescription(request.getCategoryDescription());
-        category.setShortDescription(request.getShortDescription());
-        category.setImageUrl(request.getCategoryImageUrl());
-        Category savedCategory = categoryRepository.save(category);
+        category.setCategoryName(categoryName);
+        category.setDescription(categoryDescription);
+        category.setShortDescription(shortDescription);
+
+        if (image != null && !image.isEmpty()) {
+
+            try {
+
+                Path uploadPath = Paths.get("images/categories");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                String originalFileName =
+                        image.getOriginalFilename();
+
+                String fileName =
+                        UUID.randomUUID() + "_" + originalFileName;
+
+                Path filePath =
+                        uploadPath.resolve(fileName);
+
+                Files.copy(
+                        image.getInputStream(),
+                        filePath,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+                category.setImageUrl(
+                        "/images/categories/" + fileName
+                );
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(
+                        "Could not save image",
+                        e
+                );
+            }
+
+        } else {
+
+            category.setImageUrl("");
+        }
+
+        Category savedCategory =
+                categoryRepository.save(category);
 
         return convertToResponse(savedCategory);
     }
+
+
 
     public CategoryResponse getCategoryById(UUID id) {
         Category category = categoryRepository.findById(id)
@@ -87,16 +138,13 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        // Update text fields
         category.setCategoryName(categoryName);
         category.setDescription(categoryDescription);
         category.setShortDescription(shortDescription);
 
-        // If the admin selected a new image
         if (image != null && !image.isEmpty()) {
 
             try {
-                // Use the exact same reliable path as your uploadImage method
                 Path uploadPath = Paths.get("src/main/resources/static/images/categories");
 
                 if (!Files.exists(uploadPath)) {
@@ -130,17 +178,21 @@ public class CategoryService {
         return convertToResponse(updatedCategory);
     }
 
+
     public void deleteCategory(UUID id) {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        categoryRepository.delete(category);
+
+        category.setDeleted(true);
+
+        categoryRepository.save(category);
     }
 
     public List<CategoryResponse> getPublishedCategories() {
 
         List<Category> categories =
-                categoryRepository.findByPublishedTrue();
+                categoryRepository.findByPublishedTrueAndIsDeletedFalse();
 
         return categories.stream()
                 .map(this::convertToResponse)
@@ -151,10 +203,8 @@ public class CategoryService {
 
         try {
 
-            // Get the original file name
             String originalFileName = image.getOriginalFilename();
 
-            // Get the file extension
             String extension = "";
 
             if (originalFileName != null &&
@@ -165,30 +215,24 @@ public class CategoryService {
                 );
             }
 
-            // Create a unique file name
             String fileName =
                     UUID.randomUUID() + extension;
 
-            // Folder where images will be stored
             Path uploadPath = Paths.get(
                     "src/main/resources/static/images/categories"
             );
 
-            // Create the folder if it doesn't exist
             Files.createDirectories(uploadPath);
 
-            // Full path of the new image
             Path filePath =
                     uploadPath.resolve(fileName);
 
-            // Save the image
             Files.copy(
                     image.getInputStream(),
                     filePath,
                     StandardCopyOption.REPLACE_EXISTING
             );
 
-            // Path that will be stored in database
             return "/images/categories/" + fileName;
 
         } catch (IOException e) {

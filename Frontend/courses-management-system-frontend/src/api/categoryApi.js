@@ -13,7 +13,35 @@ export const getPublishedCategories = () => {
 };
 
 export const createCategory = (categoryData) => {
-    return api.post("/api/categories", categoryData);
+
+    const formData = new FormData();
+
+    formData.append(
+        "categoryName",
+        categoryData.categoryName
+    );
+
+    formData.append(
+        "categoryDescription",
+        categoryData.categoryDescription
+    );
+
+    formData.append(
+        "shortDescription",
+        categoryData.shortDescription
+    );
+
+    if (categoryData.image) {
+        formData.append(
+            "image",
+            categoryData.image
+        );
+    }
+
+    return api.post(
+        "/api/categories",
+        formData
+    );
 };
 
 export const updateCategory = (id, categoryData) => {
