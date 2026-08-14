@@ -6,4 +6,3 @@ To do list:
 -validation for login and register in backend
 -show password in login
 - when logging in then log out then log in again the old data still and didnt disappeared
-

@@ -36,9 +36,6 @@ public class Course {
     )
     private Set<Category> categories = new HashSet<>();
 
-    @Column(name = "content_url", length = 500)
-    private String contentUrl;
-
     @Column(name="published", nullable=false)
     private boolean published=false;
 

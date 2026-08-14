@@ -1,20 +1,5 @@
 import api from "./axios";
 
-export const getFeaturedCourses = () =>
-    api.get("/api/courses/featured");
-
-export const getCourses = () =>
-    api.get("/api/courses");
-
-export const getCourseById = (id) =>
-    api.get(`/api/courses/${id}`);
-
-export const getRelatedCourses = (id) => {
-    return api.get(`/api/courses/${id}/related`);
-};
-
-export const registerForCourse = (data) => {
-    return api.post("/api/course-registrations", data);
 export const getFeaturedCourses = () => {
     return api.get("/api/courses/featured");
 };

@@ -371,6 +371,7 @@ ADD COLUMN icon_url VARCHAR(500);
 
 select * from users;
 
+-------------- new --------------
 CREATE TABLE course_category (
     course_id UUID NOT NULL,
     category_id UUID NOT NULL,
@@ -415,54 +416,6 @@ VALUES
 select * from course_category;
 
 
------------------------------------------- new --------------------------------------------------------------
-
-
-UPDATE course
-SET content_url = '/contents/pdfs/jbr-34-3-228.pdf';
-
-
-UPDATE course
-SET description = 'Learn Autodesk Revit Architecture from the ground up and develop the skills needed to create professional Building Information Modeling (BIM) projects. This comprehensive course takes you through the complete architectural workflow, starting with the Revit interface, project setup, levels, grids, and basic modeling concepts, then progressing into detailed architectural modeling and documentation.
-
-You will learn how to create and manage walls, floors, roofs, doors, windows, stairs, ceilings, rooms, and other architectural elements while maintaining an organized and accurate BIM model. The course also covers views, sections, elevations, dimensions, annotations, schedules, sheets, and professional construction documentation.
-
-Throughout the training, you will work with Revit families, project parameters, materials, and design components to create flexible and well-structured architectural models. You will also learn how to prepare professional drawings and documentation suitable for real-world architectural projects and industry standards.
-
-By the end of the course, you will have a solid understanding of the Revit Architecture workflow and be able to develop complete architectural BIM models from the initial project setup through modeling, documentation, and final presentation.'
-WHERE id = '4f7b3d39-a03d-4a96-8106-90ff4044d42e';
-
-
-
-
-CREATE TABLE course_registrations (
-    id UUID PRIMARY KEY,
-
-    full_name VARCHAR(150) NOT NULL,
-
-    phone VARCHAR(30) NOT NULL,
-
-    email VARCHAR(150),
-
-    message TEXT,
-
-    course_id UUID NOT NULL,
-
-    status VARCHAR(30) NOT NULL DEFAULT 'NEW',
-
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_course_registration_course
-        FOREIGN KEY (course_id)
-        REFERENCES course(id)
-        ON DELETE CASCADE
-);
-
-
-
-CREATE INDEX idx_course_registrations_course_id
-ON course_registrations(course_id);
-
 ----------------------new----------------
 ALTER TABLE course
     ADD COLUMN content_url VARCHAR(1000);
@@ -478,4 +431,3 @@ ALTER TABLE category
 ------------------new---------------------
 ALTER TABLE course
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
-
