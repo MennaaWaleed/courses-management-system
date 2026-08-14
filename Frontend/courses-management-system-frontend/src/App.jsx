@@ -1,5 +1,6 @@
 import { useState } from "react"; // 1. Removed useEffect
 import Navbar from "./components/layout/Navbar/Navbar";
+import Footer from "./components/layout/Footer/Footer";
 
 import HomePage from "./pages/HomePage";
 import ContactUs from "./pages/ContactUs";
@@ -37,6 +38,8 @@ function App() {
                 <Route path="/courses" element={<Courses />} />
                 <Route path="/courses/:id" element={<CourseDetails />} />
             </Routes>
+
+             <Footer />
         </>
     );
 }
