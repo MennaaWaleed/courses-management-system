@@ -1,5 +1,17 @@
 package SpringProject.courses_management_system.controller;
 
+
+import SpringProject.courses_management_system.model.Course;
+import SpringProject.courses_management_system.service.CourseService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import SpringProject.courses_management_system.dto.Course.CourseRequest;
 import SpringProject.courses_management_system.dto.Course.CourseResponse;
 import SpringProject.courses_management_system.model.Course;
@@ -79,6 +91,18 @@ public class CourseController {
     }
 
 
+
+    @GetMapping("/{id}/related")
+    public ResponseEntity<List<Course>> getRelatedCourses(
+            @PathVariable UUID id
+    ) {
+
+        return ResponseEntity.ok(
+                courseService.getRelatedCourses(id)
+        );
+    }
+
+
     @GetMapping("/{id}")
     public CourseResponse getCourseById(@PathVariable UUID id) {
         return courseService.getCourseById(id);
@@ -102,6 +126,7 @@ public class CourseController {
 
         return courseService.getCoursesByCategory(categoryId);
     }
+
 
 
 }
