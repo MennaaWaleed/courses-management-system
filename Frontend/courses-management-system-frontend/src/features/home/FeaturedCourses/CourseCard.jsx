@@ -1,21 +1,10 @@
 import "./CourseCard.css";
-import { useNavigate } from "react-router-dom";
+
 function CourseCard({ course, variant = "default" }) {
-
-
-      const navigate = useNavigate();
-
-    const BASE_URL = "http://localhost:8080";
-
-    const handleOpenCourse = () => {
-        navigate(`/courses/${course.id}`);
-    };
-
-
-
+const BASE_URL = "http://localhost:8080";
     return (
 
-   <article className={`course-card course-card--${variant}`}    onClick={handleOpenCourse}>
+   <article className={`course-card course-card--${variant}`}>
 
     <div className="course-card__stack">
         <span className="course-card__layer"></span>

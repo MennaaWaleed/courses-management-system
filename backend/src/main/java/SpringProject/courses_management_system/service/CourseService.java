@@ -6,10 +6,7 @@ import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.model.Course;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import SpringProject.courses_management_system.repository.CourseRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -204,14 +201,6 @@ public class CourseService {
         return convertToResponse(updatedCourse);
     }
 
-
-
-    public List<Course> getRelatedCourses(UUID courseId) {
-
-        return courseRepository.findRelatedCourses(courseId);
-    }
-
-
     public void deleteCourse(UUID id) {
 
         Course course = courseRepository.findByIdAndIsDeletedFalse(id)
@@ -270,6 +259,5 @@ public class CourseService {
         file.transferTo(filePath.toFile());
 
         return "/images/" + folder + "/" + fileName;
-
     }
 }
