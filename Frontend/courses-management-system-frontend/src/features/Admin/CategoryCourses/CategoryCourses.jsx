@@ -12,27 +12,20 @@ function CategoryCourses() {
 
     const [category, setCategory] = useState(null);
     const [courses, setCourses] = useState([]);
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const categoryResponse = await getCategoryById(categoryId);
-
                 setCategory(categoryResponse.data);
 
-                const coursesResponse =
-                    await getCoursesByCategory(categoryId);
-
+                const coursesResponse = await getCoursesByCategory(categoryId);
                 console.log("Courses:", coursesResponse.data);
-
                 setCourses(coursesResponse.data);
-
             } catch (error) {
-                console.error(
-                    "Error loading category courses:",
-                    error
-                );
+                console.error("Error loading category courses:", error);
             } finally {
                 setLoading(false);
             }
@@ -40,6 +33,7 @@ function CategoryCourses() {
 
         fetchData();
     }, [categoryId]);
+
 
     if (loading) {
         return (
@@ -52,30 +46,34 @@ function CategoryCourses() {
     return (
         <div className="category-courses">
 
+
             <div className="category-courses-header">
 
                 <button
                     className="back-button"
-                    onClick={() =>
-                        navigate("/admin/categories")
-                    }
+                    onClick={() => navigate("/admin/categories")}
                 >
                     ← Back to Categories
                 </button>
 
-
-                <h1>
-                    {category?.categoryName || "Category"}
-                </h1>
-
+                <div className="category-title">
+                    <h1>
+                        <span className="category-name">
+                            {category?.categoryName || "Loading..."}
+                        </span>
+                        {" "}
+                        <span className="category-label">
+                            Category
+                        </span>
+                    </h1>
+                    <p>
+                        {courses.length} {courses.length === 1 ? "Course" : "Courses"}
+                    </p>
+                </div>
 
                 <button
                     className="create-course-button"
-                    onClick={() =>
-                        navigate(
-                            `/admin/categories/${categoryId}/courses/create`
-                        )
-                    }
+                    onClick={() => navigate(`/admin/categories/${categoryId}/courses/create`)}
                 >
                     + Create New Course
                 </button>
@@ -86,102 +84,112 @@ function CategoryCourses() {
             <div className="category-courses-list">
 
                 {courses.length === 0 ? (
-
                     <div className="no-courses">
                         <p>No courses in this category.</p>
-                    </div>
-
-                ) : (
-
-                    courses.map((course) => (
-
-                        <div
-                            className="course-card"
-                            key={course.id}
+                        <button
+                            onClick={() => navigate(`/admin/categories/${categoryId}/courses/create`)}
                         >
+                            Create First Course
+                        </button>
+                    </div>
+                ) : (
+                    courses.map((course) => (
+                        <div className="course-card" key={course.id}>
 
 
-                            <div className="course-icon-container">
-
+                            <div className="course-image-container">
                                 <img
                                     src={
-                                        course.iconUrl
-                                            ? `http://localhost:8080${course.iconUrl}`
+                                        course.imageUrl
+                                            ? `http://localhost:8080${course.imageUrl}`
                                             : "/default-course.png"
                                     }
                                     alt={course.courseName}
-                                    className="course-icon"
+                                    className="course-image"
                                 />
-
                             </div>
-
 
 
                             <div className="course-info">
 
-                                <h2>
-                                    {course.courseName}
-                                </h2>
+                                <div className="course-name-row">
+                                    <div className="course-icon-container">
+                                        <img
+                                            src={
+                                                course.iconUrl
+                                                    ? `http://localhost:8080${course.iconUrl}`
+                                                    : "/default-course-icon.png"
+                                            }
+                                            alt=""
+                                            className="course-icon"
+                                        />
+                                    </div>
+                                    <h2>{course.courseName}</h2>
+                                </div>
 
-                                <p>
-                                    {course.shortDescription}
+                                <p className="course-description">
+                                    {course.shortDescription || "No description provided."}
                                 </p>
 
-                                <span
-                                    className={
-                                        course.published
-                                            ? "course-status published"
-                                            : "course-status not-published"
-                                    }
-                                >
-                                    {course.published
-                                        ? "Published"
-                                        : "Not Published"}
-                                </span>
+                                <div className="course-details">
+                                    <span>⏱ {course.courseHours} Hours</span>
+                                    <span>📚 {course.lectureCount} Lectures</span>
+                                    <span>💰 {course.price}</span>
+                                </div>
 
+                                <div className="course-status-row">
+                                    <span
+                                        className={
+                                            course.published
+                                                ? "course-status published"
+                                                : "course-status not-published"
+                                        }
+                                    >
+                                        {course.published ? "Published" : "Not Published"}
+                                    </span>
+
+                                    {course.featured && (
+                                        <span className="featured-badge">
+                                            ★ Featured
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-
 
 
                             <div className="course-actions">
 
                                 <button
                                     className="edit-course-button"
-                                    onClick={() =>
-                                        navigate(
-                                            `/admin/courses/${course.id}/edit`
-                                        )
-                                    }
+                                    onClick={() => navigate(`/admin/courses/${course.id}/edit`)}
                                 >
                                     Edit
                                 </button>
 
-
                                 <button
-                                    className="publish-course-button"
+                                    className={
+                                        course.featured
+                                            ? "unfeature-course-button"
+                                            : "feature-course-button"
+                                    }
                                 >
-                                    {course.published
-                                        ? "Unpublish"
-                                        : "Publish"}
+                                    {course.featured ? "Unfeature" : "Feature"}
                                 </button>
 
+                                <button className="publish-course-button">
+                                    {course.published ? "Unpublish" : "Publish"}
+                                </button>
 
-                                <button
-                                    className="delete-course-button"
-                                >
+                                <button className="delete-course-button">
                                     Delete
                                 </button>
 
                             </div>
 
                         </div>
-
                     ))
-
                 )}
-
             </div>
-
         </div>
     );
 }

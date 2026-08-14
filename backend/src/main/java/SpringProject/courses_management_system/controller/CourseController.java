@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/courses")
 
@@ -27,9 +28,6 @@ public class CourseController {
     }
 
 
-    // =========================
-    // STUDENT
-    // =========================
     @GetMapping("/featured")
     public List<Course> getFeaturedCourses() {
         return courseService.getFeaturedCourses();
@@ -41,9 +39,7 @@ public class CourseController {
         return courseService.getAllCourses();
     }
 
-    // =========================
-    // ADMIN
-    // =========================
+
     @GetMapping("/admin")
     public List<CourseResponse> getAllCoursesForAdmin() {
         return courseService.getAllCoursesResponse();

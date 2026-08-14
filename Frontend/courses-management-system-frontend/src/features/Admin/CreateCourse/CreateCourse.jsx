@@ -18,6 +18,8 @@ function CreateCourse() {
         price: "",
     });
 
+    const [successMessage, setSuccessMessage] = useState("");
+
     const [selectedCategories, setSelectedCategories] = useState([categoryId]);
     const [contentFile, setContentFile] = useState(null);
     const [courseImage, setCourseImage] = useState(null);
@@ -78,8 +80,9 @@ function CreateCourse() {
             };
 
             await createCourse(data);
-            alert("Course created successfully!");
-            navigate(`/admin/categories/${categoryId}/courses`);
+
+            setSuccessMessage("Course created successfully!");
+            // navigate(`/admin/categories/${categoryId}/courses`);
         } catch (error) {
             console.error("Error creating course:", error);
 
@@ -111,6 +114,33 @@ function CreateCourse() {
 
     return (
         <div className="create-course">
+            {successMessage && (
+                <div className="success-overlay">
+                    <div className="success-box">
+
+                        <div className="success-icon">
+                            ✓
+                        </div>
+
+                        <h2>Success!</h2>
+
+                        <p>{successMessage}</p>
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                navigate(
+                                    `/admin/categories/${categoryId}/courses`
+                                )
+                            }
+                        >
+                            OK
+                        </button>
+
+                    </div>
+                </div>
+            )}
+
             <div className="create-course-header">
                 <h1>Create New Course</h1>
                 <button

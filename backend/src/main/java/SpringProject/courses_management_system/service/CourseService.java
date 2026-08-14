@@ -234,7 +234,6 @@ public class CourseService {
         }
 
         String originalFileName = file.getOriginalFilename();
-
         String extension = "";
 
         if (originalFileName != null && originalFileName.contains(".")) {
@@ -245,7 +244,10 @@ public class CourseService {
 
         String fileName = UUID.randomUUID() + extension;
 
+        String projectDir = System.getProperty("user.dir");
+
         Path uploadPath = Paths.get(
+                projectDir,
                 "src/main/resources/static/images",
                 folder
         );
