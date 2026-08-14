@@ -1,6 +1,7 @@
 import { useState } from "react"; // 1. Removed useEffect
 import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 import HomePage from "./pages/HomePage";
 import ContactUs from "./pages/ContactUs";
@@ -23,6 +24,9 @@ function App() {
 
     return (
         <>
+            <ScrollToTop />
+
+
             <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
 
             <Routes>
