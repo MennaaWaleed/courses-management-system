@@ -9,6 +9,13 @@ import SpringProject.courses_management_system.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.math.BigDecimal;
 
 @Service
 public class CourseService {
@@ -64,29 +71,96 @@ public class CourseService {
         return response;
     }
 
-    public CourseResponse createCourse(CourseRequest courseRequest) {
-        Course course = new Course();
-        course.setCourseName(courseRequest.getCourseName());
-        course.setDescription(courseRequest.getDescription());
-        course.setShortDescription(courseRequest.getShortDescription());
+    public CourseResponse createCourse(
+            String courseName,
+            String description,
+            String shortDescription,
+            BigDecimal courseHours,
+            int lectureCount,
+            int price,
+            List<UUID> categoryIds,
+            MultipartFile contentFile,
+            MultipartFile courseImage,
+            MultipartFile iconImage
+    ) {
 
-        course.setPublished(courseRequest.isPublished());
-        course.setCourseHours(courseRequest.getCourseHours());
-        course.setLectureCount(courseRequest.getLectureCount());
+        try {
 
-        course.setImageUrl(courseRequest.getImageUrl());
-        course.setIconUrl(courseRequest.getIconUrl());
+            Course course = new Course();
 
-        course.setPrice(courseRequest.getPrice());
-        course.setFeatured(courseRequest.isFeatured());
 
-        List<Category> categories =
-                categoryRepository.findAllById(courseRequest.getCategoryIds());
+            course.setCourseName(courseName);
+            course.setDescription(description);
+            course.setShortDescription(shortDescription);
 
-        course.setCategories(new HashSet<>(categories));
-        course.setContent_url(courseRequest.getContent_url());
-        Course savedCourse = courseRepository.save(course);
-        return convertToResponse(savedCourse);
+            course.setCourseHours(courseHours);
+            course.setLectureCount(lectureCount);
+            course.setPrice(price);
+
+            course.setPublished(false);
+
+            course.setFeatured(false);
+
+            course.setDeleted(false);
+
+            List<Category> categories =
+                    categoryRepository.findAllById(categoryIds);
+
+            if (categories.size() != categoryIds.size()) {
+                throw new RuntimeException("One or more categories not found");
+            }
+
+            course.setCategories(
+                    new HashSet<>(categories)
+            );
+
+
+            if (contentFile == null || contentFile.isEmpty()) {
+                throw new RuntimeException("Course PDF is required");
+            }
+
+            String contentUrl = saveFile(
+                    contentFile,
+                    "courses/CoursesContent"
+            );
+
+            course.setContent_url(contentUrl);
+
+
+            if (courseImage == null || courseImage.isEmpty()) {
+                throw new RuntimeException("Course image is required");
+            }
+
+            String imageUrl = saveFile(
+                    courseImage,
+                    "courses/images"
+            );
+
+            course.setImageUrl(imageUrl);
+
+            if (iconImage != null && !iconImage.isEmpty()) {
+
+                String iconUrl = saveFile(
+                        iconImage,
+                        "courses/icons"
+                );
+
+                course.setIconUrl(iconUrl);
+
+            }
+
+            Course savedCourse =
+                    courseRepository.save(course);
+
+            return convertToResponse(savedCourse);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Failed to save course files",
+                    e
+            );
+        }
     }
 
     public CourseResponse getCourseById(UUID id) {
@@ -148,5 +222,40 @@ public class CourseService {
         return courses.stream()
                 .map(this::convertToResponse)
                 .toList();
+    }
+
+    private String saveFile(
+            MultipartFile file,
+            String folder
+    ) throws IOException {
+
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        String originalFileName = file.getOriginalFilename();
+
+        String extension = "";
+
+        if (originalFileName != null && originalFileName.contains(".")) {
+            extension = originalFileName.substring(
+                    originalFileName.lastIndexOf(".")
+            );
+        }
+
+        String fileName = UUID.randomUUID() + extension;
+
+        Path uploadPath = Paths.get(
+                "src/main/resources/static/images",
+                folder
+        );
+
+        Files.createDirectories(uploadPath);
+
+        Path filePath = uploadPath.resolve(fileName);
+
+        file.transferTo(filePath.toFile());
+
+        return "/images/" + folder + "/" + fileName;
     }
 }

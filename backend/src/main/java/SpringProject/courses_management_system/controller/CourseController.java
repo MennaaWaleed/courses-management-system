@@ -1,15 +1,17 @@
 package SpringProject.courses_management_system.controller;
 
-
 import SpringProject.courses_management_system.dto.Course.CourseRequest;
 import SpringProject.courses_management_system.dto.Course.CourseResponse;
-import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.model.Course;
 import SpringProject.courses_management_system.service.CourseService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -47,10 +49,39 @@ public class CourseController {
         return courseService.getAllCoursesResponse();
     }
 
+
     @PostMapping
-    public CourseResponse createCourse(@RequestBody CourseRequest courseRequest){
-        return courseService.createCourse(courseRequest);
+    public CourseResponse createCourse(
+            @RequestParam String courseName,
+            @RequestParam String description,
+            @RequestParam String shortDescription,
+            @RequestParam BigDecimal courseHours,
+            @RequestParam int lectureCount,
+            @RequestParam int price,
+
+            @RequestParam List<UUID> categoryIds,
+
+            @RequestPart("contentFile") MultipartFile contentFile,
+            @RequestPart("courseImage") MultipartFile courseImage,
+
+            @RequestPart(value = "iconImage", required = false)
+            MultipartFile iconImage
+    ) {
+
+        return courseService.createCourse(
+                courseName,
+                description,
+                shortDescription,
+                courseHours,
+                lectureCount,
+                price,
+                categoryIds,
+                contentFile,
+                courseImage,
+                iconImage
+        );
     }
+
 
     @GetMapping("/{id}")
     public CourseResponse getCourseById(@PathVariable UUID id) {

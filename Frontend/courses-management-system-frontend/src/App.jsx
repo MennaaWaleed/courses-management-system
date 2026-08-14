@@ -7,9 +7,11 @@ import Login from "./features/auth/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
 import AdminRoute from "./components/auth/AdminRoute";
-import AdminCategories from "./features/Admin/AdminCategories";
+import AdminCategories from "./features/Admin/AdminCategories/AdminCategories.jsx";
 import EditCategory from "./features/Admin/EditCategory/EditCategory";
 import CreateCategory from "./features/Admin/CreateCategory/ CreateCategory";
+import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
+import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const token = sessionStorage.getItem("token");
@@ -38,7 +40,7 @@ function App() {
                     />
 
                     <Route
-                        path="/auth/register"a
+                        path="/auth/register"
                         element={<Register setIsLoggedIn={setIsLoggedIn} />}
                     />
 
@@ -61,6 +63,24 @@ function App() {
                     <Route
                         path="/admin/categories/create"
                         element={<CreateCategory />}
+                    />
+
+                    <Route
+                        path="/admin/categories/:categoryId/courses"
+                        element={
+                            <AdminRoute>
+                                <CategoryCourses />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/categories/:categoryId/courses/create"
+                        element={
+                            <AdminRoute>
+                                <CreateCourse />
+                            </AdminRoute>
+                        }
                     />
 
                 </Routes>

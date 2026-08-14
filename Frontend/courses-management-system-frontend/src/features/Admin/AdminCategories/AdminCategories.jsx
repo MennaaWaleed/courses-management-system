@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {deleteCategory,getCategories, toggleCategoryPublished} from "../../api/categoryApi";
+import {deleteCategory,getCategories, toggleCategoryPublished} from "../../../api/categoryApi.js";
 import "./AdminCategories.css";
 import { useNavigate } from "react-router-dom";
 
@@ -95,10 +95,18 @@ function AdminCategories() {
 
             <div className="admin-categories-list">
                 {categories.map((category, index) => (
+                    // <div
+                    //     key={category.id}
+                    //     className="admin-category-card"
+                    //     style={{ animationDelay: `${index * 0.1}s` }}
+                    // >
                     <div
                         key={category.id}
                         className="admin-category-card"
                         style={{ animationDelay: `${index * 0.1}s` }}
+                        onClick={() =>
+                            navigate(`/admin/categories/${category.id}/courses`)
+                        }
                     >
                         {/* --- New Image Section --- */}
                         <div className="card-image-container">
@@ -124,29 +132,60 @@ function AdminCategories() {
 
                         <div className="category-actions">
 
+                            {/*<button*/}
+                            {/*    className="btn edit-button"*/}
+                            {/*    onClick={() =>*/}
+                            {/*        navigate(`/admin/categories/${category.id}/edit`)*/}
+                            {/*    }*/}
+                            {/*>*/}
+                            {/*    Edit*/}
+                            {/*</button>*/}
                             <button
                                 className="btn edit-button"
-                                onClick={() =>
-                                    navigate(`/admin/categories/${category.id}/edit`)
-                                }
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/admin/categories/${category.id}/edit`);
+                                }}
                             >
                                 Edit
                             </button>
 
+                            {/*<button*/}
+                            {/*    className={`btn ${*/}
+                            {/*        category.published*/}
+                            {/*            ? "unpublish-button"*/}
+                            {/*            : "publish-button"*/}
+                            {/*    }`}*/}
+                            {/*    onClick={() => togglePublished(category.id)}*/}
+                            {/*>*/}
+                            {/*    {category.published ? "Unpublish" : "Publish"}*/}
+                            {/*</button>*/}
                             <button
                                 className={`btn ${
                                     category.published
                                         ? "unpublish-button"
                                         : "publish-button"
                                 }`}
-                                onClick={() => togglePublished(category.id)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    togglePublished(category.id);
+                                }}
                             >
                                 {category.published ? "Unpublish" : "Publish"}
                             </button>
 
+                            {/*<button*/}
+                            {/*    className="btn delete-button"*/}
+                            {/*    onClick={() => setCategoryToDelete(category)}*/}
+                            {/*>*/}
+                            {/*    Delete*/}
+                            {/*</button>*/}
                             <button
                                 className="btn delete-button"
-                                onClick={() => setCategoryToDelete(category)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCategoryToDelete(category);
+                                }}
                             >
                                 Delete
                             </button>

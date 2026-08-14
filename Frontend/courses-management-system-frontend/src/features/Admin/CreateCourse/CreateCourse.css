@@ -1,0 +1,503 @@
+/* =========================
+   CREATE COURSE PAGE
+========================= */
+
+.create-course {
+    max-width: 900px;
+    margin: 0 auto;
+
+    padding: 120px 40px 50px;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+
+    color: #333;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.create-course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+
+    border-bottom: 2px solid #f0f2f5;
+}
+
+.create-course-header h1 {
+    margin: 0;
+
+    font-size: 1.8rem;
+    font-weight: 700;
+
+    color: #1a1f36;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.create-course-form {
+    background-color: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    padding: 35px;
+
+    box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.05),
+            0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+
+/* =========================
+   LABELS
+========================= */
+
+.create-course-form label {
+    display: block;
+
+    margin-top: 20px;
+    margin-bottom: 8px;
+
+    color: #374151;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.create-course-form label:first-child {
+    margin-top: 0;
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+.create-course-form input,
+.create-course-form textarea,
+.create-course-form select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+
+    color: #111827;
+
+    font-family: inherit;
+    font-size: 0.95rem;
+
+    outline: none;
+
+    transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+.create-course-form input {
+    height: 46px;
+}
+
+.create-course-form textarea {
+    min-height: 140px;
+
+    resize: vertical;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   FOCUS
+========================= */
+
+.create-course-form input:focus,
+.create-course-form textarea:focus,
+.create-course-form select:focus {
+    border-color: var(--primary-color);
+
+    box-shadow:
+            0 0 0 3px rgba(11, 159, 138, 0.12);
+}
+
+
+/* =========================
+   TWO COLUMN ROW
+========================= */
+
+.course-form-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+
+/* =========================
+   FILE INPUT
+========================= */
+
+.create-course-form input[type="file"] {
+    height: auto;
+
+    padding: 10px;
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+.course-image-preview {
+    margin-top: 15px;
+}
+
+.course-image-preview img {
+    width: 220px;
+    height: 140px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    border: 1px solid #e5e7eb;
+}
+
+
+/* =========================
+   CHECKBOXES
+========================= */
+
+.course-checkboxes {
+    display: flex;
+
+    gap: 30px;
+
+    margin-top: 25px;
+}
+
+.course-checkbox {
+    display: flex !important;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 !important;
+
+    cursor: pointer;
+}
+
+.course-checkbox input {
+    width: auto;
+
+    height: auto;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.create-course-error {
+    margin-top: 18px;
+
+    padding: 12px 14px;
+
+    background-color: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    border-radius: 8px;
+
+    color: #dc2626;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.create-course-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 30px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #eef0f3;
+}
+
+
+/* =========================
+   BACK / CANCEL
+========================= */
+
+.create-course .back-button,
+.create-course .cancel-button {
+    padding: 11px 22px;
+
+    background-color: white;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    color: #374151;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.create-course .back-button:hover,
+.create-course .cancel-button:hover {
+    background-color: #f3f4f6;
+
+    border-color: #9ca3af;
+}
+
+
+/* =========================
+   CREATE BUTTON
+========================= */
+
+.create-course .save-button {
+    padding: 11px 24px;
+
+    background-color: var(--primary-color);
+
+    border: 1px solid var(--primary-color);
+
+    border-radius: 8px;
+
+    color: white;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.create-course .save-button:hover {
+    background-color: var(--primary-dark);
+
+    border-color: var(--primary-dark);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+            0 5px 12px rgba(16, 185, 129, 0.2);
+}
+
+.create-course .save-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    .create-course {
+        padding: 110px 20px 40px;
+    }
+
+    .create-course-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .create-course-form {
+        padding: 25px 20px;
+    }
+
+    .course-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .create-course {
+        padding: 105px 15px 30px;
+    }
+
+    .create-course-header {
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .create-course-header h1 {
+        font-size: 1.35rem;
+    }
+
+    .create-course-form {
+        padding: 20px 16px;
+    }
+
+    .course-checkboxes {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .create-course-actions {
+        flex-direction: column-reverse;
+    }
+
+    .create-course .cancel-button,
+    .create-course .save-button {
+        width: 100%;
+    }
+}
+
+.categories-checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    margin-top: 8px;
+    padding: 15px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    background-color: #fafafa;
+
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.category-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+.category-checkbox:hover {
+    background-color: #f0f7f6;
+}
+
+.category-checkbox input {
+    width: 18px;
+    height: 18px;
+
+    cursor: pointer;
+
+    accent-color: #0fa88f;
+}
+
+.category-checkbox span {
+    font-size: 16px;
+    color: #243b53;
+}
+
+.course-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .course-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.categories-checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    padding: 20px;
+
+    border: 1px solid #ddd;
+    border-radius: 10px;
+
+    background: #fafafa;
+}
+
+.category-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.category-checkbox input {
+    width: 18px;
+    height: 18px;
+
+    accent-color: #0fa88f;
+}
+
+.category-checkbox small {
+    margin-left: 8px;
+
+    color: #0fa88f;
+    font-weight: bold;
+}
+
+.required-category {
+    background: #eefaf7;
+
+    padding: 10px;
+
+    border-radius: 7px;
+
+    cursor: not-allowed;
+}
+
+.required-category input {
+    cursor: not-allowed;
+}

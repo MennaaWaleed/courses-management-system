@@ -1,4 +1,4 @@
-import AdminCategories from "../../features/Admin/AdminCategories";
+import AdminCategories from "../../features/Admin/AdminCategories/AdminCategories.jsx";
 import "./AdminHome.css";
 
 function AdminHome() {
