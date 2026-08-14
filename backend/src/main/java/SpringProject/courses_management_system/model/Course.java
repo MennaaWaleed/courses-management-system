@@ -62,5 +62,8 @@ public class Course {
 
     @Column(name="content_url",nullable=false, length=1000)
     private String content_url;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }
 

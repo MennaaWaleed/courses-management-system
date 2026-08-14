@@ -22,13 +22,24 @@ public class CourseService {
     }
 
     public List<Course> getFeaturedCourses() {
-        return courseRepository.findByFeaturedTrueAndPublishedTrue();
+        return courseRepository.findByFeaturedTrueAndPublishedTrueAndIsDeletedFalse();
     }
 
+    //for Student page
     public List<Course> getAllCourses(){
-        Optional<Course> course= courseRepository.findById(UUID.fromString("4f7b3d39-a03d-4a96-8106-90ff4044d42e"));
-        return courseRepository.findByPublishedTrue();
+        return courseRepository.findByPublishedTrueAndIsDeletedFalse();
     }
+
+    // for Admin
+    public List<CourseResponse> getAllCoursesResponse() {
+
+        List<Course> courses = courseRepository.findByIsDeletedFalse();
+
+        return courses.stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
     private CourseResponse convertToResponse(Course course) {
 
         CourseResponse response = new CourseResponse();
@@ -80,7 +91,7 @@ public class CourseService {
 
     public CourseResponse getCourseById(UUID id) {
 
-        Course course = courseRepository.findById(id)
+        Course course = courseRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
         return convertToResponse(course);
@@ -88,7 +99,7 @@ public class CourseService {
 
     public CourseResponse updateCourse(UUID id, CourseRequest request) {
 
-        Course course = courseRepository.findById(id)
+        Course course = courseRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
         course.setCourseName(request.getCourseName());
@@ -118,9 +129,24 @@ public class CourseService {
 
     public void deleteCourse(UUID id) {
 
-        Course course = courseRepository.findById(id)
+        Course course = courseRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        courseRepository.delete(course);
+        course.setDeleted(true);
+
+        courseRepository.save(course);
+    }
+
+    public List<CourseResponse> getCoursesByCategory(UUID categoryId) {
+
+        categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        List<Course> courses =
+                courseRepository.findByCategories_IdAndIsDeletedFalse(categoryId);
+
+        return courses.stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 }

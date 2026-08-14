@@ -25,19 +25,30 @@ public class CourseController {
     }
 
 
+    // =========================
+    // STUDENT
+    // =========================
     @GetMapping("/featured")
     public List<Course> getFeaturedCourses() {
         return courseService.getFeaturedCourses();
     }
 
     @GetMapping
-    private List<Course> getAllCourses(){
+    public List<Course> getAllCourses(){
 
         return courseService.getAllCourses();
     }
 
+    // =========================
+    // ADMIN
+    // =========================
+    @GetMapping("/admin")
+    public List<CourseResponse> getAllCoursesForAdmin() {
+        return courseService.getAllCoursesResponse();
+    }
+
     @PostMapping
-    private CourseResponse createCourse(@RequestBody CourseRequest courseRequest){
+    public CourseResponse createCourse(@RequestBody CourseRequest courseRequest){
         return courseService.createCourse(courseRequest);
     }
 
@@ -57,4 +68,13 @@ public class CourseController {
     public void deleteCourse(@PathVariable UUID id) {
         courseService.deleteCourse(id);
     }
+
+    @GetMapping("/category/{categoryId}")
+    public List<CourseResponse> getCoursesByCategory(
+            @PathVariable UUID categoryId) {
+
+        return courseService.getCoursesByCategory(categoryId);
+    }
+
+
 }

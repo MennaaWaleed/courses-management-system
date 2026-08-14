@@ -427,3 +427,7 @@ ALTER TABLE category
 ----------------------new-----------------
 ALTER TABLE category
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+------------------new---------------------
+ALTER TABLE course
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
