@@ -60,7 +60,14 @@ public class Course {
     @Column(name="featured", nullable=false)
     private boolean featured;
 
-    @Column(name = "short_description", nullable = false, length = 150)
+    @Column(name = "short_description", nullable = false, length = 500)
     private String shortDescription;
+
+    //pdf
+    @Column(name="content_url",nullable=false, length=1000)
+    private String content_url;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }
 

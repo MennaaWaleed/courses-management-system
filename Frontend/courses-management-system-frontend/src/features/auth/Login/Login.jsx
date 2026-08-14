@@ -29,12 +29,20 @@ function Login({setIsLoggedIn}) {
             console.log(response.data);
 
             sessionStorage.setItem("token", response.data.token);
+            sessionStorage.setItem("role", response.data.role);
+
 
             setSuccessMessage("Login successful!");
             setIsLoggedIn(true);
 
             setTimeout(() => {
-                navigate("/");
+
+                if (response.data.role === "ADMIN") {
+                    navigate("/admin/categories");
+                } else {
+                    navigate("/");
+                }
+
             }, 1000);
 
         } catch (error) {

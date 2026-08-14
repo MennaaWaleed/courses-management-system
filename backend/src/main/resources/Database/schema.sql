@@ -415,10 +415,7 @@ VALUES
 select * from course_category;
 
 
-
-
-ALTER TABLE course
-ADD COLUMN content_url VARCHAR(500);
+------------------------------------------ new --------------------------------------------------------------
 
 
 UPDATE course
@@ -465,4 +462,20 @@ CREATE TABLE course_registrations (
 
 CREATE INDEX idx_course_registrations_course_id
 ON course_registrations(course_id);
+
+----------------------new----------------
+ALTER TABLE course
+    ADD COLUMN content_url VARCHAR(1000);
+
+ALTER TABLE category
+    ADD COLUMN published BOOLEAN NOT NULL DEFAULT FALSE;
+
+
+----------------------new-----------------
+ALTER TABLE category
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+------------------new---------------------
+ALTER TABLE course
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 

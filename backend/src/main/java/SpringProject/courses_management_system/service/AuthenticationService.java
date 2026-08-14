@@ -44,6 +44,7 @@ public class AuthenticationService {
         LoginResponse response = new LoginResponse();
         response.setMessage("Login successful");
         response.setToken(token);
+        response.setRole(user.getRole().name());
 
         return response;
     }

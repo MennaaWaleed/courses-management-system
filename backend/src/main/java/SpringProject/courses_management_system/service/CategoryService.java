@@ -1,10 +1,17 @@
 package SpringProject.courses_management_system.service;
 
+import SpringProject.courses_management_system.dto.Category.CategoryResponse;
 import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 
@@ -18,67 +25,223 @@ public class CategoryService {
 
     public List<Category> getAllCategories() {
 
-        Category category ;
-//         category = new Category();
-//        category.setCategoryName("Architecture");
-//        category.setDescription("Learn professional architectural design using Autodesk Revit, AutoCAD, and visualization tools. Master BIM workflows, project documentation, rendering, and real-world architectural projects from concept to construction.");
-//        category.setShortDescription("BIM Design & Architectural Visualization");
-//
-//       category.setImageUrl("/images/categories/architecture.png");
-//       categoryRepository.save(category);
+        return categoryRepository.findByIsDeletedFalse();
+    }
 
 
-//
-//
-//        category = new Category();
-//        category.setCategoryName("Mechanical");
-//        category.setDescription("Master Mechanical BIM by designing HVAC systems, plumbing networks, and fire protection solutions. Gain practical experience with Revit MEP and engineering design standards used in real projects.");
-//        category.setShortDescription("HVAC • Plumbing • Fire Fighting");
-//
-//        category.setImageUrl("/images/categories/mechanical.png");
-//        categoryRepository.save(category);
-//
-//
-//
-//
-//        category = new Category();
-//        category.setCategoryName("Electrical");
-//        category.setDescription("Learn electrical building systems including power distribution, lighting design, cable routing, and BIM coordination. Work on complete electrical projects using Autodesk Revit MEP.");
-//        category.setShortDescription("Power • Lighting • BIM MEP");
-//
-//        category.setImageUrl("/images/categories/electrical.png");
-//        categoryRepository.save(category);
-//
-//
-//        category = new Category();
-//        category.setCategoryName("civil");
-//        category.setDescription("Build professional skills in civil engineering using Autodesk Civil 3D. Learn road design, grading, land development, surveying, and infrastructure workflows through real engineering case studies.");
-//        category.setShortDescription("Infrastructure & Road Design");
-//
-//        category.setImageUrl("/images/categories/civil.png");
-//        categoryRepository.save(category);
-//
-//        category = new Category();
-//        category.setCategoryName("Interior Design");
-//        category.setDescription("Create modern interior spaces using 3ds Max, Revit, and rendering tools. Learn space planning, furniture modeling, materials, lighting, and photorealistic visualization for residential and commercial projects.");
-//        category.setShortDescription("Visualization & Interior Modeling");
-//
-//        category.setImageUrl("/images/categories/inerior_design.png");
-//        categoryRepository.save(category);
+    private CategoryResponse convertToResponse(Category category) {
+
+        CategoryResponse response = new CategoryResponse();
+
+        response.setId(category.getId());
+        response.setCategoryName(category.getCategoryName());
+        response.setCategoryDescription(category.getDescription());
+        response.setCategoryImageUrl(category.getImageUrl());
+        response.setCategoryShortDescription(category.getShortDescription());
+        response.setPublished(category.isPublished());
+
+        return response;
+    }
+
+
+    public CategoryResponse createCategory(
+            String categoryName,
+            String categoryDescription,
+            String shortDescription,
+            MultipartFile image
+    ) {
+
+        Category category = new Category();
+
+        category.setCategoryName(categoryName);
+        category.setDescription(categoryDescription);
+        category.setShortDescription(shortDescription);
+
+        if (image != null && !image.isEmpty()) {
+
+            try {
+
+                Path uploadPath = Paths.get("images/categories");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                String originalFileName =
+                        image.getOriginalFilename();
+
+                String fileName =
+                        UUID.randomUUID() + "_" + originalFileName;
+
+                Path filePath =
+                        uploadPath.resolve(fileName);
+
+                Files.copy(
+                        image.getInputStream(),
+                        filePath,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+                category.setImageUrl(
+                        "/images/categories/" + fileName
+                );
+
+            } catch (IOException e) {
+
+                throw new RuntimeException(
+                        "Could not save image",
+                        e
+                );
+            }
+
+        } else {
+
+            category.setImageUrl("");
+        }
+
+        Category savedCategory =
+                categoryRepository.save(category);
+
+        return convertToResponse(savedCategory);
+    }
 
 
 
-//        category = new Category();
-//        category.setCategoryName("Structure");
-//        category.setDescription("Develop structural engineering skills using Revit Structure and industry-standard analysis software. Learn reinforced concrete, steel structures, detailing, and BIM coordination through practical engineering projects.");
-//        category.setShortDescription("Structural Analysis & BIM Modeling");
-//
-//        category.setImageUrl("/images/categories/structure.png");
-//        categoryRepository.save(category);
+    public CategoryResponse getCategoryById(UUID id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        return categoryRepository.findAll();
+        return convertToResponse(category);
+    }
+
+    public CategoryResponse togglePublished(UUID id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        category.setPublished(!category.isPublished());
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return convertToResponse(savedCategory);
+    }
 
 
+    public CategoryResponse updateCategory(
+            UUID id,
+            String categoryName,
+            String categoryDescription,
+            String shortDescription,
+            MultipartFile image
+    ) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        category.setCategoryName(categoryName);
+        category.setDescription(categoryDescription);
+        category.setShortDescription(shortDescription);
+
+        if (image != null && !image.isEmpty()) {
+
+            try {
+                Path uploadPath = Paths.get("src/main/resources/static/images/categories");
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                String originalFileName = image.getOriginalFilename();
+                String extension = "";
+
+                if (originalFileName != null && originalFileName.contains(".")) {
+                    extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                }
+
+                String fileName = UUID.randomUUID() + extension;
+                Path filePath = uploadPath.resolve(fileName);
+
+                Files.copy(
+                        image.getInputStream(),
+                        filePath,
+                        StandardCopyOption.REPLACE_EXISTING
+                );
+
+                category.setImageUrl("/images/categories/" + fileName);
+
+            } catch (IOException e) {
+                throw new RuntimeException("Could not save image", e);
+            }
+        }
+
+        Category updatedCategory = categoryRepository.save(category);
+        return convertToResponse(updatedCategory);
+    }
+
+
+    public void deleteCategory(UUID id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        category.setDeleted(true);
+
+        categoryRepository.save(category);
+    }
+
+    public List<CategoryResponse> getPublishedCategories() {
+
+        List<Category> categories =
+                categoryRepository.findByPublishedTrueAndIsDeletedFalse();
+
+        return categories.stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
+    public String uploadImage(MultipartFile image) {
+
+        try {
+
+            String originalFileName = image.getOriginalFilename();
+
+            String extension = "";
+
+            if (originalFileName != null &&
+                    originalFileName.contains(".")) {
+
+                extension = originalFileName.substring(
+                        originalFileName.lastIndexOf(".")
+                );
+            }
+
+            String fileName =
+                    UUID.randomUUID() + extension;
+
+            Path uploadPath = Paths.get(
+                    "src/main/resources/static/images/categories"
+            );
+
+            Files.createDirectories(uploadPath);
+
+            Path filePath =
+                    uploadPath.resolve(fileName);
+
+            Files.copy(
+                    image.getInputStream(),
+                    filePath,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
+            return "/images/categories/" + fileName;
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Could not upload image",
+                    e
+            );
+        }
     }
 
 }

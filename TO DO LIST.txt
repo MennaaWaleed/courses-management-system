@@ -5,4 +5,5 @@ To do list:
 -edit the contact us page
 -validation for login and register in backend
 -show password in login
--add related courses
+- when logging in then log out then log in again the old data still and didnt disappeared
+

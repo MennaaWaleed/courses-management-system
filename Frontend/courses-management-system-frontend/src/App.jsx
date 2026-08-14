@@ -1,5 +1,6 @@
-import { useState } from "react"; // 1. Removed useEffect
+import { useState } from "react";
 import Navbar from "./components/layout/Navbar/Navbar";
+
 import Footer from "./components/layout/Footer/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 
@@ -9,7 +10,16 @@ import Courses from "./pages/Courses/Courses";
 import Login from "./features/auth/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
+
 import CourseDetails from "./pages/Courses/CourseDetails/CourseDetails";
+
+
+import AdminRoute from "./components/auth/AdminRoute";
+import AdminCategories from "./features/Admin/AdminCategories/AdminCategories.jsx";
+import EditCategory from "./features/Admin/EditCategory/EditCategory";
+import CreateCategory from "./features/Admin/CreateCategory/ CreateCategory";
+import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
+import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -19,6 +29,8 @@ function App() {
 
     const handleLogout = () => {
         sessionStorage.removeItem("token");
+        sessionStorage.removeItem("role");
+
         setIsLoggedIn(false);
     };
 
@@ -29,21 +41,70 @@ function App() {
 
             <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
 
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/contact" element={<ContactUs />} />
+            <main className="main-content">
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/contact" element={<ContactUs />} />
 
-                <Route path="/auth/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-                <Route
-                    path="/auth/register"
-                    element={<Register setIsLoggedIn={setIsLoggedIn} />}
-                />
+                    <Route
+                        path="/auth/login"
+                        element={<Login setIsLoggedIn={setIsLoggedIn} />}
+                    />
+
+                    <Route
+                        path="/auth/register"
+                        element={<Register setIsLoggedIn={setIsLoggedIn} />}
+                    />
+
+                    <Route path="/courses" element={<Courses />} />
+
+                    <Route
+                        path="/admin/categories"
+                        element={
+                            <AdminRoute>
+                                <AdminCategories />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/categories/:id/edit"
+                        element={<EditCategory />}
+                    />
+
+                    <Route
+                        path="/admin/categories/create"
+                        element={<CreateCategory />}
+                    />
+
+                    <Route
+                        path="/admin/categories/:categoryId/courses"
+                        element={
+                            <AdminRoute>
+                                <CategoryCourses />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/categories/:categoryId/courses/create"
+                        element={
+                            <AdminRoute>
+                                <CreateCourse />
+                            </AdminRoute>
+                        }
+                    />
+
 
                 <Route path="/courses" element={<Courses />} />
                 <Route path="/courses/:id" element={<CourseDetails />} />
             </Routes>
 
              <Footer />
+
+                </Routes>
+            </main>
+
         </>
     );
 }

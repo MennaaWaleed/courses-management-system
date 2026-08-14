@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+import java.util.Optional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +14,13 @@ import java.util.zip.CheckedOutputStream;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, UUID> {
 
+    List<Course> findByFeaturedTrueAndPublishedTrueAndIsDeletedFalse();
+
+    List<Course> findByPublishedTrueAndIsDeletedFalse();
+
+    List<Course> findByIsDeletedFalse();
+
+    List<Course> findByCategories_IdAndIsDeletedFalse(UUID categoryId);
 
     List<Course> findByFeaturedTrueAndPublishedTrue();
     List<Course> findByPublishedTrue();
@@ -33,4 +40,5 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     AND c.id <> :courseId
 """)
     List<Course> findRelatedCourses(@Param("courseId") UUID courseId);
+    Optional<Course> findByIdAndIsDeletedFalse(UUID id);
 }
