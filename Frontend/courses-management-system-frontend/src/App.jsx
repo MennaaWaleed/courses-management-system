@@ -1,17 +1,26 @@
 import { useState } from "react";
 import Navbar from "./components/layout/Navbar/Navbar";
+
+import Footer from "./components/layout/Footer/Footer";
+import ScrollToTop from "./components/common/ScrollToTop";
+
 import HomePage from "./pages/HomePage";
 import ContactUs from "./pages/ContactUs";
 import Courses from "./pages/Courses/Courses";
 import Login from "./features/auth/Login/Login";
 import { Routes, Route } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
+
+import CourseDetails from "./pages/Courses/CourseDetails/CourseDetails";
+
+
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminCategories from "./features/Admin/AdminCategories/AdminCategories.jsx";
 import EditCategory from "./features/Admin/EditCategory/EditCategory";
 import CreateCategory from "./features/Admin/CreateCategory/ CreateCategory";
 import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
 import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
+
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const token = sessionStorage.getItem("token");
@@ -27,6 +36,9 @@ function App() {
 
     return (
         <>
+            <ScrollToTop />
+
+
             <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
 
             <main className="main-content">
@@ -83,8 +95,16 @@ function App() {
                         }
                     />
 
-                </Routes>
+
+                <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/:id" element={<CourseDetails />} />
+            </Routes>
+
+             <Footer />
+
+            
             </main>
+
         </>
     );
 }

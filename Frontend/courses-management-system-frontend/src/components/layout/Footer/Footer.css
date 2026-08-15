@@ -1,0 +1,416 @@
+.footer {
+    position: relative;
+    background: #ffffff;
+    border-top: 1px solid #e8eeee;
+    overflow: hidden;
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.footer__container {
+    width: min(1200px, calc(100% - 48px));
+    margin: 0 auto;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.footer__main {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.2fr 1.3fr;
+    gap: 50px;
+    padding: 80px 0 65px;
+}
+
+
+/* =========================
+   BRAND
+========================= */
+
+.footer__brand {
+    max-width: 350px;
+}
+
+.footer__logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: 22px;
+}
+
+.footer__logo img {
+    width: 125px;
+    height: auto;
+    display: block;
+}
+
+
+.footer__description {
+    margin: 0;
+    color: #667085;
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 330px;
+}
+
+
+.footer__authorized {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 22px;
+    padding: 8px 14px;
+    border-radius: 999px;
+
+    background: #e9f8f5;
+    color: #0ca592;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   COLUMNS
+========================= */
+
+.footer__column h3 {
+    margin: 7px 0 22px;
+
+    color: #1f2328;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.footer__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+
+.footer__links a {
+    position: relative;
+
+    color: #667085;
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.footer__links a::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+
+    width: 0;
+    height: 1px;
+
+    background: #0ca592;
+
+    transition: width 0.25s ease;
+}
+
+
+.footer__links a:hover {
+    color: #0ca592;
+    transform: translateX(3px);
+}
+
+
+.footer__links a:hover::after {
+    width: 100%;
+}
+
+
+/* =========================
+   CONTACT & WORKING HOURS
+========================= */
+
+.footer__contact {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.footer__contact > a,
+.footer__contact-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin-bottom: 15px;
+
+    color: #667085;
+    text-decoration: none;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+.footer__contact > a {
+    transition: color 0.25s ease;
+}
+
+
+.footer__contact > a:hover {
+    color: #0ca592;
+}
+
+
+.footer__contact-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #eefaf8;
+    color: #0ca592;
+}
+
+/* Working Hours Section */
+.footer__hours {
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px dashed #e2e8e7;
+}
+
+.footer__hours-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f2328;
+    margin-bottom: 8px;
+}
+
+.footer__hours-icon {
+    color: #0ca592;
+}
+
+.footer__hours p {
+    margin: 0 0 4px;
+    font-size: 12px;
+    color: #667085;
+    line-height: 1.5;
+}
+
+.footer__status-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    background: #e9f8f5;
+    color: #0ca592;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   BOTTOM
+========================= */
+
+.footer__bottom {
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    border-top: 1px solid #edf0f0;
+}
+
+
+.footer__bottom p {
+    margin: 0;
+
+    color: #98a2b3;
+
+    font-size: 13px;
+}
+
+
+.footer__bottom-right {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+
+/* =========================
+   SOCIALS
+========================= */
+
+.footer__socials {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.footer__socials a {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e2e8e7;
+    border-radius: 50%;
+
+    color: #667085;
+    text-decoration: none;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.footer__socials a:hover {
+    background: #0ca592;
+    border-color: #0ca592;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   POWERED TEXT
+========================= */
+
+.footer__powered {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    color: #98a2b3;
+    font-size: 12px;
+}
+
+.footer__powered-arrow {
+    color: #0ca592;
+    font-size: 15px;
+    line-height: 1;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 950px) {
+
+    .footer__main {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        gap: 40px;
+    }
+
+    .footer__contact {
+        grid-column: span 3;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 650px) {
+
+    .footer__container {
+        width: min(100% - 32px, 500px);
+    }
+
+
+    .footer__main {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px 25px;
+
+        padding: 55px 0 45px;
+    }
+
+
+    .footer__brand {
+        grid-column: span 2;
+        max-width: 100%;
+    }
+
+
+    .footer__contact {
+        grid-column: span 2;
+    }
+
+
+    .footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+
+        padding: 22px 0;
+        gap: 18px;
+    }
+
+
+    .footer__bottom-right {
+        width: 100%;
+
+        justify-content: space-between;
+
+        gap: 15px;
+    }
+
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 420px) {
+
+    .footer__main {
+        grid-template-columns: 1fr;
+    }
+
+
+    .footer__brand,
+    .footer__contact {
+        grid-column: auto;
+    }
+
+
+    .footer__bottom-right {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}

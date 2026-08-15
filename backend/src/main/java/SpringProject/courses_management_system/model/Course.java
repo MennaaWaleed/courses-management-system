@@ -36,6 +36,8 @@ public class Course {
     )
     private Set<Category> categories = new HashSet<>();
 
+
+
     @Column(name="published", nullable=false)
     private boolean published=false;
 

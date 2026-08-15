@@ -1,5 +1,9 @@
 import api from "./axios";
 
+// =========================
+// Public Courses
+// =========================
+
 export const getFeaturedCourses = () => {
     return api.get("/api/courses/featured");
 };
@@ -8,9 +12,29 @@ export const getCourses = () => {
     return api.get("/api/courses");
 };
 
+export const getCourseById = (id) => {
+    return api.get(`/api/courses/${id}`);
+};
+
 export const getCoursesByCategory = (categoryId) => {
     return api.get(`/api/courses/category/${categoryId}`);
 };
+
+export const getRelatedCourses = (id) => {
+    return api.get(`/api/courses/${id}/related`);
+};
+
+// =========================
+// Course Registration
+// =========================
+
+export const registerForCourse = (data) => {
+    return api.post("/api/course-registrations", data);
+};
+
+// =========================
+// Admin - Create Course
+// =========================
 
 export const createCourse = (courseData) => {
 
@@ -46,6 +70,7 @@ export const createCourse = (courseData) => {
         courseData.price
     );
 
+    // Multiple category IDs
     courseData.categoryIds.forEach((categoryId) => {
         formData.append(
             "categoryIds",
@@ -53,16 +78,19 @@ export const createCourse = (courseData) => {
         );
     });
 
+    // Course content file
     formData.append(
         "contentFile",
         courseData.contentFile
     );
 
+    // Course image
     formData.append(
         "courseImage",
         courseData.courseImage
     );
 
+    // Optional icon
     if (courseData.iconImage) {
         formData.append(
             "iconImage",
@@ -71,8 +99,6 @@ export const createCourse = (courseData) => {
     }
 
     const token = sessionStorage.getItem("token");
-
-    console.log("TOKEN:", token);
 
     return api.post(
         "/api/courses",

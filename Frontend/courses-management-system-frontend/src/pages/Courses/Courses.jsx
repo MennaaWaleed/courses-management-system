@@ -5,7 +5,6 @@ import CourseCard from "../../features/Home/FeaturedCourses/CourseCard";
 import { useSearchParams } from "react-router-dom";
 
 function Courses() {
-
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -62,29 +61,36 @@ function Courses() {
     /* =========================
        CATEGORIES
     ========================= */
-const categories = [
-    "All",
-    ...new Set(
-        courses
-            .flatMap(course =>
-                course.categories?.map(category => category.categoryName) || []
+
+    const categories = [
+        "All",
+        ...new Set(
+            courses.flatMap(
+                course =>
+                    course.categories?.map(
+                        category =>
+                            category.categoryName
+                    ) || []
             )
-    )
-];
+        )
+    ];
 
 
     /* =========================
        FILTERED COURSES
     ========================= */
-const filteredCourses =
-    activeCategory === "All"
-        ? courses
-        : courses.filter(course =>
-            course.categories?.some(
-                category =>
-                    category.categoryName === activeCategory
-            )
-        );
+
+    const filteredCourses =
+        activeCategory === "All"
+            ? courses
+            : courses.filter(
+                course =>
+                    course.categories?.some(
+                        category =>
+                            category.categoryName ===
+                            activeCategory
+                    )
+            );
 
 
     /* =========================
@@ -108,19 +114,24 @@ const filteredCourses =
     };
 
 
+    /* =========================
+       RENDER
+    ========================= */
+
     return (
 
-        <main className="courses-page">
+        <main className="course-catalog-page">
+
 
             {/* =========================
                 HERO
             ========================= */}
 
-            <section className="courses-page__hero">
+            <section className="course-catalog-page__hero">
 
-                <div className="courses-page__container">
+                <div className="course-catalog-page__container">
 
-                    <span className="courses-page__badge">
+                    <span className="course-catalog-page__badge">
                         Our Courses
                     </span>
 
@@ -140,12 +151,12 @@ const filteredCourses =
 
 
             {/* =========================
-                COURSES
+                COURSES CONTENT
             ========================= */}
 
-            <section className="courses-page__content">
+            <section className="course-catalog-page__content">
 
-                <div className="courses-page__container">
+                <div className="course-catalog-page__container">
 
 
                     {/* =========================
@@ -156,9 +167,9 @@ const filteredCourses =
                         !error &&
                         courses.length > 0 && (
 
-                            <div className="courses-page__categories">
+                            <div className="course-catalog-page__categories">
 
-                                <div className="courses-page__categories-list">
+                                <div className="course-catalog-page__categories-list">
 
                                     {categories.map(
                                         category => (
@@ -166,15 +177,16 @@ const filteredCourses =
                                             <button
                                                 key={category}
                                                 type="button"
+
                                                 className={`
-                                                    courses-page__category
+                                                    course-catalog-page__category
                                                     ${
-                                                        activeCategory ===
-                                                        category
-                                                            ? "active"
+                                                        activeCategory === category
+                                                            ? "course-catalog-page__category--active"
                                                             : ""
                                                     }
                                                 `}
+
                                                 onClick={() =>
                                                     handleCategoryChange(
                                                         category
@@ -204,29 +216,56 @@ const filteredCourses =
 
                     {loading && (
 
-                        <div className="courses-page__grid">
+                        <div className="course-catalog-page__grid">
 
                             {[1, 2, 3, 4, 5, 6].map(
                                 item => (
 
                                     <div
-                                        className="course-card-skeleton"
+                                        className="course-catalog-skeleton-card"
                                         key={item}
                                     >
 
-                                        <div className="course-card-skeleton__content">
+                                        <div className="course-catalog-skeleton-card__content">
 
-                                            <span className="skeleton skeleton--category"></span>
+                                            <span
+                                                className="
+                                                    course-catalog-skeleton
+                                                    course-catalog-skeleton--category
+                                                "
+                                            />
 
-                                            <span className="skeleton skeleton--title"></span>
+                                            <span
+                                                className="
+                                                    course-catalog-skeleton
+                                                    course-catalog-skeleton--title
+                                                "
+                                            />
 
-                                            <span className="skeleton skeleton--title short"></span>
+                                            <span
+                                                className="
+                                                    course-catalog-skeleton
+                                                    course-catalog-skeleton--title
+                                                    course-catalog-skeleton--title-short
+                                                "
+                                            />
 
-                                            <div className="course-card-skeleton__footer">
 
-                                                <span className="skeleton skeleton--duration"></span>
+                                            <div className="course-catalog-skeleton-card__footer">
 
-                                                <span className="skeleton skeleton--button"></span>
+                                                <span
+                                                    className="
+                                                        course-catalog-skeleton
+                                                        course-catalog-skeleton--duration
+                                                    "
+                                                />
+
+                                                <span
+                                                    className="
+                                                        course-catalog-skeleton
+                                                        course-catalog-skeleton--button
+                                                    "
+                                                />
 
                                             </div>
 
@@ -249,7 +288,7 @@ const filteredCourses =
                     {!loading &&
                         error && (
 
-                            <div className="courses-page__state">
+                            <div className="course-catalog-page__state">
 
                                 <h3>
                                     Something went wrong
@@ -272,7 +311,7 @@ const filteredCourses =
                         !error &&
                         courses.length === 0 && (
 
-                            <div className="courses-page__state">
+                            <div className="course-catalog-page__state">
 
                                 <h3>
                                     No courses available
@@ -296,13 +335,14 @@ const filteredCourses =
                         !error &&
                         filteredCourses.length > 0 && (
 
-                            <div className="courses-page__grid">
+                            <div className="course-catalog-page__grid">
 
                                 {filteredCourses.map(
                                     course => (
 
                                         <CourseCard
                                             key={course.id}
+
                                             course={{
                                                 ...course,
 
@@ -318,6 +358,7 @@ const filteredCourses =
                                                 icon:
                                                     `http://localhost:8080${course.iconUrl}`,
                                             }}
+
                                             variant="compact"
                                         />
 
@@ -338,7 +379,7 @@ const filteredCourses =
                         courses.length > 0 &&
                         filteredCourses.length === 0 && (
 
-                            <div className="courses-page__state">
+                            <div className="course-catalog-page__state">
 
                                 <h3>
                                     No courses found
@@ -360,7 +401,6 @@ const filteredCourses =
         </main>
 
     );
-
 }
 
 export default Courses;
