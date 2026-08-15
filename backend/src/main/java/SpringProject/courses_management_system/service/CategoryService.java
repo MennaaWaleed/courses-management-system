@@ -2,7 +2,10 @@ package SpringProject.courses_management_system.service;
 
 import SpringProject.courses_management_system.dto.Category.CategoryResponse;
 import SpringProject.courses_management_system.model.Category;
+import SpringProject.courses_management_system.model.Course;
 import SpringProject.courses_management_system.repository.CategoryRepository;
+import SpringProject.courses_management_system.repository.CourseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -18,11 +21,15 @@ import java.util.UUID;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CourseRepository courseRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(
+            CategoryRepository categoryRepository,
+            CourseRepository courseRepository
+    ) {
         this.categoryRepository = categoryRepository;
+        this.courseRepository = courseRepository;
     }
-
     public List<Category> getAllCategories() {
 
         return categoryRepository.findByIsDeletedFalse();
@@ -179,15 +186,23 @@ public class CategoryService {
     }
 
 
-    public void deleteCategory(UUID id) {
+@Transactional
+public void deleteCategory(UUID id) {
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+    Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        category.setDeleted(true);
+    List<Course> courses = courseRepository.findByCategoriesContaining(category);
 
-        categoryRepository.save(category);
+    for (Course course : courses) {
+        course.setDeleted(true);
     }
+
+    courseRepository.saveAll(courses);
+
+    category.setDeleted(true);
+    categoryRepository.save(category);
+}
 
     public List<CategoryResponse> getPublishedCategories() {
 

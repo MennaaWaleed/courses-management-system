@@ -1,5 +1,6 @@
 package SpringProject.courses_management_system.repository;
 
+import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,9 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     List<Course> findByIsDeletedFalse();
 
     List<Course> findByCategories_IdAndIsDeletedFalse(UUID categoryId);
+
+    List<Course> findByCategoriesContaining(Category category);
+
 
     List<Course> findByFeaturedTrueAndPublishedTrue();
     List<Course> findByPublishedTrue();
