@@ -3,7 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { getCoursesByCategory } from "../../../api/courseApi";
 import { getCategoryById } from "../../../api/categoryApi";
-
+import {
+    publishCourse,
+    featureCourse,
+    deleteCourse
+} from "../../../api/courseApi";
 import "./CategoryCourses.css";
 
 function CategoryCourses() {
@@ -14,6 +18,61 @@ function CategoryCourses() {
     const [courses, setCourses] = useState([]);
 
     const [loading, setLoading] = useState(true);
+
+    const handlePublish = async (course) => {
+        try {
+            await publishCourse(course.id);
+
+            setCourses((prevCourses) =>
+                prevCourses.map((c) =>
+                    c.id === course.id
+                        ? { ...c, published: !c.published }
+                        : c
+                )
+            );
+
+        } catch (error) {
+            console.error("Error publishing course:", error);
+        }
+    };
+
+    const handleFeature = async (course) => {
+        try {
+            await featureCourse(course.id);
+
+            setCourses((prevCourses) =>
+                prevCourses.map((c) =>
+                    c.id === course.id
+                        ? { ...c, featured: !c.featured }
+                        : c
+                )
+            );
+
+        } catch (error) {
+            console.error("Error featuring course:", error);
+        }
+    };
+
+    const handleDelete = async (courseId) => {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this course?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            await deleteCourse(courseId);
+
+            setCourses((prevCourses) =>
+                prevCourses.filter((course) => course.id !== courseId)
+            );
+
+        } catch (error) {
+            console.error("Error deleting course:", error);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -172,15 +231,26 @@ function CategoryCourses() {
                                             ? "unfeature-course-button"
                                             : "feature-course-button"
                                     }
+                                    onClick={() => handleFeature(course)}
                                 >
                                     {course.featured ? "Unfeature" : "Feature"}
                                 </button>
 
-                                <button className="publish-course-button">
+                                <button
+                                    className={
+                                        course.published
+                                            ? "unpublish-course-button"
+                                            : "publish-course-button"
+                                    }
+                                    onClick={() => handlePublish(course)}
+                                >
                                     {course.published ? "Unpublish" : "Publish"}
                                 </button>
 
-                                <button className="delete-course-button">
+                                <button
+                                    className="delete-course-button"
+                                    onClick={() => handleDelete(course.id)}
+                                >
                                     Delete
                                 </button>
 

@@ -127,6 +127,14 @@ public class CourseController {
         return courseService.getCoursesByCategory(categoryId);
     }
 
+    @PutMapping("/{id}/publish")
+    public CourseResponse togglePublish(@PathVariable UUID id) {
+        return courseService.togglePublish(id);
+    }
 
+    @PutMapping("/{id}/feature")
+    public CourseResponse toggleFeature(@PathVariable UUID id) {
+        return courseService.toggleFeature(id);
+    }
 
 }

@@ -272,4 +272,29 @@ public class CourseService {
         return "/images/" + folder + "/" + fileName;
 
     }
+
+    public CourseResponse togglePublish(UUID courseId) {
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        course.setPublished(!course.isPublished());
+
+        Course savedCourse = courseRepository.save(course);
+
+        return convertToResponse(savedCourse);
+    }
+
+    public CourseResponse toggleFeature(UUID courseId) {
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        course.setFeatured(!course.isFeatured());
+
+        Course savedCourse = courseRepository.save(course);
+
+        return convertToResponse(savedCourse);
+    }
+
 }

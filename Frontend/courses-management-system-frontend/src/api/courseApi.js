@@ -1,9 +1,5 @@
 import api from "./axios";
 
-// =========================
-// Public Courses
-// =========================
-
 export const getFeaturedCourses = () => {
     return api.get("/api/courses/featured");
 };
@@ -24,17 +20,10 @@ export const getRelatedCourses = (id) => {
     return api.get(`/api/courses/${id}/related`);
 };
 
-// =========================
-// Course Registration
-// =========================
-
 export const registerForCourse = (data) => {
     return api.post("/api/course-registrations", data);
 };
 
-// =========================
-// Admin - Create Course
-// =========================
 
 export const createCourse = (courseData) => {
 
@@ -109,4 +98,16 @@ export const createCourse = (courseData) => {
             }
         }
     );
+};
+
+export const publishCourse = (courseId) => {
+    return api.put(`/api/courses/${courseId}/publish`);
+};
+
+export const featureCourse = (courseId) => {
+    return api.put(`/api/courses/${courseId}/feature`);
+};
+
+export const deleteCourse = (courseId) => {
+    return api.delete(`/api/courses/${courseId}`);
 };
