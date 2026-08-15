@@ -178,11 +178,12 @@
 }
 
 .course-description {
-    margin: 0 0 14px;
-    color: #4b5563 !important;
-    font-size: 14px;
-    line-height: 1.5;
-    max-width: 600px;
+    margin: 8px 0;
+    color: #555;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    max-width: 100%;
 }
 
 .course-details {
