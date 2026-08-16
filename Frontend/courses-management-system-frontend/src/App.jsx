@@ -20,6 +20,7 @@ import EditCategory from "./features/Admin/EditCategory/EditCategory";
 import CreateCategory from "./features/Admin/CreateCategory/ CreateCategory";
 import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
 import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
+import EditCourse from "./features/Admin/EditCourse/EditCourse";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -95,6 +96,11 @@ function App() {
                         }
                     />
 
+                    <Route
+                        path="/admin/courses/edit/:id"
+                        element={<EditCourse />}
+                    />
+
 
                 <Route path="/courses" element={<Courses />} />
                 <Route path="/courses/:id" element={<CourseDetails />} />
@@ -102,7 +108,6 @@ function App() {
 
              <Footer />
 
-            
             </main>
 
         </>

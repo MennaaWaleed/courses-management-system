@@ -2,7 +2,7 @@ package SpringProject.courses_management_system.controller;
 
 
 import SpringProject.courses_management_system.model.Course;
-import SpringProject.courses_management_system.service.CourseService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,16 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import SpringProject.courses_management_system.dto.Course.CourseRequest;
+
 import SpringProject.courses_management_system.dto.Course.CourseResponse;
-import SpringProject.courses_management_system.model.Course;
-import SpringProject.courses_management_system.service.CourseService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -108,11 +103,67 @@ public class CourseController {
         return courseService.getCourseById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public CourseResponse updateCourse(
+
             @PathVariable UUID id,
-            @RequestBody CourseRequest request) {
-        return courseService.updateCourse(id, request);
+
+            @RequestParam String courseName,
+
+            @RequestParam String description,
+
+            @RequestParam String shortDescription,
+
+            @RequestParam BigDecimal courseHours,
+
+            @RequestParam int lectureCount,
+
+            @RequestParam int price,
+
+            @RequestParam List<UUID> categoryIds,
+
+            @RequestParam boolean published,
+
+            @RequestParam boolean featured,
+
+            @RequestParam(required = false)
+            MultipartFile courseImage,
+
+            @RequestParam(required = false)
+            MultipartFile iconImage,
+
+            @RequestParam(required = false)
+            MultipartFile contentFile
+    ) {
+
+        System.out.println("========== UPDATE COURSE CALLED ==========");
+        System.out.println("ID = " + id);
+        System.out.println("Course Image = " +
+                (courseImage != null ? courseImage.getOriginalFilename() : "null"));
+        System.out.println("Icon = " +
+                (iconImage != null ? iconImage.getOriginalFilename() : "null"));
+        System.out.println("PDF = " +
+                (contentFile != null ? contentFile.getOriginalFilename() : "null"));
+
+
+        return courseService.updateCourse(
+                id,
+                courseName,
+                description,
+                shortDescription,
+                courseHours,
+                lectureCount,
+                price,
+                categoryIds,
+                published,
+                featured,
+                courseImage,
+                iconImage,
+                contentFile
+        );
     }
 
     @DeleteMapping("/{id}")

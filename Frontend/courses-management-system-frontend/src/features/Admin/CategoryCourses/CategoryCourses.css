@@ -438,3 +438,171 @@
         width: 100%;
     }
 }
+
+.delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+
+
+.delete-modal {
+    width: 420px;
+    max-width: 90%;
+
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 40px 35px;
+
+    text-align: center;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+
+    animation: deleteModalAppear 0.25s ease;
+}
+
+
+
+.delete-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    background: #ffe5e5;
+
+    color: #dc3545;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 42px;
+    font-weight: 700;
+}
+
+
+
+.delete-modal h2 {
+    margin: 0 0 15px;
+
+    font-size: 28px;
+
+    color: #1d3155;
+}
+
+
+
+.delete-modal p {
+    margin: 0 0 10px;
+
+    font-size: 17px;
+
+    color: #666;
+}
+
+.delete-modal strong {
+    color: #333;
+}
+
+
+
+.delete-warning {
+    font-size: 14px !important;
+    color: #dc3545 !important;
+
+    margin-bottom: 28px !important;
+}
+
+
+
+.delete-modal-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+}
+
+
+.delete-modal-actions button {
+    min-width: 130px;
+
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+
+.cancel-delete-button {
+    background: #e5e5e5;
+
+    color: #333;
+}
+
+.cancel-delete-button:hover {
+    background: #d5d5d5;
+}
+
+
+
+.confirm-delete-button {
+    background: #dc3545;
+
+    color: white;
+}
+
+.confirm-delete-button:hover {
+    background: #c82333;
+}
+
+
+
+.delete-modal-actions button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+
+@keyframes deleteModalAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}

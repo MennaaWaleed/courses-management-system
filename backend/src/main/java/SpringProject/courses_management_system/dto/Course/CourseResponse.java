@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public class CourseResponse {
 
     private String shortDescription;
 
-    private Set<UUID> categoryIds;
+    private List<UUID> categoryIds;
 
     private boolean published;
 

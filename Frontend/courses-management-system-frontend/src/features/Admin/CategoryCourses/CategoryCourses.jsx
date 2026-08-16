@@ -18,6 +18,9 @@ function CategoryCourses() {
     const [courses, setCourses] = useState([]);
 
     const [loading, setLoading] = useState(true);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [courseToDelete, setCourseToDelete] = useState(null);
+    const [deleting, setDeleting] = useState(false);
 
     const handlePublish = async (course) => {
         try {
@@ -53,25 +56,44 @@ function CategoryCourses() {
         }
     };
 
-    const handleDelete = async (courseId) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this course?"
-        );
+    const confirmDelete = async () => {
 
-        if (!confirmed) {
+        if (!courseToDelete) {
             return;
         }
 
+        setDeleting(true);
+
         try {
-            await deleteCourse(courseId);
+
+            await deleteCourse(courseToDelete.id);
 
             setCourses((prevCourses) =>
-                prevCourses.filter((course) => course.id !== courseId)
+                prevCourses.filter(
+                    (course) => course.id !== courseToDelete.id
+                )
             );
 
+            setShowDeleteModal(false);
+            setCourseToDelete(null);
+
         } catch (error) {
-            console.error("Error deleting course:", error);
+
+            console.error(
+                "Error deleting course:",
+                error
+            );
+
+        } finally {
+
+            setDeleting(false);
+
         }
+    };
+
+    const handleDelete = (course) => {
+        setCourseToDelete(course);
+        setShowDeleteModal(true);
     };
 
     useEffect(() => {
@@ -220,7 +242,7 @@ function CategoryCourses() {
 
                                 <button
                                     className="edit-course-button"
-                                    onClick={() => navigate(`/admin/courses/${course.id}/edit`)}
+                                    onClick={() => navigate(`/admin/courses/edit/${course.id}`)}
                                 >
                                     Edit
                                 </button>
@@ -249,7 +271,7 @@ function CategoryCourses() {
 
                                 <button
                                     className="delete-course-button"
-                                    onClick={() => handleDelete(course.id)}
+                                    onClick={() => handleDelete(course)}
                                 >
                                     Delete
                                 </button>
@@ -260,6 +282,58 @@ function CategoryCourses() {
                     ))
                 )}
             </div>
+            {showDeleteModal && (
+                <div className="delete-modal-overlay">
+
+                    <div className="delete-modal">
+
+                        <div className="delete-icon">
+                            !
+                        </div>
+
+                        <h2>
+                            Delete Course?
+                        </h2>
+
+                        <p>
+                            Are you sure you want to delete
+                            <strong>
+                                {" "}{courseToDelete?.courseName}
+                            </strong>
+                            ?
+                        </p>
+
+                        <p className="delete-warning">
+                            This action cannot be undone.
+                        </p>
+
+                        <div className="delete-modal-actions">
+
+                            <button
+                                className="cancel-delete-button"
+                                onClick={() => {
+                                    setShowDeleteModal(false);
+                                    setCourseToDelete(null);
+                                }}
+                                disabled={deleting}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                className="confirm-delete-button"
+                                onClick={confirmDelete}
+                                disabled={deleting}
+                            >
+                                {deleting ? "Deleting..." : "Delete"}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 }
