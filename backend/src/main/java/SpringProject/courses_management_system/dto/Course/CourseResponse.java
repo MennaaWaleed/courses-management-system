@@ -37,4 +37,6 @@ public class CourseResponse {
     private boolean featured;
 
     private String content_url;
+
+    private Set<UUID> categoriesId;
 }
