@@ -23,10 +23,14 @@ import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 import EditCourse from "./features/Admin/EditCourse/EditCourse";
 
 function App() {
+
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const token = sessionStorage.getItem("token");
         return !!token;
     });
+
+    const role = sessionStorage.getItem("role");
+    const isAdmin = role === "ADMIN";
 
     const handleLogout = () => {
         sessionStorage.removeItem("token");
@@ -39,25 +43,55 @@ function App() {
         <>
             <ScrollToTop />
 
-
-            <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            <Navbar
+                isLoggedIn={isLoggedIn}
+                handleLogout={handleLogout}
+            />
 
             <main className="main-content">
+
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/contact" element={<ContactUs />} />
+
+
+                    <Route
+                        path="/"
+                        element={<HomePage />}
+                    />
+
+                    <Route
+                        path="/contact"
+                        element={<ContactUs />}
+                    />
 
                     <Route
                         path="/auth/login"
-                        element={<Login setIsLoggedIn={setIsLoggedIn} />}
+                        element={
+                            <Login
+                                setIsLoggedIn={setIsLoggedIn}
+                            />
+                        }
                     />
 
                     <Route
                         path="/auth/register"
-                        element={<Register setIsLoggedIn={setIsLoggedIn} />}
+                        element={
+                            <Register
+                                setIsLoggedIn={setIsLoggedIn}
+                            />
+                        }
                     />
 
-                    <Route path="/courses" element={<Courses />} />
+                    <Route
+                        path="/courses"
+                        element={<Courses />}
+                    />
+
+                    <Route
+                        path="/courses/:id"
+                        element={<CourseDetails />}
+                    />
+
+
 
                     <Route
                         path="/admin/categories"
@@ -70,12 +104,20 @@ function App() {
 
                     <Route
                         path="/admin/categories/:id/edit"
-                        element={<EditCategory />}
+                        element={
+                            <AdminRoute>
+                                <EditCategory />
+                            </AdminRoute>
+                        }
                     />
 
                     <Route
                         path="/admin/categories/create"
-                        element={<CreateCategory />}
+                        element={
+                            <AdminRoute>
+                                <CreateCategory />
+                            </AdminRoute>
+                        }
                     />
 
                     <Route
@@ -98,17 +140,18 @@ function App() {
 
                     <Route
                         path="/admin/courses/edit/:id"
-                        element={<EditCourse />}
+                        element={
+                            <AdminRoute>
+                                <EditCourse />
+                            </AdminRoute>
+                        }
                     />
 
-
-                <Route path="/courses" element={<Courses />} />
-                <Route path="/courses/:id" element={<CourseDetails />} />
-            </Routes>
-
-             <Footer />
+                </Routes>
 
             </main>
+
+            {!isAdmin && <Footer />}
 
         </>
     );
