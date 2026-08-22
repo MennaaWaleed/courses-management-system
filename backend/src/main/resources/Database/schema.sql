@@ -479,3 +479,128 @@ ALTER TABLE category
 ALTER TABLE course
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 
+-----------------new 22/8/2026 ____________
+INSERT INTO course_batch (
+    id,
+    course_id,
+    instructor_id,
+    name,
+    status,
+    attendance_type,
+    capacity,
+    start_date,
+    end_date
+)
+VALUES (
+           '33333333-3333-3333-3333-333333333333',
+           '3156832d-99ad-452a-9d1b-ead993011f66',
+           '89808211-2de4-437b-9849-61056c51ae9c',
+           'Interior Design Diploma batch 1',
+           'OPEN',
+           'ONLINE',
+           30,
+           '2026-09-01 10:00:00+03',
+           '2026-10-01 10:00:00+03'
+       );
+
+
+INSERT INTO Enrollment (
+    user_id,
+    batch_id,
+    status,
+    amountPaid,
+    paymentStatus,
+    deliveryMode,
+    meetingLink
+)
+VALUES (
+           '545dbb5a-78e1-4feb-be14-723dbddc7840',
+           '33333333-3333-3333-3333-333333333333',
+           'ACTIVE',
+           1000,
+           'PENDING',
+           'ONLINE',
+           'https://meet.google.com/example'
+       );
+
+
+INSERT INTO wishlist (
+    user_id,
+    course_id
+)
+VALUES (
+           '545dbb5a-78e1-4feb-be14-723dbddc7840',
+           '3156832d-99ad-452a-9d1b-ead993011f66'
+       );
+
+
+INSERT INTO Certificate (
+    student_id,
+    batch_id,
+    certificateUrl
+)
+VALUES (
+           '545dbb5a-78e1-4feb-be14-723dbddc7840',
+           '33333333-3333-3333-3333-333333333333',
+           'file:///C:/Users/pc/Desktop/new%20service/courses-management-system/backend/src/main/resources/static/images/courses/Certificates/arwa-revit-batch-1.pdf'
+       );
+
+
+
+INSERT INTO users (
+    id,
+    first_name,
+    last_name,
+    email,
+    password,
+    phone,
+    role,
+    enabled,
+    created_at,
+    updated_at
+) VALUES (
+             'a1111111-1111-1111-1111-111111111111',
+             'Omar',
+             'Hassan',
+             'instructor@gmail.com',
+             '$2a$10$21ZlRYEg61ML2Pnsctdm9uqvZ10oeF6Q5EGCSytmmP59sPyWO3Roa',
+             '01012345678',
+             'INSTRUCTOR',
+             true,
+             NOW(),
+             NOW()
+         )
+    ON CONFLICT (email) DO NOTHING;
+
+INSERT INTO course_batch (
+    id,
+    course_id,
+    instructor_id,
+    name,
+    status,
+    attendance_type,
+    capacity,
+    start_date,
+    end_date
+) VALUES
+    (
+        '22222222-2222-2222-2222-222222222222',
+        '3156832d-99ad-452a-9d1b-ead993011f66',
+        'a1111111-1111-1111-1111-111111111111',
+        'Interior Design Diploma batch 2',
+        'ACTIVE',
+        'ONLINE',
+        25,
+        NOW(),
+        NOW() + INTERVAL '60 days'
+    )
+
+UPDATE Certificate
+SET certificateUrl = '/images/courses/Certificates/arwa-revit-batch-1.pdf'
+WHERE student_id = '545dbb5a-78e1-4feb-be14-723dbddc7840'
+  AND batch_id = '33333333-3333-3333-3333-333333333333';
+
+
+select * from course
+select * from users
+
