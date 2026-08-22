@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchUserProfile } from "../api/profileApi";
-import { Mail, Phone, BookOpen, Heart, Award, X, Download } from "lucide-react";
+import { Mail, Phone, BookOpen, Heart, Award, X, Download, Layers, ShieldCheck, UserCheck } from "lucide-react";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState(null);
@@ -83,17 +83,25 @@ export default function ProfilePage() {
         );
     }
 
+    const role = profile?.role?.toUpperCase();
+
     return (
         <div style={{ maxWidth: "800px", margin: "40px auto", padding: "0 20px", display: "flex", flexDirection: "column", gap: "24px" }}>
-            {/* 1. User Info */}
+
+            {/* 1. Common Info Header (Admin, Instructor, Student) */}
             <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: "20px" }}>
-                <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#2563eb", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", fontWeight: "bold" }}>
+                <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: role === "ADMIN" ? "#7c3aed" : role === "INSTRUCTOR" ? "#0891b2" : "#2563eb", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", fontWeight: "bold" }}>
                     {profile?.firstName?.[0]}{profile?.lastName?.[0]}
                 </div>
                 <div>
-                    <h1 style={{ fontSize: "22px", fontWeight: "bold", color: "#1e293b", margin: 0 }}>
-                        {profile?.firstName} {profile?.lastName}
-                    </h1>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <h1 style={{ fontSize: "22px", fontWeight: "bold", color: "#1e293b", margin: 0 }}>
+                            {profile?.firstName} {profile?.lastName}
+                        </h1>
+                        <span style={{ fontSize: "12px", fontWeight: "600", padding: "3px 8px", borderRadius: "9999px", background: "#f1f5f9", color: "#475569" }}>
+              {role}
+            </span>
+                    </div>
                     <p style={{ display: "flex", alignItems: "center", gap: "8px", color: "#64748b", margin: "6px 0 0", fontSize: "14px" }}>
                         <Mail size={16} /> {profile?.email}
                     </p>
@@ -103,67 +111,93 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            {/* 2. Enrolled Courses */}
-            <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
-                <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-                    <BookOpen size={20} color="#2563eb" /> Enrolled Courses
-                </h2>
-                {!profile?.enrolledCourses || profile.enrolledCourses.length === 0 ? (
-                    <p style={{ color: "#94a3b8", fontSize: "14px" }}>No enrolled courses yet.</p>
-                ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                        {profile.enrolledCourses.map((course, idx) => (
-                            <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
-                                <div>
-                                    <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "600", color: "#1e293b" }}>{course.courseName}</h3>
-                                    <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>{course.batchName}</p>
+            {/* 2. Instructor: Assigned Course Batches */}
+            {role === "INSTRUCTOR" && (
+                <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                    <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+                        <Layers size={20} color="#0891b2" /> Assigned Batches
+                    </h2>
+                    {!profile?.assignedBatches || profile.assignedBatches.length === 0 ? (
+                        <p style={{ color: "#94a3b8", fontSize: "14px" }}>No course batches currently assigned.</p>
+                    ) : (
+                        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                            {profile.assignedBatches.map((batch, idx) => (
+                                <div key={idx} style={{ padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
+                                    <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "600", color: "#1e293b" }}>{batch.courseName}</h3>
+                                    <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>Batch: {batch.batchName}</p>
                                 </div>
-                                {course.certificateUrl && (
-                                    <button
-                                        onClick={() => handleOpenCertificate(course.certificateUrl, course.courseName)}
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "6px",
-                                            background: "#2563eb",
-                                            color: "#fff",
-                                            padding: "8px 16px",
-                                            borderRadius: "8px",
-                                            border: "none",
-                                            fontSize: "14px",
-                                            fontWeight: "500",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        <Award size={16} /> Certificate
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
 
-            {/* 3. Wishlist */}
-            <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
-                <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-                    <Heart size={20} color="#ef4444" /> Wishlist
-                </h2>
-                {!profile?.wishlist || profile.wishlist.length === 0 ? (
-                    <p style={{ color: "#94a3b8", fontSize: "14px" }}>Your wishlist is empty.</p>
-                ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                        {profile.wishlist.map((item, idx) => (
-                            <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
-                                <span style={{ fontSize: "15px", fontWeight: "500", color: "#1e293b" }}>{item.courseName}</span>
-                                <span style={{ fontSize: "15px", fontWeight: "bold", color: "#059669" }}>{item.price?.toLocaleString()} EGP</span>
+            {/* 3. Student: Enrolled Courses & Wishlist */}
+            {role !== "ADMIN" && role !== "INSTRUCTOR" && (
+                <>
+                    {/* Enrolled Courses */}
+                    <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                        <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+                            <BookOpen size={20} color="#2563eb" /> Enrolled Courses
+                        </h2>
+                        {!profile?.enrolledCourses || profile.enrolledCourses.length === 0 ? (
+                            <p style={{ color: "#94a3b8", fontSize: "14px" }}>No enrolled courses yet.</p>
+                        ) : (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                                {profile.enrolledCourses.map((course, idx) => (
+                                    <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
+                                        <div>
+                                            <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "600", color: "#1e293b" }}>{course.courseName}</h3>
+                                            <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>{course.batchName}</p>
+                                        </div>
+                                        {course.certificateUrl && (
+                                            <button
+                                                onClick={() => handleOpenCertificate(course.certificateUrl, course.courseName)}
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: "6px",
+                                                    background: "#2563eb",
+                                                    color: "#fff",
+                                                    padding: "8px 16px",
+                                                    borderRadius: "8px",
+                                                    border: "none",
+                                                    fontSize: "14px",
+                                                    fontWeight: "500",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                <Award size={16} /> Certificate
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                        )}
                     </div>
-                )}
-            </div>
 
-            {/* 4. PDF Modal */}
+                    {/* Wishlist */}
+                    <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                        <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+                            <Heart size={20} color="#ef4444" /> Wishlist
+                        </h2>
+                        {!profile?.wishlist || profile.wishlist.length === 0 ? (
+                            <p style={{ color: "#94a3b8", fontSize: "14px" }}>Your wishlist is empty.</p>
+                        ) : (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                                {profile.wishlist.map((item, idx) => (
+                                    <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
+                                        <span style={{ fontSize: "15px", fontWeight: "500", color: "#1e293b" }}>{item.courseName}</span>
+                                        <span style={{ fontSize: "15px", fontWeight: "bold", color: "#059669" }}>{item.price?.toLocaleString()} EGP</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
+
+            {/* PDF Modal Viewer */}
             {modalOpen && (
                 <div
                     style={{
@@ -193,16 +227,7 @@ export default function ProfilePage() {
                         }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                padding: "16px 20px",
-                                borderBottom: "1px solid #e2e8f0",
-                                background: "#f8fafc",
-                            }}
-                        >
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                 <Award size={20} color="#2563eb" />
                                 <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "600", color: "#1e293b" }}>
@@ -263,6 +288,7 @@ export default function ProfilePage() {
                     </div>
                 </div>
             )}
+
         </div>
     );
 }
