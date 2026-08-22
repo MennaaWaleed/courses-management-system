@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Navbar from "./components/layout/Navbar/Navbar";
-
 import Footer from "./components/layout/Footer/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 
@@ -8,11 +7,11 @@ import HomePage from "./pages/HomePage";
 import ContactUs from "./pages/ContactUs";
 import Courses from "./pages/Courses/Courses";
 import Login from "./features/auth/Login/Login";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
+import ProfilePage from "./pages/ProfilePage";
 
 import CourseDetails from "./pages/Courses/CourseDetails/CourseDetails";
-
 
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminCategories from "./features/Admin/AdminCategories/AdminCategories.jsx";
@@ -22,7 +21,15 @@ import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
 import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 import EditCourse from "./features/Admin/EditCourse/EditCourse";
 
+function ProtectedRoute({ isLoggedIn, children }) {
+    if (!isLoggedIn) {
+        return <Navigate to="/auth/login" replace />;
+    }
+    return children;
+}
+
 function App() {
+    const navigate = useNavigate();
 
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const token = sessionStorage.getItem("token");
@@ -35,8 +42,8 @@ function App() {
     const handleLogout = () => {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("role");
-
         setIsLoggedIn(false);
+        navigate("/auth/login");
     };
 
     return (
@@ -49,49 +56,31 @@ function App() {
             />
 
             <main className="main-content">
-
                 <Routes>
-
-
-                    <Route
-                        path="/"
-                        element={<HomePage />}
-                    />
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/contact" element={<ContactUs />} />
 
                     <Route
-                        path="/contact"
-                        element={<ContactUs />}
+                        path="/profile"
+                        element={
+                            <ProtectedRoute isLoggedIn={isLoggedIn}>
+                                <ProfilePage />
+                            </ProtectedRoute>
+                        }
                     />
 
                     <Route
                         path="/auth/login"
-                        element={
-                            <Login
-                                setIsLoggedIn={setIsLoggedIn}
-                            />
-                        }
+                        element={<Login setIsLoggedIn={setIsLoggedIn} />}
                     />
 
                     <Route
                         path="/auth/register"
-                        element={
-                            <Register
-                                setIsLoggedIn={setIsLoggedIn}
-                            />
-                        }
+                        element={<Register setIsLoggedIn={setIsLoggedIn} />}
                     />
 
-                    <Route
-                        path="/courses"
-                        element={<Courses />}
-                    />
-
-                    <Route
-                        path="/courses/:id"
-                        element={<CourseDetails />}
-                    />
-
-
+                    <Route path="/courses" element={<Courses />} />
+                    <Route path="/courses/:id" element={<CourseDetails />} />
 
                     <Route
                         path="/admin/categories"
@@ -146,13 +135,10 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
                 </Routes>
-
             </main>
 
             {!isAdmin && <Footer />}
-
         </>
     );
 }

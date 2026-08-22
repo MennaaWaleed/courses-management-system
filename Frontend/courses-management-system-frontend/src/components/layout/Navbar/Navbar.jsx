@@ -1,12 +1,12 @@
 import "./Navbar.css";
 import logo from "../../../assets/images/logo.png";
-import { Link, useNavigate } from "react-router-dom"; // Imported useNavigate
-import { Menu, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, X, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Navbar({ isLoggedIn, handleLogout }) {
     const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate(); // Initialized navigate
+    const navigate = useNavigate();
 
     const links = [
         { title: "Home", href: "/" },
@@ -15,7 +15,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
         { title: "Contact", href: "/contact" }
     ];
 
-    // Lock body scroll when the mobile drawer is open
     useEffect(() => {
         document.body.style.overflow = menuOpen ? "hidden" : "auto";
         return () => {
@@ -23,7 +22,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
         };
     }, [menuOpen]);
 
-    // Close drawer on Escape key press
     useEffect(() => {
         const handleEsc = (e) => {
             if (e.key === "Escape") {
@@ -36,7 +34,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
         };
     }, []);
 
-    // Close drawer automatically if window is resized above mobile breakpoint
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 992) {
@@ -70,17 +67,26 @@ function Navbar({ isLoggedIn, handleLogout }) {
                         ))}
                     </ul>
 
-                    {/* Desktop Actions */}
                     <div className="navbar__actions">
                         {isLoggedIn ? (
-                            <button className="navbar__logout" onClick={handleLogout}>
-                                Logout
-                            </button>
+                            <div className="navbar__user-actions">
+                                <button
+                                    className="navbar__profile-btn"
+                                    onClick={() => navigate("/profile")}
+                                    title="View Profile"
+                                    aria-label="Profile"
+                                >
+                                    <User size={22} />
+                                </button>
+                                <button className="navbar__logout" onClick={handleLogout}>
+                                    Logout
+                                </button>
+                            </div>
                         ) : (
                             <>
                                 <button
                                     className="navbar__login"
-                                    onClick={() => navigate("/auth/login")} // Added navigation
+                                    onClick={() => navigate("/auth/login")}
                                 >
                                     Login
                                 </button>
@@ -100,7 +106,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 </div>
             </nav>
 
-            {/* Mobile Drawer */}
             <div className={`navbar__drawer ${menuOpen ? "active" : ""}`}>
                 <div className="navbar__drawer-header">
                     <img src={logo} alt="MTC" />
@@ -125,25 +130,36 @@ function Navbar({ isLoggedIn, handleLogout }) {
                     ))}
                 </ul>
 
-                {/* Mobile Drawer Actions */}
                 <div className="navbar__drawer-actions">
                     {isLoggedIn ? (
-                        <button
-                            className="navbar__logout"
-                            onClick={() => {
-                                setMenuOpen(false);
-                                if (handleLogout) handleLogout();
-                            }}
-                        >
-                            Logout
-                        </button>
+                        <div className="navbar__drawer-user">
+                            <button
+                                className="navbar__drawer-profile"
+                                onClick={() => {
+                                    setMenuOpen(false);
+                                    navigate("/profile");
+                                }}
+                            >
+                                <User size={20} />
+                                <span>My Profile</span>
+                            </button>
+                            <button
+                                className="navbar__logout"
+                                onClick={() => {
+                                    setMenuOpen(false);
+                                    if (handleLogout) handleLogout();
+                                }}
+                            >
+                                Logout
+                            </button>
+                        </div>
                     ) : (
                         <>
                             <button
                                 className="navbar__login"
                                 onClick={() => {
                                     setMenuOpen(false);
-                                    navigate("/auth/login"); // Added navigation & closes menu
+                                    navigate("/auth/login");
                                 }}
                             >
                                 Login
@@ -160,7 +176,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 </div>
             </div>
 
-            {/* Overlay */}
             {menuOpen && (
                 <div
                     className="navbar__overlay"
