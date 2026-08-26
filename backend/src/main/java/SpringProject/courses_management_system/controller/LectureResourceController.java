@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/lecture-resources")
-@CrossOrigin(origins = "http://localhost:5173")
 public class LectureResourceController {
 
     private final LectureResourceService lectureResourceService;

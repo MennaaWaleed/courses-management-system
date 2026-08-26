@@ -21,6 +21,7 @@ import CreateCategory from "./features/Admin/CreateCategory/ CreateCategory";
 import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
 import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 import EditCourse from "./features/Admin/EditCourse/EditCourse";
+import BatchLectures from './features/student/BatchLectures/pages/BatchLectures';
 
 function App() {
 
@@ -146,7 +147,12 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
+                    
+                   <Route 
+                          path="/student/batches/:batchId/lectures"
+                          element={<BatchLectures />
+                         } 
+                    />
                 </Routes>
 
             </main>

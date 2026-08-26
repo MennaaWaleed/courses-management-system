@@ -479,3 +479,9 @@ ALTER TABLE category
 ALTER TABLE course
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 
+-------------------- new -----------------
+ALTER TABLE lectureresource
+ADD COLUMN source VARCHAR(50) NOT NULL;
+
+select * from lecture;
+

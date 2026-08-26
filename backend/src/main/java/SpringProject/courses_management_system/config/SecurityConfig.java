@@ -47,6 +47,13 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+
+                .headers(headers -> headers.frameOptions(frame -> frame.disable() )
+
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("frame-ancestors 'self' http://localhost:5173"  )
+                        )
+                )
+
                 .addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
