@@ -185,5 +185,37 @@ public class FileStorageService {
             );
         }
     }
+    public void deleteLectureResource(String fileUrl) {
+
+        if (fileUrl == null || fileUrl.isBlank()) {
+            return;
+        }
+
+        try {
+
+            String prefix = "/resources/lecture-resources/";
+
+            if (!fileUrl.startsWith(prefix)) {
+                return;
+            }
+
+            String fileName =
+                    fileUrl.substring(prefix.length());
+
+            Path filePath =
+                    Paths.get(
+                            "src/main/resources/static/resources/lecture-resources"
+                    ).resolve(fileName);
+
+            Files.deleteIfExists(filePath);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Failed to delete lecture resource file",
+                    e
+            );
+        }
+    }
 
 }

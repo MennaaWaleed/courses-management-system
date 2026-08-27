@@ -22,7 +22,7 @@ import CategoryCourses from "./features/Admin/CategoryCourses/CategoryCourses";
 import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 import EditCourse from "./features/Admin/EditCourse/EditCourse";
 import BatchLectures from './features/student/BatchLectures/pages/BatchLectures';
-
+import AdminLecturesPage from './features/Admin/ManageLectures/pages/AdminLecturesPage';
 function App() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -153,6 +153,11 @@ function App() {
                           element={<BatchLectures />
                          } 
                     />
+
+                    <Route 
+                            path="/admin/batches/:batchId/lectures" 
+                            element={<AdminLecturesPage />} 
+                        />
                 </Routes>
 
             </main>

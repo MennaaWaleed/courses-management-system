@@ -10,7 +10,8 @@ const Icons = {
   ZIP: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>,
   LINK: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>,
   LOCK: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
-  CHEVRON: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  CHEVRON: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>,
+  DOWNLOAD: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
 };
 
 export const LectureAccordion = ({ lecture, onOpenResource }) => {
@@ -25,7 +26,7 @@ export const LectureAccordion = ({ lecture, onOpenResource }) => {
   const padOrder = (num) => String(num).padStart(2, '0');
 
   return (
-    <div className={`lms-accordion-card ${isLocked ? 'is-locked' : ''}`}>
+    <div className={`lms-accordion-card ${isLocked ? 'is-locked' : ''} ${isExpanded ? 'is-expanded' : ''}`}>
       <button 
         className="lms-accordion-header" 
         onClick={toggleExpand}
@@ -80,21 +81,40 @@ export const LectureAccordion = ({ lecture, onOpenResource }) => {
 };
 
 const ResourceCard = ({ resource, onOpenResource }) => {
-  const isViewable = resource.type === 'VIDEO' || resource.type === 'PDF';
-  
-  const handleAction = () => {
-    if (isViewable) {
+  const isVideo = resource.type === 'VIDEO';
+  const isLink = resource.type === 'LINK';
+
+  const handleMainClick = () => {
+    if (isVideo) {
       onOpenResource(resource);
-    } else if (resource.type === 'LINK') {
+    } else if (isLink) {
       window.open(resource.fileUrl, '_blank', 'noopener,noreferrer');
     } else {
-      // For ZIP, DOCUMENT, etc. Download action
-      window.open(resolveResourceUrl(resource.fileUrl), '_blank');
+      // For PDF, DOCUMENT, ZIP: Clicking the card can open the viewer (if PDF/Doc) or trigger download
+      if (resource.type === 'PDF' || resource.type === 'DOCUMENT') {
+        onOpenResource(resource);
+      } else {
+        handleDownload();
+      }
     }
   };
 
+  const handleDownload = (e) => {
+    if (e) e.stopPropagation(); // Prevent card click event from firing simultaneously
+    const resolvedUrl = resolveResourceUrl(resource.fileUrl);
+    
+    // Create an invisible anchor to enforce a browser download action
+    const anchor = document.createElement('a');
+    anchor.href = resolvedUrl;
+    anchor.download = resource.name || 'download';
+    anchor.target = '_blank';
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  };
+
   return (
-    <div className="lms-resource-card" onClick={handleAction}>
+    <div className="lms-resource-card" onClick={handleMainClick}>
       <div className="lms-resource-icon">
         {Icons[resource.type] || Icons.DOCUMENT}
       </div>
@@ -110,8 +130,30 @@ const ResourceCard = ({ resource, onOpenResource }) => {
           )}
         </div>
       </div>
-      <div className="lms-resource-action-btn">
-        {isViewable ? 'View' : resource.type === 'LINK' ? 'Open' : 'Download'}
+
+      <div className="lms-resource-actions-group">
+        {isVideo ? (
+          <span className="lms-action-badge view-badge">Watch Video</span>
+        ) : isLink ? (
+          <span className="lms-action-badge open-badge">Open Link</span>
+        ) : (
+          <div className="lms-dual-actions">
+            {(resource.type === 'PDF' || resource.type === 'DOCUMENT') && (
+              <button className="lms-action-text-btn" onClick={(e) => { e.stopPropagation(); onOpenResource(resource); }}>
+                View
+              </button>
+            )}
+            <button 
+              className="lms-download-btn" 
+              onClick={handleDownload}
+              title={`Download ${resource.name}`}
+              aria-label={`Download ${resource.name}`}
+            >
+              {Icons.DOWNLOAD}
+              <span>Download</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

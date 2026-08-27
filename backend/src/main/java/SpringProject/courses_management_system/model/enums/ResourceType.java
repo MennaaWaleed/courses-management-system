@@ -6,5 +6,6 @@ public enum ResourceType {
     PDF,
     DOCUMENT,
     ZIP,
-    LINK
+    LINK,
+    rar
 }

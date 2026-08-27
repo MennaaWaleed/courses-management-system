@@ -11,5 +11,15 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:images/", "file:src/main/resources/static/images/");
+
+        // Expose all potential local upload directories so they load instantly
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations(
+                        "file:resources/",
+                        "file:uploads/",
+                        "file:files/",
+                        "file:lecture-resources/",
+                        "file:src/main/resources/static/resources/"
+                );
     }
 }

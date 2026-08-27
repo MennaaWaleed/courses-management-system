@@ -1,6 +1,7 @@
 package SpringProject.courses_management_system.controller;
 
 import SpringProject.courses_management_system.dto.Lecture.LectureResourceResponse;
+import SpringProject.courses_management_system.dto.Lecture.LectureResourceUpdateRequest;
 import SpringProject.courses_management_system.service.LectureResourceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,34 +20,38 @@ public class LectureResourceController {
     public LectureResourceController(
             LectureResourceService lectureResourceService
     ) {
-        this.lectureResourceService = lectureResourceService;
+        this.lectureResourceService =
+                lectureResourceService;
     }
 
 
     // =====================================================
-    // GET RESOURCES BY LECTURE
+    // GET
     // =====================================================
 
     @GetMapping("/lecture/{lectureId}")
-    public ResponseEntity<List<LectureResourceResponse>> getResourcesByLecture(
+    public ResponseEntity<List<LectureResourceResponse>>
+    getResourcesByLecture(
             @PathVariable UUID lectureId
     ) {
 
         return ResponseEntity.ok(
-                lectureResourceService.getResourcesByLecture(lectureId)
+                lectureResourceService
+                        .getResourcesByLecture(lectureId)
         );
     }
 
 
     // =====================================================
-    // UPLOAD RESOURCE
+    // CREATE UPLOAD
     // =====================================================
 
     @PostMapping(
             value = "/lecture/{lectureId}/upload",
             consumes = "multipart/form-data"
     )
-    public ResponseEntity<LectureResourceResponse> uploadResource(
+    public ResponseEntity<LectureResourceResponse>
+    uploadResource(
 
             @PathVariable UUID lectureId,
 
@@ -54,26 +59,32 @@ public class LectureResourceController {
 
             @RequestParam String type,
 
-            @RequestPart("file") MultipartFile file
+            @RequestPart("file")
+            MultipartFile file
     ) {
 
-        return ResponseEntity.ok(
-                lectureResourceService.createUploadedResource(
-                        lectureId,
-                        name,
-                        type,
-                        file
-                )
-        );
+        LectureResourceResponse response =
+                lectureResourceService
+                        .createUploadedResource(
+                                lectureId,
+                                name,
+                                type,
+                                file
+                        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
 
     // =====================================================
-    // GOOGLE DRIVE RESOURCE
+    // CREATE DRIVE
     // =====================================================
 
     @PostMapping("/lecture/{lectureId}/drive")
-    public ResponseEntity<LectureResourceResponse> createDriveResource(
+    public ResponseEntity<LectureResourceResponse>
+    createDriveResource(
 
             @PathVariable UUID lectureId,
 
@@ -84,40 +95,119 @@ public class LectureResourceController {
             @RequestParam String fileUrl
     ) {
 
+        LectureResourceResponse response =
+                lectureResourceService
+                        .createDriveResource(
+                                lectureId,
+                                name,
+                                type,
+                                fileUrl
+                        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
+
+    // =====================================================
+    // CREATE EXTERNAL
+    // =====================================================
+
+    @PostMapping("/lecture/{lectureId}/external")
+    public ResponseEntity<LectureResourceResponse>
+    createExternalResource(
+
+            @PathVariable UUID lectureId,
+
+            @RequestParam String name,
+
+            @RequestParam String type,
+
+            @RequestParam String fileUrl
+    ) {
+
+        LectureResourceResponse response =
+                lectureResourceService
+                        .createExternalResource(
+                                lectureId,
+                                name,
+                                type,
+                                fileUrl
+                        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
+
+    // =====================================================
+    // UPDATE RESOURCE DATA
+    // =====================================================
+
+    @PutMapping("/{resourceId}")
+    public ResponseEntity<LectureResourceResponse>
+    updateResource(
+
+            @PathVariable UUID resourceId,
+
+            @RequestBody
+            LectureResourceUpdateRequest request
+    ) {
+
         return ResponseEntity.ok(
-                lectureResourceService.createDriveResource(
-                        lectureId,
-                        name,
-                        type,
-                        fileUrl
-                )
+                lectureResourceService
+                        .updateResource(
+                                resourceId,
+                                request
+                        )
         );
     }
 
 
     // =====================================================
-    // EXTERNAL LINK RESOURCE
+    // REPLACE UPLOADED FILE
     // =====================================================
 
-    @PostMapping(
-            "/lecture/{lectureId}/external"
+    @PutMapping(
+            value = "/{resourceId}/file",
+            consumes = "multipart/form-data"
     )
-    public ResponseEntity<LectureResourceResponse> createExternalResource( @PathVariable UUID lectureId,  @RequestParam String name, @RequestParam String type,  @RequestParam String fileUrl) {
+    public ResponseEntity<LectureResourceResponse>
+    replaceUploadedFile(
 
-        LectureResourceResponse response =lectureResourceService.createExternalResource(  lectureId,   name, type,fileUrl   );
-         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            @PathVariable UUID resourceId,
+
+            @RequestPart("file")
+            MultipartFile file
+    ) {
+
+        return ResponseEntity.ok(
+                lectureResourceService
+                        .replaceUploadedFile(
+                                resourceId,
+                                file
+                        )
+        );
     }
 
 
-
+    // =====================================================
+    // DELETE
+    // =====================================================
 
     @DeleteMapping("/{resourceId}")
-    public ResponseEntity<Void> deleteResource(
+    public ResponseEntity<Void>
+    deleteResource(
             @PathVariable UUID resourceId
     ) {
 
-        lectureResourceService.deleteResource(resourceId);
+        lectureResourceService
+                .deleteResource(resourceId);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
