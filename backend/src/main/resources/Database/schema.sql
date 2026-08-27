@@ -604,3 +604,10 @@ WHERE student_id = '545dbb5a-78e1-4feb-be14-723dbddc7840'
 select * from course
 select * from users
 
+--------------------new 26/8/2026------------------------
+ALTER TABLE course_batch
+    ADD COLUMN deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE ENROLLMENT
+    ADD COLUMN removed BOOLEAN NOT NULL DEFAULT FALSE
+

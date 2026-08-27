@@ -41,4 +41,7 @@ public class CourseBatch {
     @Column(name="end_date", nullable=false)
     private ZonedDateTime endDate;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
 }

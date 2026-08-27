@@ -8,6 +8,7 @@ import {
     featureCourse,
     deleteCourse
 } from "../../../api/courseApi";
+
 import "./CategoryCourses.css";
 
 function CategoryCourses() {
@@ -18,9 +19,11 @@ function CategoryCourses() {
     const [courses, setCourses] = useState([]);
 
     const [loading, setLoading] = useState(true);
+
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [courseToDelete, setCourseToDelete] = useState(null);
     const [deleting, setDeleting] = useState(false);
+
 
     const handlePublish = async (course) => {
         try {
@@ -29,15 +32,18 @@ function CategoryCourses() {
             setCourses((prevCourses) =>
                 prevCourses.map((c) =>
                     c.id === course.id
-                        ? { ...c, published: !c.published }
+                        ? {
+                            ...c,
+                            published: !c.published
+                        }
                         : c
                 )
             );
-
         } catch (error) {
             console.error("Error publishing course:", error);
         }
     };
+
 
     const handleFeature = async (course) => {
         try {
@@ -46,18 +52,25 @@ function CategoryCourses() {
             setCourses((prevCourses) =>
                 prevCourses.map((c) =>
                     c.id === course.id
-                        ? { ...c, featured: !c.featured }
+                        ? {
+                            ...c,
+                            featured: !c.featured
+                        }
                         : c
                 )
             );
-
         } catch (error) {
             console.error("Error featuring course:", error);
         }
     };
 
-    const confirmDelete = async () => {
 
+    const handleDelete = (course) => {
+        setCourseToDelete(course);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = async () => {
         if (!courseToDelete) {
             return;
         }
@@ -65,7 +78,6 @@ function CategoryCourses() {
         setDeleting(true);
 
         try {
-
             await deleteCourse(courseToDelete.id);
 
             setCourses((prevCourses) =>
@@ -76,25 +88,13 @@ function CategoryCourses() {
 
             setShowDeleteModal(false);
             setCourseToDelete(null);
-
         } catch (error) {
-
-            console.error(
-                "Error deleting course:",
-                error
-            );
-
+            console.error("Error deleting course:", error);
         } finally {
-
             setDeleting(false);
-
         }
     };
 
-    const handleDelete = (course) => {
-        setCourseToDelete(course);
-        setShowDeleteModal(true);
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -103,7 +103,6 @@ function CategoryCourses() {
                 setCategory(categoryResponse.data);
 
                 const coursesResponse = await getCoursesByCategory(categoryId);
-                console.log("Courses:", coursesResponse.data);
                 setCourses(coursesResponse.data);
             } catch (error) {
                 console.error("Error loading category courses:", error);
@@ -114,7 +113,6 @@ function CategoryCourses() {
 
         fetchData();
     }, [categoryId]);
-
 
     if (loading) {
         return (
@@ -127,9 +125,7 @@ function CategoryCourses() {
     return (
         <div className="category-courses">
 
-
             <div className="category-courses-header">
-
                 <button
                     className="back-button"
                     onClick={() => navigate("/admin/categories")}
@@ -141,11 +137,8 @@ function CategoryCourses() {
                     <h1>
                         <span className="category-name">
                             {category?.categoryName || "Loading..."}
-                        </span>
-                        {" "}
-                        <span className="category-label">
-                            Category
-                        </span>
+                        </span>{" "}
+                        <span className="category-label">Category</span>
                     </h1>
                     <p>
                         {courses.length} {courses.length === 1 ? "Course" : "Courses"}
@@ -154,21 +147,22 @@ function CategoryCourses() {
 
                 <button
                     className="create-course-button"
-                    onClick={() => navigate(`/admin/categories/${categoryId}/courses/create`)}
+                    onClick={() =>
+                        navigate(`/admin/categories/${categoryId}/courses/create`)
+                    }
                 >
                     + Create New Course
                 </button>
-
             </div>
 
-
             <div className="category-courses-list">
-
                 {courses.length === 0 ? (
                     <div className="no-courses">
                         <p>No courses in this category.</p>
                         <button
-                            onClick={() => navigate(`/admin/categories/${categoryId}/courses/create`)}
+                            onClick={() =>
+                                navigate(`/admin/categories/${categoryId}/courses/create`)
+                            }
                         >
                             Create First Course
                         </button>
@@ -177,8 +171,11 @@ function CategoryCourses() {
                     courses.map((course) => (
                         <div className="course-card" key={course.id}>
 
-
-                            <div className="course-image-container">
+                            <div
+                                className="course-image-container"
+                                onClick={() => navigate(`/admin/courses/${course.id}/batches`)}
+                                title="View Batches"
+                            >
                                 <img
                                     src={
                                         course.imageUrl
@@ -190,22 +187,36 @@ function CategoryCourses() {
                                 />
                             </div>
 
-
                             <div className="course-info">
-
                                 <div className="course-name-row">
-                                    <div className="course-icon-container">
+                                    <button
+                                        type="button"
+                                        className="course-icon-container"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            navigate(`/admin/courses/${course.id}/batches`);
+                                        }}
+                                        title="View Batches"
+                                    >
                                         <img
                                             src={
                                                 course.iconUrl
                                                     ? `http://localhost:8080${course.iconUrl}`
                                                     : "/default-course-icon.png"
                                             }
-                                            alt=""
+                                            alt={course.courseName}
                                             className="course-icon"
                                         />
-                                    </div>
-                                    <h2>{course.courseName}</h2>
+                                    </button>
+
+                                    <h2
+                                        onClick={() => navigate(`/admin/courses/${course.id}/batches`)}
+                                        style={{ cursor: "pointer" }}
+                                        title="View Batches"
+                                    >
+                                        {course.courseName}
+                                    </h2>
                                 </div>
 
                                 <p className="course-description">
@@ -237,12 +248,12 @@ function CategoryCourses() {
                                 </div>
                             </div>
 
-
                             <div className="course-actions">
-
                                 <button
                                     className="edit-course-button"
-                                    onClick={() => navigate(`/admin/courses/edit/${course.id}`)}
+                                    onClick={() =>
+                                        navigate(`/admin/courses/edit/${course.id}`)
+                                    }
                                 >
                                     Edit
                                 </button>
@@ -275,32 +286,23 @@ function CategoryCourses() {
                                 >
                                     Delete
                                 </button>
-
                             </div>
 
                         </div>
                     ))
                 )}
             </div>
+
             {showDeleteModal && (
                 <div className="delete-modal-overlay">
-
                     <div className="delete-modal">
+                        <div className="delete-icon">!</div>
 
-                        <div className="delete-icon">
-                            !
-                        </div>
-
-                        <h2>
-                            Delete Course?
-                        </h2>
+                        <h2>Delete Course?</h2>
 
                         <p>
                             Are you sure you want to delete
-                            <strong>
-                                {" "}{courseToDelete?.courseName}
-                            </strong>
-                            ?
+                            <strong> {courseToDelete?.courseName}</strong>?
                         </p>
 
                         <p className="delete-warning">
@@ -308,7 +310,6 @@ function CategoryCourses() {
                         </p>
 
                         <div className="delete-modal-actions">
-
                             <button
                                 className="cancel-delete-button"
                                 onClick={() => {
@@ -327,11 +328,8 @@ function CategoryCourses() {
                             >
                                 {deleting ? "Deleting..." : "Delete"}
                             </button>
-
                         </div>
-
                     </div>
-
                 </div>
             )}
         </div>

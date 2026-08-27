@@ -3,6 +3,7 @@ package SpringProject.courses_management_system.repository;
 import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -45,4 +46,8 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 """)
     List<Course> findRelatedCourses(@Param("courseId") UUID courseId);
     Optional<Course> findByIdAndIsDeletedFalse(UUID id);
+
+    @Modifying
+    @Query("UPDATE Course c SET c.isDeleted = true WHERE c.id = :id")
+    void softDeleteById(UUID courseId);
 }

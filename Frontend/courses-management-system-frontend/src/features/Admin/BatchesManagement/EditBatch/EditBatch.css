@@ -1,0 +1,141 @@
+.edit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(17, 24, 39, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    backdrop-filter: blur(4px);
+}
+
+.edit-modal-content {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 24px;
+    animation: slideUp 0.3s ease-out forwards;
+}
+
+.edit-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 12px;
+}
+
+.edit-modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #111827;
+}
+
+.edit-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.edit-close-btn:hover {
+    color: #ef4444;
+}
+
+.edit-batch-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+}
+
+.edit-cancel-btn, .edit-save-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+}
+
+.edit-cancel-btn {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.edit-cancel-btn:hover {
+    background-color: #e5e7eb;
+}
+
+.edit-save-btn {
+    background-color: #2563eb;
+    color: white;
+}
+
+.edit-save-btn:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.edit-save-btn:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+}
+
+.edit-loading {
+    text-align: center;
+    padding: 40px;
+    color: #6b7280;
+}

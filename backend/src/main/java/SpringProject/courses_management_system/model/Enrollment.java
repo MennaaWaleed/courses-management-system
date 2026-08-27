@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.net.ssl.SSLSession;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
@@ -47,4 +48,9 @@ public class Enrollment {
     @CreationTimestamp
     @Column(name="enrolledat", nullable=false, updatable=false)
     private ZonedDateTime enrolledAt;
+
+    @Column(name = "removed", nullable = false)
+    private boolean removed = false;
+
+
 }
