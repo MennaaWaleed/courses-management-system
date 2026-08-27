@@ -205,24 +205,20 @@ public class CourseBatchService {
 
 
     @Transactional
-    public void changeStudentBatch(
-            UUID oldBatchId,
-            UUID studentId,
-            UUID newBatchId) {
+    public void changeStudentBatch(UUID oldBatchId, UUID studentId, UUID newBatchId) {
+        Optional<Enrollment> existingInNewBatch = enrollmentRepository.findByUserIdAndBatchId(studentId, newBatchId);
+        if (existingInNewBatch.isPresent()) {
+            Enrollment newEnrollment = existingInNewBatch.get();
+            newEnrollment.setRemoved(false);
+            enrollmentRepository.save(newEnrollment);
 
-        courseBatchRepository.findById(newBatchId)
-                .orElseThrow(() -> new RuntimeException("New batch not found"));
-
-        int updated = enrollmentRepository.changeStudentBatch(
-                studentId,
-                oldBatchId,
-                newBatchId
-        );
-
-        if (updated == 0) {
-            throw new RuntimeException(
-                    "Enrollment record not found in the old batch"
-            );
+            Optional<Enrollment> oldEnrollment = enrollmentRepository.findByUserIdAndBatchId(studentId, oldBatchId);
+            oldEnrollment.ifPresent(old -> {
+                old.setRemoved(true);
+                enrollmentRepository.save(old);
+            });
+        } else {
+            enrollmentRepository.updateStudentBatch(studentId, oldBatchId, newBatchId);
         }
     }
 

@@ -3,7 +3,7 @@ package SpringProject.courses_management_system.repository;
 import SpringProject.courses_management_system.dto.CourseBatch.BatchStudent;
 import SpringProject.courses_management_system.model.Enrollment;
 import SpringProject.courses_management_system.model.EnrollmentKey;
-import SpringProject.courses_management_system.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -82,4 +82,19 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
 
 
 
+    @Query("SELECT e FROM Enrollment e WHERE e.user.id = :userId AND e.courseBatch.id = :batchId")
+    Optional<Enrollment> findByUserIdAndBatchId(@Param("userId") UUID userId, @Param("batchId") UUID batchId);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+        UPDATE enrollment 
+        SET batch_id = :newBatchId, 
+            removed = false 
+        WHERE user_id = :studentId 
+        AND batch_id = :oldBatchId
+    """, nativeQuery = true)
+    int updateStudentBatch(@Param("studentId") UUID studentId,
+                           @Param("oldBatchId") UUID oldBatchId,
+                           @Param("newBatchId") UUID newBatchId);
 }
