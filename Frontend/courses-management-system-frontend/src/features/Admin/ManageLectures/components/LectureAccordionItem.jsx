@@ -34,9 +34,14 @@ const LectureAccordionItem = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleAccordion = (e) => {
-    // Prevent accordion toggle when interacting with buttons, drag handle, or menu
-    if (e.target.closest('button') || e.target.closest('.drag-handle') || e.target.closest('.lms-dropdown-menu')) {
+const toggleAccordion = (e) => {
+    // If the click originated from any button, drag handle, or menu, do nothing
+    if (
+      e.target.closest('button') || 
+      e.target.closest('.drag-handle') || 
+      e.target.closest('.lms-dropdown-menu') ||
+      e.target.closest('.lecture-header-right')
+    ) {
       return;
     }
     setIsExpanded(!isExpanded);
@@ -96,7 +101,11 @@ const LectureAccordionItem = ({
         </div>
         
         {/* RIGHT SIDE */}
-        <div className="lecture-header-right">
+       {/* RIGHT SIDE */}
+        <div 
+          className="lecture-header-right" 
+          onClick={(e) => e.stopPropagation()}
+        >
           <span className="resource-count">
             {lecture.resources?.length || 0} Resources
           </span>
