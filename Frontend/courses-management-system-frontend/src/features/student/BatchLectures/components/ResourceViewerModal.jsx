@@ -1,12 +1,24 @@
-// src/features/student/BatchLectures/components/ResourceViewerModal.jsx
 import React, { useEffect } from 'react';
 import { resolveResourceUrl } from '../../../../utils/resourceUtils';
 import '../styles/BatchLectures.css';
 
+// NEW HELPER: Detects YouTube URLs and converts them to embed links
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  
+  return (match && match[2].length === 11) 
+    ? `https://www.youtube.com/embed/${match[2]}` 
+    : null;
+};
+
 const VideoViewer = ({ resource }) => {
   const isDrive = resource.source === 'DRIVE';
+  const isExternal = resource.source === 'EXTERNAL';
   const resolvedUrl = isDrive ? resource.previewUrl : resolveResourceUrl(resource.fileUrl);
 
+  // 1. Google Drive Video
   if (isDrive) {
     return (
       <iframe
@@ -18,12 +30,45 @@ const VideoViewer = ({ resource }) => {
     );
   }
 
+  // 2. YouTube / External Video
+  if (isExternal) {
+    const youtubeUrl = getYouTubeEmbedUrl(resource.fileUrl);
+    
+    if (youtubeUrl) {
+      return (
+        <iframe
+          src={youtubeUrl}
+          className="lms-viewer-iframe"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title={resource.name}
+        />
+      );
+    } else {
+      // Fallback for non-YouTube external videos
+      return (
+        <div className="lms-viewer-unsupported">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <h3>External Video</h3>
+          <p>This video cannot be previewed directly in the browser.</p>
+          <a href={resource.fileUrl} target="_blank" rel="noreferrer" className="lms-btn-primary">
+            Open Video Link
+          </a>
+        </div>
+      );
+    }
+  }
+
+  // 3. Uploaded Local Video
   return (
     <video 
       controls 
       controlsList="nodownload"
       className="lms-viewer-video" 
       src={resolvedUrl}
+      autoPlay
     >
       Your browser does not support the video tag.
     </video>

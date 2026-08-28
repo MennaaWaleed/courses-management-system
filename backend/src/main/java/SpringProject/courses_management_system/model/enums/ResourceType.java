@@ -7,5 +7,5 @@ public enum ResourceType {
     DOCUMENT,
     ZIP,
     LINK,
-    rar
+    RAR
 }

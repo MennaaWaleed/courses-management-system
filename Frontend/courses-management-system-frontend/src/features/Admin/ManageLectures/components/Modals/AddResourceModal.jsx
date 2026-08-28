@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { lectureResourceApi } from '../../../../../api/lectureResourceApi';
 import { getApiErrorMessage } from '../../../../../utils/apiUtils'; // Import the error helper
 
@@ -13,6 +13,54 @@ const AddResourceModal = ({ lectureId, onClose, onSuccess }) => {
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState('');
 
+  // 1. CLEAR FILE WHEN RESOURCE TYPE CHANGES
+  useEffect(() => {
+    setFile(null);
+    setError(null);
+  }, [type]);
+
+  // 2. DYNAMIC ACCEPT ATTRIBUTE HELPER
+  const getAcceptAttribute = () => {
+    switch (type) {
+      case 'VIDEO': return 'video/*';
+      case 'PDF': return '.pdf,application/pdf';
+      case 'ZIP': return '.zip,application/zip';
+      case 'RAR': return '.rar,application/vnd.rar';
+      case 'DOCUMENT': return '.doc,.docx,.txt,.ppt,.pptx,.xls,.xlsx';
+      default: return '*/*';
+    }
+  };
+
+  // 3. FRONTEND FILE VALIDATION HELPER
+  const validateFile = (selectedFile, selectedType) => {
+    if (!selectedFile) return;
+    
+    const ext = selectedFile.name.split('.').pop().toLowerCase();
+    const mime = selectedFile.type.toLowerCase();
+
+    switch (selectedType) {
+      case 'VIDEO':
+        if (!mime.startsWith('video/')) throw new Error("Please select a video file.");
+        break;
+      case 'PDF':
+        if (ext !== 'pdf' && mime !== 'application/pdf') throw new Error("Please select a PDF file.");
+        break;
+      case 'ZIP':
+        if (ext !== 'zip' && mime !== 'application/zip') throw new Error("Please select a ZIP file.");
+        break;
+      case 'RAR':
+        // Browsers often omit MIME for RAR, so we strictly check the extension as a fallback
+        if (ext !== 'rar' && mime !== 'application/vnd.rar') throw new Error("Please select a RAR archive.");
+        break;
+      case 'DOCUMENT':
+        const docExts = ['doc', 'docx', 'txt', 'ppt', 'pptx', 'xls', 'xlsx'];
+        if (!docExts.includes(ext)) throw new Error("Please select a supported document file.");
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -21,6 +69,10 @@ const AddResourceModal = ({ lectureId, onClose, onSuccess }) => {
     try {
       if (activeTab === 'UPLOAD') {
         if (!file) throw new Error("Please select a file to upload.");
+        
+        // Execute strict file validation before submitting
+        validateFile(file, type);
+
         const formData = new FormData();
         formData.append('name', name);
         formData.append('type', type);
@@ -37,8 +89,8 @@ const AddResourceModal = ({ lectureId, onClose, onSuccess }) => {
 
       onSuccess(); // Close modal and refresh in parent
     } catch (err) {
-      // Use the helper to extract a clean message
-      setError(getApiErrorMessage(err));
+      // Prioritize our custom frontend validation errors, otherwise use API error helper
+      setError(err.message && !err.response ? err.message : getApiErrorMessage(err));
     } finally {
       setIsSubmitting(false);
     }
@@ -103,7 +155,16 @@ const AddResourceModal = ({ lectureId, onClose, onSuccess }) => {
                     {file ? <strong>{file.name}</strong> : <>Drag & drop your file here or <strong>Browse</strong></>}
                   </p>
                   {file && <span style={{ fontSize: '0.8rem', color: '#64748b' }}>{(file.size / 1024 / 1024).toFixed(2)} MB</span>}
-                  <input type="file" required className="file-drop-input" onChange={(e) => setFile(e.target.files[0])} disabled={isSubmitting} />
+                  
+                  {/* DYNAMIC ACCEPT ATTRIBUTE IMPLEMENTED HERE */}
+                  <input 
+                    type="file" 
+                    required 
+                    className="file-drop-input" 
+                    accept={getAcceptAttribute()}
+                    onChange={(e) => setFile(e.target.files[0])} 
+                    disabled={isSubmitting} 
+                  />
                 </div>
               </div>
             ) : (

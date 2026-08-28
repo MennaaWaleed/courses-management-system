@@ -4,20 +4,27 @@ import { BASE_URL } from '../../../../../api/axios';
 const ResourceViewerModal = ({ resource, onClose }) => {
   if (!resource) return null;
 
-  // HELPER FUNCTION: Fixes relative URLs for uploaded files using your existing BASE_URL
+  // HELPER FUNCTION: Fixes relative URLs for uploaded files
   const getFullUrl = (url) => {
     if (!url) return '';
-    
-    // If it's already a full Google Drive or external URL, leave it alone
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
-    
-    // Use the BASE_URL imported from your axios config!
-    // We remove any double slashes just in case your URL starts with one
     const cleanUrl = url.startsWith('/') ? url : `/${url}`;
-    
     return `${BASE_URL}${cleanUrl}`;
+  };
+
+  // NEW HELPER: Detects YouTube URLs and converts them to embed links
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return null;
+    // Regex matches youtu.be, youtube.com/watch?v=, youtube.com/embed/ etc.
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    
+    // YouTube IDs are exactly 11 characters
+    return (match && match[2].length === 11) 
+      ? `https://www.youtube.com/embed/${match[2]}` 
+      : null;
   };
 
   const renderContent = () => {
@@ -34,6 +41,7 @@ const ResourceViewerModal = ({ resource, onClose }) => {
           />
         );
       }
+      
       if (resource.source === 'UPLOAD') {
         return (
           <video controls className="resource-video-player" autoPlay>
@@ -41,6 +49,38 @@ const ResourceViewerModal = ({ resource, onClose }) => {
             Your browser does not support the video tag.
           </video>
         );
+      }
+
+      // 3. NEW LOGIC: YouTube / External Videos
+      if (resource.source === 'EXTERNAL') {
+        const youtubeUrl = getYouTubeEmbedUrl(resource.fileUrl);
+        
+        if (youtubeUrl) {
+          return (
+            <iframe 
+              src={youtubeUrl} 
+              className="resource-iframe"
+              title={resource.name}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          );
+        } else {
+          // Edge Case: If they provided an external video link that IS NOT YouTube
+          return (
+            <div className="viewer-unsupported" style={{ textAlign: 'center', padding: '2rem' }}>
+              <p style={{ marginBottom: '1rem' }}>This external video cannot be previewed directly.</p>
+              <a 
+                href={resource.fileUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="lms-btn lms-btn-primary"
+              >
+                Open Video Link
+              </a>
+            </div>
+          );
+        }
       }
     }
 
@@ -57,17 +97,18 @@ const ResourceViewerModal = ({ resource, onClose }) => {
       );
     }
 
-    // Fallback/Error state for unsupported embedded previews
+    // 3. ARCHIVES / DOCUMENTS LOGIC (DOWNLOAD-ONLY FALLBACK)
     return (
-      <div className="viewer-unsupported">
-        <p>This resource type cannot be previewed in the browser.</p>
+      <div className="viewer-unsupported" style={{ textAlign: 'center', padding: '2rem' }}>
+        <p style={{ marginBottom: '1rem' }}>This resource type ({resource.type}) is for download only and cannot be previewed in the browser.</p>
         <a 
           href={getFullUrl(resource.fileUrl)} 
+          download 
           target="_blank" 
           rel="noopener noreferrer" 
           className="lms-btn lms-btn-primary"
         >
-          Download File
+          Download {resource.type.toLowerCase()}
         </a>
       </div>
     );

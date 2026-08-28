@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { lectureResourceApi } from '../../../../api/lectureResourceApi';
 import ResourceViewerModal from './Modals/ResourceViewerModal';
 import ConfirmDeleteModal from './Modals/ConfirmDeleteModal';
+import { BASE_URL } from '../../../../api/axios'; // 1. Added BASE_URL import
 
 const formatFileSize = (bytes) => {
   if (!bytes || bytes === 0) return '';
@@ -27,6 +28,16 @@ const getSourceLabel = (source) => {
   if (source === 'DRIVE') return 'Google Drive';
   if (source === 'EXTERNAL') return 'External Link';
   return 'Uploaded';
+};
+
+// 2. Added helper to ensure local downloads work properly
+const getFullUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+  return `${BASE_URL}${cleanUrl}`;
 };
 
 const ResourceList = ({ resources, refreshData }) => {
@@ -63,7 +74,6 @@ const ResourceList = ({ resources, refreshData }) => {
           <div className="resource-item-left">
             <div className="resource-icon">{getResourceIcon(resource.type)}</div>
             <div className="resource-info">
-              {/* Name is isolated here, preventing duplicate type text */}
               <span className="resource-name">{resource.name}</span>
               <span className="resource-meta">
                 {resource.type} • {getSourceLabel(resource.source)} 
@@ -73,21 +83,39 @@ const ResourceList = ({ resources, refreshData }) => {
           </div>
           
           <div className="resource-item-actions">
-            {['VIDEO', 'PDF'].includes(resource.type) ? (
+            
+            {/* 3. STRICT BEHAVIOR: VIDEO & PDF -> PREVIEW MODAL */}
+            {['VIDEO', 'PDF'].includes(resource.type) && (
               <button 
                 className="lms-btn lms-btn-text" 
                 onClick={() => setSelectedResource(resource)}
               >
-                Preview
+                {resource.type === 'VIDEO' ? 'Play' : 'Preview'}
               </button>
-            ) : (
+            )}
+
+            {/* 4. STRICT BEHAVIOR: DOCUMENT, ZIP, RAR -> DIRECT DOWNLOAD */}
+            {['DOCUMENT', 'ZIP', 'RAR'].includes(resource.type) && (
+              <a 
+                href={getFullUrl(resource.fileUrl)} 
+                download
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="lms-btn lms-btn-text"
+              >
+                Download
+              </a>
+            )}
+
+            {/* 5. STRICT BEHAVIOR: EXTERNAL LINKS -> OPEN */}
+            {resource.type === 'LINK' && (
               <a 
                 href={resource.fileUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="lms-btn lms-btn-text"
               >
-                {resource.type === 'LINK' ? 'Open' : 'Download'}
+                Open
               </a>
             )}
             
