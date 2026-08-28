@@ -479,6 +479,12 @@ ALTER TABLE category
 ALTER TABLE course
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 
+-------------------- new -----------------
+ALTER TABLE lectureresource
+ADD COLUMN source VARCHAR(50) NOT NULL;
+
+select * from lecture;
+
 -----------------new 22/8/2026 ____________
 INSERT INTO course_batch (
     id,

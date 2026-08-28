@@ -23,6 +23,8 @@ import EditCourse from "./features/Admin/EditCourse/EditCourse";
 import CourseBatches from "./features/Admin/BatchesManagement/CourseBatches/CourseBatches";
 import CreateBatch from "./features/Admin/BatchesManagement/CreateBatch/CreateBatch";
 import AdminEnrollmentRequests from "./features/Admin/AdminEnrollmentRequests"
+import BatchLectures from './features/student/BatchLectures/pages/BatchLectures';
+import AdminLecturesPage from './features/Admin/ManageLectures/pages/AdminLecturesPage';
 
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
@@ -138,6 +140,7 @@ function App() {
                             </AdminRoute>
                         }
                     />
+
                     <Route
                         path="/admin/courses/:courseId/batches"
                         element={
@@ -157,6 +160,18 @@ function App() {
 
                     <Route path="/admin/enrollment-requests" element={<AdminEnrollmentRequests />} />
 
+                    
+                   <Route 
+                          path="/student/batches/:batchId/lectures"
+                          element={<BatchLectures />
+                         } 
+                    />
+
+
+                    <Route 
+                            path="/admin/batches/:batchId/lectures" 
+                            element={<AdminLecturesPage />} 
+                        />
                 </Routes>
             </main>
 

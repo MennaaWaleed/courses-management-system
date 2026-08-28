@@ -1,5 +1,7 @@
 package SpringProject.courses_management_system.model;
 
+import SpringProject.courses_management_system.model.enums.ResourceSource;
+import SpringProject.courses_management_system.model.enums.ResourceType;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,11 +29,24 @@ public class LectureResource {
     @Column(name="fileurl", nullable=false, length=1000)
     private String fileUrl;
 
-    @Column(name="size", nullable=false)
+    @Column(name="size")
     private Long size;
 
-    @Column(name="type", nullable=false, length=100)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "type",
+            nullable = false,
+            length = 50
+    )
+    private ResourceType type;
+
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "source",
+            nullable = false,
+            length = 50
+    )
+    private ResourceSource source;
 
     @CreationTimestamp
     @Column(name="createdat", nullable=false, updatable=false)

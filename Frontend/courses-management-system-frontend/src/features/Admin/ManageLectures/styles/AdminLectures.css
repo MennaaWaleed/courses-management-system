@@ -1,0 +1,484 @@
+/* =========================================================
+   1. BRAND VARIABLES & BASE STYLES
+   ========================================================= */
+:root {
+  --mtc-primary: #0f766e; 
+  --mtc-primary-hover: #115e59;
+  --mtc-surface: #ffffff;
+  --mtc-bg: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+/* =========================================================
+   2. MAIN PAGE LAYOUT (Restored Clean Design)
+   ========================================================= */
+.admin-page-container {
+  max-width: 1000px; /* Comfortable width, not too wide */
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-main);
+  background-color: #ffffff; /* Clean white background */
+}
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+}
+
+.admin-page-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+}
+
+.admin-page-subtitle {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* =========================================================
+   3. LECTURE CARDS (Clean horizontal structure)
+   ========================================================= */
+.lecture-card {
+  background: var(--mtc-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  transition: all 0.2s ease;
+  /* overflow: hidden; */
+}
+
+.lecture-card.expanded {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem; /* Slightly more space when open */
+}
+
+.lecture-header {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: var(--mtc-surface);
+  transition: background-color 0.15s;
+}
+
+.lecture-header:hover {
+  background: #f8fafc;
+}
+
+.lecture-card.expanded .lecture-header {
+  border-bottom: 1px solid var(--border-color);
+  background: #f8fafc;
+}
+
+/* Left Side: Drag, Number, Title */
+.lecture-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  user-select: none;
+}
+.drag-handle:active { cursor: grabbing; }
+
+.lecture-number {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: #f1f5f9;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.lecture-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+/* Right Side: Metadata & Actions */
+.lecture-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.resource-count {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.status-badge.published { background-color: #ecfdf5; color: #059669; }
+.status-badge.unpublished { background-color: #f1f5f9; color: #64748b; }
+
+.action-menu-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+.action-menu-btn:hover {
+  background: #e2e8f0;
+  color: var(--text-main);
+}
+
+/* =========================================================
+   4. RESOURCES SECTION (Clean Inner List)
+   ========================================================= */
+.lecture-body {
+  background: #ffffff;
+}
+
+.lecture-body-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem 0.5rem;
+}
+
+.resources-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.resource-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1.5rem 1.25rem;
+}
+
+.resource-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+.resource-item:last-child {
+  border-bottom: none;
+}
+
+.resource-item-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.resource-icon {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resource-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.resource-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.resource-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+.resource-item-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* =========================================================
+   5. BUTTONS (Shared across page and modals)
+   ========================================================= */
+.lms-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-family: inherit;
+}
+.lms-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.lms-btn-primary { background: var(--mtc-primary); color: white; }
+.lms-btn-primary:hover:not(:disabled) { background: var(--mtc-primary-hover); }
+.lms-btn-outline { background: white; border-color: var(--border-color); color: var(--text-main); }
+.lms-btn-outline:hover:not(:disabled) { background: var(--mtc-bg); }
+.lms-btn-sm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+
+.lms-btn-text {
+  background: transparent; border: none; padding: 0.25rem 0.5rem;
+  font-weight: 500; color: var(--mtc-primary); cursor: pointer; text-decoration: none; font-size: 0.875rem;
+}
+.lms-btn-text:hover { text-decoration: underline; }
+.text-danger { color: #ef4444 !important; }
+
+/* Empty States */
+.lms-empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+.lms-empty-state-sm { padding: 1.5rem 1rem; font-size: 0.9rem; }
+
+
+/* =========================================================
+   6. MODALS & FORMS (KEPT EXACTLY AS DESIGNED PREVIOUSLY)
+   ========================================================= */
+.lms-modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;
+}
+.lms-modal-container {
+  background: var(--mtc-surface); border-radius: 12px; width: 100%; max-width: 550px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex; flex-direction: column; max-height: 90vh; overflow: hidden;
+}
+.lms-modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color);
+  background: var(--mtc-surface); flex-shrink: 0;
+}
+.lms-modal-title { margin: 0; font-size: 1.25rem; font-weight: 600; color: var(--text-main); }
+.lms-close-btn {
+  background: none; border: none; font-size: 1.75rem; line-height: 1; cursor: pointer;
+  color: var(--text-muted); transition: color 0.2s; padding: 0 0.5rem;
+}
+.lms-close-btn:hover { color: #ef4444; }
+.lms-modal-body {
+  padding: 1.5rem; overflow-y: auto; background: var(--mtc-surface); color: var(--text-main);
+}
+.file-drop-area {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2rem 1.5rem; border: 2px dashed #cbd5e1; border-radius: 8px; background: #f8fafc;
+  text-align: center; transition: all 0.2s ease; cursor: pointer;
+}
+.file-drop-area:hover { border-color: var(--mtc-primary); background: #f0fdfa; }
+.file-drop-icon { font-size: 2rem; margin-bottom: 0.5rem; color: var(--mtc-primary); }
+.file-drop-text { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+.file-drop-text strong { color: var(--mtc-primary); }
+.file-drop-input {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+}
+.lms-form { display: flex; flex-direction: column; }
+.form-group { margin-bottom: 1.25rem; }
+.form-group label {
+  display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-main); font-size: 0.875rem;
+}
+.form-group input, .form-group select {
+  width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px;
+  outline: none; font-family: inherit; font-size: 0.95rem; box-sizing: border-box;
+  background: #fff; color: var(--text-main); transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: var(--mtc-primary); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+.form-actions {
+  display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);
+}
+.segmented-controls-wrapper { padding: 1rem 1.5rem 0; background: var(--mtc-surface); flex-shrink: 0; }
+.segmented-controls { display: flex; background: var(--mtc-bg); padding: 0.35rem; border-radius: 8px; border: 1px solid var(--border-color); }
+.segmented-controls button {
+  flex: 1; border: none; background: transparent; padding: 0.6rem 1rem; border-radius: 6px;
+  font-weight: 500; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+}
+.segmented-controls button.active {
+  background: #ffffff; color: var(--mtc-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Viewers Override */
+.lms-modal-container.viewer-modal {
+  max-width: 1100px;
+  width: 90vw;
+  height: 85vh;
+  max-height: 90vh;
+}
+
+/* Make the body fill the remaining height and keep it black for cinema mode */
+.viewer-modal .lms-modal-body {
+  background: #000;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden; /* Prevents double scrollbars */
+}
+
+/* Force the video and iframe to stretch and fill the massive new space */
+.resource-iframe, 
+.resource-video-player {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  border: none;
+  display: block;
+}
+
+/* Keep PDF background slightly light so the document stands out */
+.pdf-viewer {
+  background: #f1f5f9;
+}
+/* =========================================================
+   ERROR ALERTS, SPINNERS & TOAST NOTIFICATIONS
+   ========================================================= */
+
+/* Professional Error Alert */
+.lms-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.lms-alert-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+.lms-alert-icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.125rem;
+  fill: currentColor;
+}
+
+/* Button Loading Spinner */
+.lms-spinner {
+  animation: lms-spin 1s linear infinite;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.5rem;
+}
+.lms-spinner circle { opacity: 0.25; }
+.lms-spinner path { opacity: 0.75; }
+
+@keyframes lms-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Success Toast Notification */
+.lms-toast-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.lms-toast {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  background-color: #064e3b; /* Deep green */
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  animation: lms-toast-slide-up 0.3s ease-out forwards;
+}
+
+@keyframes lms-toast-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* =========================================================
+   8. DROPDOWN MENU
+   ========================================================= */
+.lms-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: var(--mtc-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  min-width: 160px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem;
+}
+
+.lms-dropdown-item {
+  background: transparent;
+  border: none;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-main);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  width: 100%;
+}
+
+.lms-dropdown-item:hover {
+  background: #f1f5f9;
+}
+
+.lms-dropdown-item.text-danger:hover {
+  background: #fef2f2;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .lecture-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .lecture-header-right { width: 100%; justify-content: space-between; }
+  .resource-item { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .resource-item-actions { width: 100%; justify-content: flex-end; }
+}

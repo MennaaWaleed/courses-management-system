@@ -14,7 +14,7 @@ import java.util.UUID;
 public class FileStorageService {
 
     private final Path contentDirectory =
-            Paths.get("src/main/resources/static/images/courses/CoursesContent");
+            Paths.get("src/main/resources/static/contents/pdfs");
 
     private final Path courseImagesDirectory =
             Paths.get("src/main/resources/static/images/courses/images");
@@ -22,7 +22,8 @@ public class FileStorageService {
     private final Path courseIconsDirectory =
             Paths.get("src/main/resources/static/images/courses/icons");
 
-
+    private final Path lectureResourcesDirectory =
+            Paths.get( "src/main/resources/static/resources/lecture-resources");
     public FileStorageService() {
 
         try {
@@ -36,18 +37,25 @@ public class FileStorageService {
     }
 
 
+
     public String saveContentFile(MultipartFile file) {
 
         if (file == null || file.isEmpty()) {
-            throw new RuntimeException("Course PDF is required");
+
+            throw new RuntimeException(
+                    "Course PDF is required"
+            );
         }
 
         String fileName =
-                UUID.randomUUID() + "_" + file.getOriginalFilename();
+                UUID.randomUUID()
+                        + "_"
+                        + file.getOriginalFilename();
 
         try {
 
-            Path filePath = contentDirectory.resolve(fileName);
+            Path filePath =
+                    contentDirectory.resolve(fileName);
 
             Files.copy(
                     file.getInputStream(),
@@ -55,13 +63,17 @@ public class FileStorageService {
                     StandardCopyOption.REPLACE_EXISTING
             );
 
-            return "/images/CoursesContent/" + fileName;
+            return "/contents/courses/CoursesContent/"
+                    + fileName;
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save course PDF", e);
+
+            throw new RuntimeException(
+                    "Failed to save course PDF",
+                    e
+            );
         }
     }
-
 
     public String saveCourseImage(MultipartFile file) {
 
@@ -115,4 +127,95 @@ public class FileStorageService {
             throw new RuntimeException("Failed to save course icon", e);
         }
     }
+
+
+    public String saveLectureResource(MultipartFile file) {
+
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("Lecture resource is required");
+        }
+
+        String originalFileName = file.getOriginalFilename();
+
+        if (originalFileName == null || originalFileName.isBlank()) {
+            throw new RuntimeException("Invalid lecture resource file name");
+        }
+
+        String fileName =
+                UUID.randomUUID()
+                        + "_"
+                        + Paths.get(originalFileName)
+                        .getFileName()
+                        .toString();
+
+        try {
+
+            Path lectureResourcesDirectory = Paths.get(
+                    System.getProperty("user.dir"),
+                    "src",
+                    "main",
+                    "resources",
+                    "static",
+                    "resources",
+                    "lecture-resources"
+            );
+
+            // تأكد إن الفولدر موجود
+            Files.createDirectories(lectureResourcesDirectory);
+
+            Path filePath =
+                    lectureResourcesDirectory.resolve(fileName);
+
+            // تأكد إن الـ parent موجود
+            Files.createDirectories(filePath.getParent());
+
+            Files.copy(
+                    file.getInputStream(),
+                    filePath,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
+            return "/resources/lecture-resources/" + fileName;
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Failed to save lecture resource",
+                    e
+            );
+        }
+    }
+    public void deleteLectureResource(String fileUrl) {
+
+        if (fileUrl == null || fileUrl.isBlank()) {
+            return;
+        }
+
+        try {
+
+            String prefix = "/resources/lecture-resources/";
+
+            if (!fileUrl.startsWith(prefix)) {
+                return;
+            }
+
+            String fileName =
+                    fileUrl.substring(prefix.length());
+
+            Path filePath =
+                    Paths.get(
+                            "src/main/resources/static/resources/lecture-resources"
+                    ).resolve(fileName);
+
+            Files.deleteIfExists(filePath);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Failed to delete lecture resource file",
+                    e
+            );
+        }
+    }
+
 }

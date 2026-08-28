@@ -3,6 +3,8 @@ package SpringProject.courses_management_system.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -30,4 +32,10 @@ public class Lecture {
 
     @Column(name="published", nullable=false)
     private boolean published;
+
+
+
+    @OneToMany( mappedBy = "lecture", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OrderBy("createdAt ASC")
+    private List<LectureResource> resources = new ArrayList<>();
 }

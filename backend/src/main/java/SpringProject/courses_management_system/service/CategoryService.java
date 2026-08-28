@@ -3,6 +3,7 @@ package SpringProject.courses_management_system.service;
 import SpringProject.courses_management_system.dto.Category.CategoryResponse;
 import SpringProject.courses_management_system.model.Category;
 import SpringProject.courses_management_system.model.Course;
+import SpringProject.courses_management_system.model.CourseBatch;
 import SpringProject.courses_management_system.repository.CategoryRepository;
 import SpringProject.courses_management_system.repository.CourseRepository;
 import jakarta.transaction.Transactional;
@@ -117,6 +118,7 @@ public class CategoryService {
     public CategoryResponse getCategoryById(UUID id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
+
 
         return convertToResponse(category);
     }
