@@ -15,5 +15,6 @@ public record CourseBatchResponse(
         UUID courseId,
         String courseName,
         UUID instructorId,
-        String instructorName
+        String instructorName,
+        String batchCode
 ) {}

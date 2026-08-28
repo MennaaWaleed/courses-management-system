@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,8 +70,17 @@ public class CourseBatchService {
         batch.setStartDate(request.startDate());
         batch.setEndDate(request.endDate());
 
+        batch.setBatchCode(generateUniqueBatchCode());
+        batch.setCodeExpiresAt(ZonedDateTime.now().plusDays(30));
+
         CourseBatch savedBatch = courseBatchRepository.save(batch);
         return mapToDTO(savedBatch);
+    }
+
+
+
+    private String generateUniqueBatchCode() {
+        return UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
     @Transactional
@@ -108,7 +118,8 @@ public class CourseBatchService {
                 batch.getCourse().getId(),
                 batch.getCourse().getCourseName(),
                 instructorId,
-                instructorName
+                instructorName,
+                batch.getBatchCode()
         );
     }
 
@@ -222,4 +233,16 @@ public class CourseBatchService {
         }
     }
 
+    @Transactional
+    public CourseBatchResponse regenerateBatchCode(UUID batchId) {
+        CourseBatch batch = courseBatchRepository.findById(batchId)
+                .orElseThrow(() -> new RuntimeException("Batch not found"));
+
+        String newCode = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        batch.setBatchCode(newCode);
+        batch.setCodeExpiresAt(ZonedDateTime.now().plusDays(30));
+
+        CourseBatch savedBatch = courseBatchRepository.save(batch);
+        return mapToDTO(savedBatch);
+    }
 }

@@ -611,3 +611,17 @@ ALTER TABLE course_batch
 ALTER TABLE ENROLLMENT
     ADD COLUMN removed BOOLEAN NOT NULL DEFAULT FALSE
 
+--------------------new 28/8-----------------------------
+ALTER TABLE course_batch ADD COLUMN batch_code VARCHAR(20) UNIQUE;
+ALTER TABLE course_batch ADD COLUMN code_expires_at TIMESTAMP WITH TIME ZONE;
+
+CREATE TABLE enrollment_requests (
+                                     id UUID PRIMARY KEY,
+                                     user_id UUID NOT NULL,
+                                     batch_id UUID NOT NULL,
+                                     status VARCHAR(50) NOT NULL,
+                                     requested_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                                     updated_at TIMESTAMP WITH TIME ZONE,
+                                     FOREIGN KEY (user_id) REFERENCES users(id),
+                                     FOREIGN KEY (batch_id) REFERENCES course_batch(id)
+);

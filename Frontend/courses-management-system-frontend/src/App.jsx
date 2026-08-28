@@ -22,7 +22,7 @@ import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 import EditCourse from "./features/Admin/EditCourse/EditCourse";
 import CourseBatches from "./features/Admin/BatchesManagement/CourseBatches/CourseBatches";
 import CreateBatch from "./features/Admin/BatchesManagement/CreateBatch/CreateBatch";
-
+import AdminEnrollmentRequests from "./features/Admin/AdminEnrollmentRequests"
 
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
@@ -154,6 +154,8 @@ function App() {
                             </AdminRoute>
                         }
                     />
+
+                    <Route path="/admin/enrollment-requests" element={<AdminEnrollmentRequests />} />
 
                 </Routes>
             </main>

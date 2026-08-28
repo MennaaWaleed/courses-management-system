@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchUserProfile } from "../api/profileApi";
-import { Mail, Phone, BookOpen, Heart, Award, X, Download, Layers, ShieldCheck, UserCheck } from "lucide-react";
+import { enrollmentRequestApi } from "../api/enrollmentRequestApi";
+import { Mail, Phone, BookOpen, Heart, Award, X, Download, Layers, Clock, Send } from "lucide-react";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState(null);
+    const [myRequests, setMyRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -12,12 +14,28 @@ export default function ProfilePage() {
     const [pdfTitle, setPdfTitle] = useState("");
     const [pdfLoading, setPdfLoading] = useState(false);
 
+    const [batchCode, setBatchCode] = useState("");
+    const [joinLoading, setJoinLoading] = useState(false);
+    const [joinError, setJoinError] = useState("");
+    const [joinSuccess, setJoinSuccess] = useState("");
+
     useEffect(() => {
-        const loadProfile = async () => {
+        const loadProfileAndRequests = async () => {
             try {
                 setLoading(true);
                 const data = await fetchUserProfile();
                 setProfile(data);
+
+                const userRole = data?.role?.toUpperCase();
+
+                if (userRole !== "ADMIN" && userRole !== "INSTRUCTOR") {
+                    try {
+                        const reqs = await enrollmentRequestApi.getMyRequests();
+                        setMyRequests(reqs);
+                    } catch (reqErr) {
+                        console.error("Failed to load enrollment requests", reqErr);
+                    }
+                }
             } catch (err) {
                 setError(err.response?.data?.message || "Failed to load profile details.");
             } finally {
@@ -25,8 +43,37 @@ export default function ProfilePage() {
             }
         };
 
-        loadProfile();
+        loadProfileAndRequests();
     }, []);
+
+    const handleJoinBatch = async (e) => {
+        e.preventDefault();
+
+        if (!batchCode.trim()) {
+            setJoinError("Please enter a valid batch code.");
+            setJoinSuccess("");
+            return;
+        }
+
+        try {
+            setJoinLoading(true);
+            setJoinError("");
+            setJoinSuccess("");
+
+            await enrollmentRequestApi.createRequest(null, batchCode.trim());
+
+            setJoinSuccess("Request sent successfully! It is now pending approval.");
+            setBatchCode("");
+
+            const updatedReqs = await enrollmentRequestApi.getMyRequests();
+            setMyRequests(updatedReqs);
+
+        } catch (err) {
+            setJoinError(err.response?.data?.message || err.response?.data || "Invalid or expired batch code.");
+        } finally {
+            setJoinLoading(false);
+        }
+    };
 
     const handleOpenCertificate = async (url, courseName) => {
         try {
@@ -88,7 +135,6 @@ export default function ProfilePage() {
     return (
         <div style={{ maxWidth: "800px", margin: "40px auto", padding: "0 20px", display: "flex", flexDirection: "column", gap: "24px" }}>
 
-            {/* 1. Common Info Header (Admin, Instructor, Student) */}
             <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: "20px" }}>
                 <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: role === "ADMIN" ? "#7c3aed" : role === "INSTRUCTOR" ? "#0891b2" : "#2563eb", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", fontWeight: "bold" }}>
                     {profile?.firstName?.[0]}{profile?.lastName?.[0]}
@@ -99,8 +145,8 @@ export default function ProfilePage() {
                             {profile?.firstName} {profile?.lastName}
                         </h1>
                         <span style={{ fontSize: "12px", fontWeight: "600", padding: "3px 8px", borderRadius: "9999px", background: "#f1f5f9", color: "#475569" }}>
-              {role}
-            </span>
+                            {role}
+                        </span>
                     </div>
                     <p style={{ display: "flex", alignItems: "center", gap: "8px", color: "#64748b", margin: "6px 0 0", fontSize: "14px" }}>
                         <Mail size={16} /> {profile?.email}
@@ -111,7 +157,6 @@ export default function ProfilePage() {
                 </div>
             </div>
 
-            {/* 2. Instructor: Assigned Course Batches */}
             {role === "INSTRUCTOR" && (
                 <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
                     <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
@@ -132,10 +177,73 @@ export default function ProfilePage() {
                 </div>
             )}
 
-            {/* 3. Student: Enrolled Courses & Wishlist */}
             {role !== "ADMIN" && role !== "INSTRUCTOR" && (
                 <>
-                    {/* Enrolled Courses */}
+                    <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                            <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", margin: 0 }}>
+                                <Clock size={20} color="#f59e0b" /> Enrollment Requests
+                            </h2>
+                        </div>
+
+                        <form onSubmit={handleJoinBatch} style={{ display: "flex", gap: "10px", marginBottom: "16px", flexWrap: "wrap" }}>
+                            <input
+                                type="text"
+                                placeholder="Enter Batch Code (e.g., SPR-8F42K)"
+                                value={batchCode}
+                                onChange={(e) => setBatchCode(e.target.value)}
+                                disabled={joinLoading}
+                                style={{ flex: 1, minWidth: "200px", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", outline: "none", fontSize: "14px", textTransform: "uppercase", background: "#f8fafc" }}
+                            />
+                            <button
+                                type="submit"
+                                disabled={joinLoading || !batchCode.trim()}
+                                style={{
+                                    background: "#0f172a", color: "#fff", padding: "10px 20px", borderRadius: "8px", border: "none",
+                                    fontSize: "14px", fontWeight: "500", display: "flex", alignItems: "center", gap: "6px",
+                                    cursor: (joinLoading || !batchCode.trim()) ? "not-allowed" : "pointer",
+                                    opacity: (joinLoading || !batchCode.trim()) ? 0.7 : 1
+                                }}
+                            >
+                                <Send size={16} />
+                                {joinLoading ? "Checking..." : "Join Batch"}
+                            </button>
+                        </form>
+
+                        {joinError && (
+                            <div style={{ color: "#ef4444", fontSize: "13.5px", marginBottom: "20px", background: "#fef2f2", padding: "10px 12px", borderRadius: "6px", border: "1px solid #fecaca" }}>
+                                <strong>Error:</strong> {joinError}
+                            </div>
+                        )}
+                        {joinSuccess && (
+                            <div style={{ color: "#059669", fontSize: "13.5px", marginBottom: "20px", background: "#d1fae5", padding: "10px 12px", borderRadius: "6px", border: "1px solid #a7f3d0" }}>
+                                {joinSuccess}
+                            </div>
+                        )}
+
+                        {!myRequests || myRequests.length === 0 ? (
+                            <p style={{ color: "#94a3b8", fontSize: "14px", borderTop: "1px solid #e2e8f0", paddingTop: "16px" }}>No pending or recent enrollment requests.</p>
+                        ) : (
+                            <div style={{ display: "flex", flexDirection: "column", gap: "12px", borderTop: "1px solid #e2e8f0", paddingTop: "16px" }}>
+                                {myRequests.map((req, idx) => (
+                                    <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
+                                        <div>
+                                            <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "600", color: "#1e293b" }}>{req.courseName}</h3>
+                                            <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>Batch: {req.batchName}</p>
+                                        </div>
+                                        <span style={{
+                                            fontSize: "12px", fontWeight: "bold", padding: "6px 12px", borderRadius: "6px",
+                                            backgroundColor: req.status === "PENDING" ? "#fef3c7" : req.status === "ACCEPTED" ? "#d1fae5" : "#fee2e2",
+                                            color: req.status === "PENDING" ? "#d97706" : req.status === "ACCEPTED" ? "#059669" : "#dc2626"
+                                        }}>
+                                            {req.status}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
                     <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
                         <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
                             <BookOpen size={20} color="#2563eb" /> Enrolled Courses
@@ -153,19 +261,7 @@ export default function ProfilePage() {
                                         {course.certificateUrl && (
                                             <button
                                                 onClick={() => handleOpenCertificate(course.certificateUrl, course.courseName)}
-                                                style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: "6px",
-                                                    background: "#2563eb",
-                                                    color: "#fff",
-                                                    padding: "8px 16px",
-                                                    borderRadius: "8px",
-                                                    border: "none",
-                                                    fontSize: "14px",
-                                                    fontWeight: "500",
-                                                    cursor: "pointer",
-                                                }}
+                                                style={{ display: "flex", alignItems: "center", gap: "6px", background: "#2563eb", color: "#fff", padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "14px", fontWeight: "500", cursor: "pointer" }}
                                             >
                                                 <Award size={16} /> Certificate
                                             </button>
@@ -176,7 +272,6 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-                    {/* Wishlist */}
                     <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
                         <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
                             <Heart size={20} color="#ef4444" /> Wishlist
@@ -197,76 +292,21 @@ export default function ProfilePage() {
                 </>
             )}
 
-            {/* PDF Modal Viewer */}
             {modalOpen && (
-                <div
-                    style={{
-                        position: "fixed",
-                        inset: 0,
-                        backgroundColor: "rgba(15, 23, 42, 0.75)",
-                        backdropFilter: "blur(4px)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        zIndex: 1000,
-                        padding: "16px",
-                    }}
-                    onClick={handleCloseModal}
-                >
-                    <div
-                        style={{
-                            background: "#fff",
-                            width: "100%",
-                            maxWidth: "900px",
-                            height: "90vh",
-                            borderRadius: "14px",
-                            display: "flex",
-                            flexDirection: "column",
-                            overflow: "hidden",
-                            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(15, 23, 42, 0.75)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "16px" }} onClick={handleCloseModal}>
+                    <div style={{ background: "#fff", width: "100%", maxWidth: "900px", height: "90vh", borderRadius: "14px", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }} onClick={(e) => e.stopPropagation()}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                 <Award size={20} color="#2563eb" />
-                                <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "600", color: "#1e293b" }}>
-                                    {pdfTitle} Certificate
-                                </h3>
+                                <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "600", color: "#1e293b" }}>{pdfTitle} Certificate</h3>
                             </div>
                             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                 {pdfBlobUrl && (
-                                    <button
-                                        onClick={handleDownload}
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "6px",
-                                            background: "#059669",
-                                            color: "#fff",
-                                            padding: "7px 14px",
-                                            borderRadius: "6px",
-                                            border: "none",
-                                            cursor: "pointer",
-                                            fontSize: "13px",
-                                            fontWeight: "500",
-                                        }}
-                                    >
+                                    <button onClick={handleDownload} style={{ display: "flex", alignItems: "center", gap: "6px", background: "#059669", color: "#fff", padding: "7px 14px", borderRadius: "6px", border: "none", cursor: "pointer", fontSize: "13px", fontWeight: "500" }}>
                                         <Download size={15} /> Download PDF
                                     </button>
                                 )}
-                                <button
-                                    onClick={handleCloseModal}
-                                    style={{
-                                        background: "none",
-                                        border: "none",
-                                        cursor: "pointer",
-                                        color: "#64748b",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        padding: "4px",
-                                    }}
-                                >
+                                <button onClick={handleCloseModal} style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b", display: "flex", alignItems: "center", padding: "4px" }}>
                                     <X size={22} />
                                 </button>
                             </div>
@@ -274,21 +314,14 @@ export default function ProfilePage() {
 
                         <div style={{ flex: 1, width: "100%", height: "100%", background: "#525659" }}>
                             {pdfLoading ? (
-                                <div style={{ color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                                    Rendering Certificate...
-                                </div>
+                                <div style={{ color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>Rendering Certificate...</div>
                             ) : pdfBlobUrl ? (
-                                <iframe
-                                    src={pdfBlobUrl}
-                                    title="Certificate PDF"
-                                    style={{ width: "100%", height: "100%", border: "none" }}
-                                />
+                                <iframe src={pdfBlobUrl} title="Certificate PDF" style={{ width: "100%", height: "100%", border: "none" }} />
                             ) : null}
                         </div>
                     </div>
                 </div>
             )}
-
         </div>
     );
 }

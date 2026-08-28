@@ -118,4 +118,10 @@ public class CourseBatchController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/api/admin/batches/{id}/regenerate-code")
+    public ResponseEntity<CourseBatchResponse> regenerateBatchCode(@PathVariable UUID id) {
+        CourseBatchResponse updatedBatch = courseBatchService.regenerateBatchCode(id);
+        return ResponseEntity.ok(updatedBatch);
+    }
+
 }
