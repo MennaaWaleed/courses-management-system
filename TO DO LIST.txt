@@ -8,4 +8,7 @@ To do list:
 -show password in login
 - when logging in then log out then log in again the old data still and didnt disappeared
 -handle when entering negative in course fields
+- edit course page design change colors
+- when delete category the all course be unpublished or is deleted
+- in course page related courses must be published and is deleted false
 
