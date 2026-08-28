@@ -16,7 +16,10 @@ const getYouTubeEmbedUrl = (url) => {
 const VideoViewer = ({ resource }) => {
   const isDrive = resource.source === 'DRIVE';
   const isExternal = resource.source === 'EXTERNAL';
-  const resolvedUrl = isDrive ? resource.previewUrl : resolveResourceUrl(resource.fileUrl);
+  
+  // FIXED: encodeURI safely translates spaces and special characters like [ ] into URL-safe formats
+  const rawUrl = isDrive ? resource.previewUrl : resolveResourceUrl(resource.fileUrl);
+  const resolvedUrl = encodeURI(rawUrl);
 
   // 1. Google Drive Video
   if (isDrive) {
@@ -53,7 +56,7 @@ const VideoViewer = ({ resource }) => {
           </svg>
           <h3>External Video</h3>
           <p>This video cannot be previewed directly in the browser.</p>
-          <a href={resource.fileUrl} target="_blank" rel="noreferrer" className="lms-btn-primary">
+          <a href={encodeURI(resource.fileUrl)} target="_blank" rel="noreferrer" className="lms-btn-primary">
             Open Video Link
           </a>
         </div>
@@ -76,7 +79,8 @@ const VideoViewer = ({ resource }) => {
 };
 
 const PdfViewer = ({ resource }) => {
-  const resolvedUrl = resolveResourceUrl(resource.fileUrl);
+  // FIXED: Added encodeURI to handle special characters like [ ] in PDF filenames
+  const resolvedUrl = encodeURI(resolveResourceUrl(resource.fileUrl));
   return (
     <iframe
       src={`${resolvedUrl}#toolbar=0`}
@@ -107,7 +111,8 @@ export const ResourceViewerModal = ({ resource, onClose }) => {
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
             <h3>Preview not available</h3>
             <p>This resource type ({resource.type}) cannot be viewed in the browser.</p>
-            <a href={resolveResourceUrl(resource.fileUrl)} download target="_blank" rel="noreferrer" className="lms-btn-primary">
+            {/* FIXED: Added encodeURI for downloads as well */}
+            <a href={encodeURI(resolveResourceUrl(resource.fileUrl))} download target="_blank" rel="noreferrer" className="lms-btn-primary">
               Download File
             </a>
           </div>

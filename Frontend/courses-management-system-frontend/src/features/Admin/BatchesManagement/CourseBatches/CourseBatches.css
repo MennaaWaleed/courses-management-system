@@ -458,3 +458,19 @@
 .requests-batch-btn:hover {
     background-color: #ccfbf1;
 }
+
+.manage-lectures-btn {
+    background-color: #eef2ff;
+    color: #4f46e5;
+    border: 1px solid #c7d2fe;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.manage-lectures-btn:hover {
+    background-color: #e0e7ff;
+}

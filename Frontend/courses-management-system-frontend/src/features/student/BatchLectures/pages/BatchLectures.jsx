@@ -1,4 +1,3 @@
-// src/features/student/BatchLectures/pages/BatchLectures.jsx
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLectures } from '../hooks/useLectures';
@@ -8,16 +7,21 @@ import { LecturesSkeleton, LecturesError, EmptyLectures } from '../components/St
 import '../styles/BatchLectures.css';
 
 const BatchLectures = () => {
-  // Use a hardcoded fallback ONLY if params aren't set during testing
-  const { batchId = '33333333-3333-3333-3333-333333333333' } = useParams();
+  // 1. STRICT DYNAMIC ROUTING: No hardcoded fallback IDs
+  const { batchId } = useParams();
   const { lectures, isLoading, error, refetch } = useLectures(batchId);
   
   const [activeResource, setActiveResource] = useState(null);
 
+  // 2. STRICT FILTERING & SORTING: Only show published, and order ASC
+  const publishedLectures = (lectures || [])
+    .filter(l => l.published === true)
+    .sort((a, b) => a.lectureOrder - b.lectureOrder);
+
   // UI-only derived state for the header summary
-  const totalLectures = lectures.length;
-  const publishedLectures = lectures.filter(l => l.published).length;
-  const progressPercent = totalLectures > 0 ? Math.round((publishedLectures / totalLectures) * 100) : 0;
+  const totalLectures = lectures ? lectures.length : 0;
+  const availableLecturesCount = publishedLectures.length;
+  const progressPercent = totalLectures > 0 ? Math.round((availableLecturesCount / totalLectures) * 100) : 0;
 
   return (
     <div className="lms-page-container">
@@ -32,11 +36,11 @@ const BatchLectures = () => {
           <div className="lms-progress-card">
             <div className="lms-progress-stats">
               <div>
-                <strong>{totalLectures}</strong> <small>Lectures</small>
+                <strong>{totalLectures}</strong> <small>Total Lectures</small>
               </div>
               <div className="lms-progress-divider"></div>
               <div>
-                <strong>{publishedLectures}</strong> <small>Available</small>
+                <strong>{availableLecturesCount}</strong> <small>Available</small>
               </div>
             </div>
             <div className="lms-progress-bar-bg">
@@ -55,11 +59,12 @@ const BatchLectures = () => {
         
         {error && <LecturesError message={error} onRetry={refetch} />}
         
-        {!isLoading && !error && totalLectures === 0 && <EmptyLectures />}
+        {/* Show empty state if there are NO published lectures */}
+        {!isLoading && !error && availableLecturesCount === 0 && <EmptyLectures />}
 
-        {!isLoading && !error && totalLectures > 0 && (
+        {!isLoading && !error && availableLecturesCount > 0 && (
           <div className="lms-lecture-list">
-            {lectures.map((lecture) => (
+            {publishedLectures.map((lecture) => (
               <LectureAccordion 
                 key={lecture.id} 
                 lecture={lecture} 

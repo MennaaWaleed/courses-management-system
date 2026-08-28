@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchUserProfile } from "../api/profileApi";
 import { enrollmentRequestApi } from "../api/enrollmentRequestApi";
+import { useNavigate } from "react-router-dom"; 
 import { Mail, Phone, BookOpen, Heart, Award, X, Download, Layers, Clock, Send } from "lucide-react";
 
 export default function ProfilePage() {
+    const navigate = useNavigate(); 
     const [profile, setProfile] = useState(null);
     const [myRequests, setMyRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -253,19 +255,41 @@ export default function ProfilePage() {
                         ) : (
                             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                 {profile.enrolledCourses.map((course, idx) => (
-                                    <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9" }}>
+                                    <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #f1f5f9", flexWrap: "wrap", gap: "10px" }}>
                                         <div>
                                             <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "600", color: "#1e293b" }}>{course.courseName}</h3>
                                             <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#64748b" }}>{course.batchName}</p>
                                         </div>
-                                        {course.certificateUrl && (
+                                        
+                                        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                                            
+                                            {/* --- SMART NAVIGATION FIX --- */}
                                             <button
-                                                onClick={() => handleOpenCertificate(course.certificateUrl, course.courseName)}
-                                                style={{ display: "flex", alignItems: "center", gap: "6px", background: "#2563eb", color: "#fff", padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "14px", fontWeight: "500", cursor: "pointer" }}
+                                                onClick={() => {
+                                                    // Checks multiple possible variable names from the backend
+                                                    const targetBatchId = course.batchId || course.courseBatchId || course.id;
+                                                    
+                                                    if (targetBatchId) {
+                                                        navigate(`/student/batches/${targetBatchId}/lectures`);
+                                                    } else {
+                                                        console.error("Missing ID! Backend returned:", course);
+                                                        alert("Cannot open course. The backend did not send a batch ID.");
+                                                    }
+                                                }}
+                                                style={{ display: "flex", alignItems: "center", gap: "6px", background: "#f1f5f9", color: "#1e293b", padding: "8px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px", fontWeight: "500", cursor: "pointer", transition: "all 0.2s ease" }}
                                             >
-                                                <Award size={16} /> Certificate
+                                                <BookOpen size={16} /> View Course
                                             </button>
-                                        )}
+                                            
+                                            {course.certificateUrl && (
+                                                <button
+                                                    onClick={() => handleOpenCertificate(course.certificateUrl, course.courseName)}
+                                                    style={{ display: "flex", alignItems: "center", gap: "6px", background: "#2563eb", color: "#fff", padding: "8px 16px", borderRadius: "8px", border: "none", fontSize: "14px", fontWeight: "500", cursor: "pointer", transition: "all 0.2s ease" }}
+                                                >
+                                                    <Award size={16} /> Certificate
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>

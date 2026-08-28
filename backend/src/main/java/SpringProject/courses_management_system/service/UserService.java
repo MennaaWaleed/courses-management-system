@@ -98,7 +98,7 @@ public class UserService {
                                 .toUriString();
                     }
 
-                    return new EnrolledCourseResponse(courseName, batchName, httpCertificateUrl);
+                    return new EnrolledCourseResponse(courseName, batchName, httpCertificateUrl,batchId);
                 })
                 .toList();
 

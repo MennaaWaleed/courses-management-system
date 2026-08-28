@@ -5,13 +5,16 @@ const ResourceViewerModal = ({ resource, onClose }) => {
   if (!resource) return null;
 
   // HELPER FUNCTION: Fixes relative URLs for uploaded files
+// HELPER FUNCTION: Fixes relative URLs for uploaded files
   const getFullUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
     const cleanUrl = url.startsWith('/') ? url : `/${url}`;
-    return `${BASE_URL}${cleanUrl}`;
+    
+    // NEW: encodeURI safely translates spaces and special characters like [ ] into URL-safe formats
+    return `${BASE_URL}${encodeURI(cleanUrl)}`;
   };
 
   // NEW HELPER: Detects YouTube URLs and converts them to embed links
