@@ -21,5 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "file:lecture-resources/",
                         "file:src/main/resources/static/resources/"
                 );
+
+        registry.addResourceHandler("/contents/courses/CoursesContent/**")
+                .addResourceLocations("file:src/main/resources/static/contents/pdfs/");
     }
 }
