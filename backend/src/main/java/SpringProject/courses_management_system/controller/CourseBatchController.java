@@ -118,7 +118,8 @@ public class CourseBatchController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/api/admin/batches/{id}/regenerate-code")
+    @PutMapping("batches/{id}/regenerate-code")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CourseBatchResponse> regenerateBatchCode(@PathVariable UUID id) {
         CourseBatchResponse updatedBatch = courseBatchService.regenerateBatchCode(id);
         return ResponseEntity.ok(updatedBatch);

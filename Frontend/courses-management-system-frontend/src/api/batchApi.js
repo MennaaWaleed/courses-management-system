@@ -58,7 +58,7 @@ export const removeStudentFromBatch = async (studentId, batchId) => {
 
 
 export const regenerateBatchCode = async (batchId) => {
-    const response = await api.put(`/api/admin/batches/${batchId}/regenerate-code`);
+    const response = await api.put(`/api/courses/batches/${batchId}/regenerate-code`);
     return response.data;
 };
 

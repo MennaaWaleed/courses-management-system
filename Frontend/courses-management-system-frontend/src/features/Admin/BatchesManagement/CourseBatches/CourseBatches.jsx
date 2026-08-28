@@ -885,7 +885,7 @@ function CourseBatches() {
                         <thead>
                         <tr>
                             <th>Batch Name</th>
-                            <th>Batch Code</th> {/* <-- عمود الكود الجديد */}
+                            <th>Batch Code</th> 
                             <th>Status</th>
                             <th>Attendance</th>
                             <th>Capacity</th>
