@@ -26,7 +26,7 @@ public class EnrollmentRequestController {
     @PostMapping("/api/enrollment-requests")
     @PreAuthorize("hasRole('STUDENT') or hasRole('USER')")
     public ResponseEntity<EnrollmentRequestDto> createRequest(@RequestBody CreateEnrollmentRequest dto, Principal principal) {
-        EnrollmentRequestDto request = enrollmentRequestService.createRequest(principal.getName(), dto.getCourseId(), dto.getBatchCode());
+        EnrollmentRequestDto request = enrollmentRequestService.createRequest(principal.getName(), dto.getBatchCode());
         return ResponseEntity.ok(request);
     }
 

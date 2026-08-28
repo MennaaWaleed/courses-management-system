@@ -29,16 +29,13 @@ public class EnrollmentRequestService {
     private final EnrollmentRepository enrollmentRepository;
 
     @Transactional
-    public EnrollmentRequestDto createRequest(String email, UUID courseId, String batchCode) {
+    public EnrollmentRequestDto createRequest(String email, String batchCode) {
         User student = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Student not found."));
 
         CourseBatch batch = batchRepository.findByBatchCode(batchCode)
                 .orElseThrow(() -> new RuntimeException("Invalid batch code."));
 
-        if (!batch.getCourse().getId().equals(courseId)) {
-            throw new RuntimeException("This batch code does not belong to this course.");
-        }
 
         if (batch.getCodeExpiresAt() != null && batch.getCodeExpiresAt().isBefore(ZonedDateTime.now())) {
             throw new RuntimeException("This batch code has expired.");

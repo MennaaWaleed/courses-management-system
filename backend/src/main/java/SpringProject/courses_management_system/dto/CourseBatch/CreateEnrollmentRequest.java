@@ -5,6 +5,5 @@ import java.util.UUID;
 
 @Data
 public class CreateEnrollmentRequest {
-    private UUID courseId;
     private String batchCode;
 }
