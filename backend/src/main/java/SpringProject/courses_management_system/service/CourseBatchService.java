@@ -31,7 +31,7 @@ public class CourseBatchService {
 
     @Transactional(readOnly = true)
     public List<DropdownItem> getAllInstructorsDropdown() {
-        return userRepository.findByRole(Role.INSTRUCTOR).stream()
+        return userRepository.findByRoleAndIsDeletedFalse(Role.INSTRUCTOR).stream()
                 .map(u -> new DropdownItem(
                         u.getId(),
                         u.getFirstName() + " " + u.getLastName() + " (" + u.getUsername() + ")"

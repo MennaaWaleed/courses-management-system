@@ -15,17 +15,5 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
-
-    boolean existsByEmail(String email);
-
-    List<User> findByRole(Role role);
-
-    List<User> findByRoleOrderByCreatedAtDesc(Role role);
-
-    // 2. Search instructors by name or email
-    @Query("SELECT u FROM User u WHERE u.role = :role AND " +
-            "(LOWER(u.firstName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(u.lastName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<User> searchInstructors(@Param("role") Role role, @Param("keyword") String keyword);
+    List<User> findByRoleAndIsDeletedFalse(Role role);
 }

@@ -128,7 +128,7 @@ function CategoryCourses() {
             <div className="category-courses-header">
                 <button
                     className="back-button"
-                    onClick={() => navigate("/admin/categories")}
+                    onClick={() => navigate("/")}
                 >
                     ← Back to Categories
                 </button>

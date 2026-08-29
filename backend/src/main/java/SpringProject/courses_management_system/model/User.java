@@ -47,6 +47,9 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private ZonedDateTime updatedAt;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     public String getUsername() {
         return this.email;
     }

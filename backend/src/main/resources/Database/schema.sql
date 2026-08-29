@@ -631,3 +631,8 @@ CREATE TABLE enrollment_requests (
                                      FOREIGN KEY (user_id) REFERENCES users(id),
                                      FOREIGN KEY (batch_id) REFERENCES course_batch(id)
 );
+
+
+-----------------------------new 28/8-------------------------------------
+ALTER TABLE users
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
