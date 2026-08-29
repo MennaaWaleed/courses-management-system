@@ -11,4 +11,7 @@ To do list:
 - edit course page design change colors
 - when delete category the all course be unpublished or is deleted
 - in course page related courses must be published and is deleted false
+- student can change password
+- dark mode
+
 
