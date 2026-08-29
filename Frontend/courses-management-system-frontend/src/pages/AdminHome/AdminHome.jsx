@@ -1,13 +1,36 @@
+import React from "react";
 import AdminCategories from "../../features/Admin/AdminCategories/AdminCategories.jsx";
 import "./AdminHome.css";
-
+import { Users } from "lucide-react";
+ import { useNavigate } from "react-router-dom";
 function AdminHome() {
-    return (
-        <>
-            <h1 className="main-dashboard-title">Admin Dashboard</h1>
+    const navigate = useNavigate();
 
+    return (
+        <div className="admin-home-container">
+            
+            {/* --- Premium Dashboard Header --- */}
+            <header className="admin-dashboard-header">
+                <div className="admin-dashboard-header__text">
+                    <h1 className="admin-dashboard-header__title">Admin Dashboard</h1>
+                    <p className="admin-dashboard-header__subtitle">System overview and management controls</p>
+                </div>
+                
+                <div className="admin-dashboard-header__actions">
+                    <button 
+                        className="admin-dashboard-header__btn"
+                        onClick={() => navigate('/admin/instructors')}
+                    >
+                        <Users size={18} strokeWidth={2.5} />
+                        Manage Instructors
+                    </button>
+                </div>
+            </header>
+
+            {/* --- Existing Categories Section --- */}
             <AdminCategories />
-        </>
+            
+        </div>
     );
 }
 

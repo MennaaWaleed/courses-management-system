@@ -1,8 +1,99 @@
-.main-dashboard-title {
-    text-align: center;
-    font-size: 2.5rem;
+/* =========================================
+   ADMIN DASHBOARD HEADER
+========================================= */
+
+.admin-home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.admin-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 40px 0 24px 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-dashboard-header__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.admin-dashboard-header__title {
+    font-size: 2.25rem;
     font-weight: 800;
-    color: #14213d;
-    margin-top: 40px;
-    margin-bottom: 10px;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.admin-dashboard-header__subtitle {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+    font-weight: 400;
+}
+
+.admin-dashboard-header__actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Premium Button Styling */
+.admin-dashboard-header__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15);
+}
+
+.admin-dashboard-header__btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
+}
+
+.admin-dashboard-header__btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.15);
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS
+========================================= */
+
+@media (max-width: 768px) {
+    .admin-dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 30px 0 20px 0;
+    }
+
+    .admin-dashboard-header__title {
+        font-size: 1.8rem;
+    }
+    
+    .admin-dashboard-header__actions {
+        width: 100%;
+    }
+
+    .admin-dashboard-header__btn {
+        width: 100%;
+    }
 }

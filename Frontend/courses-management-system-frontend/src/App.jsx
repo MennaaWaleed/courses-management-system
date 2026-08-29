@@ -25,7 +25,7 @@ import CreateBatch from "./features/Admin/BatchesManagement/CreateBatch/CreateBa
 import AdminEnrollmentRequests from "./features/Admin/AdminEnrollmentRequests"
 import BatchLectures from './features/student/BatchLectures/pages/BatchLectures';
 import AdminLecturesPage from './features/Admin/ManageLectures/pages/AdminLecturesPage';
-
+import AdminInstructors from "./features/Admin/AdminInstructors/AdminInstructors";
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
         return <Navigate to="/auth/login" replace />;
@@ -171,6 +171,15 @@ function App() {
                     <Route 
                             path="/admin/batches/:batchId/lectures" 
                             element={<AdminLecturesPage />} 
+                        />
+
+                    <Route
+                            path="/admin/instructors"
+                            element={
+                                <AdminRoute>
+                                    <AdminInstructors />
+                                </AdminRoute>
+                            }
                         />
                 </Routes>
             </main>
