@@ -97,4 +97,10 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
     int updateStudentBatch(@Param("studentId") UUID studentId,
                            @Param("oldBatchId") UUID oldBatchId,
                            @Param("newBatchId") UUID newBatchId);
+
+    boolean existsByUserIdAndCourseBatchIdAndRemovedFalse(
+            UUID userId,
+            UUID batchId
+    );
+
 }

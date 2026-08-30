@@ -2,9 +2,11 @@ package SpringProject.courses_management_system.controller;
 
 import SpringProject.courses_management_system.dto.Lecture.LectureResourceResponse;
 import SpringProject.courses_management_system.dto.Lecture.LectureResourceUpdateRequest;
+import SpringProject.courses_management_system.service.LectureAccessService;
 import SpringProject.courses_management_system.service.LectureResourceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,12 +18,13 @@ import java.util.UUID;
 public class LectureResourceController {
 
     private final LectureResourceService lectureResourceService;
-
+    private final LectureAccessService lectureAccessService;
     public LectureResourceController(
-            LectureResourceService lectureResourceService
+            LectureResourceService lectureResourceService, LectureAccessService lectureAccessService
     ) {
         this.lectureResourceService =
                 lectureResourceService;
+        this.lectureAccessService = lectureAccessService;
     }
 
 
@@ -32,16 +35,21 @@ public class LectureResourceController {
     @GetMapping("/lecture/{lectureId}")
     public ResponseEntity<List<LectureResourceResponse>>
     getResourcesByLecture(
-            @PathVariable UUID lectureId
+            @PathVariable UUID lectureId,
+            Authentication authentication
     ) {
 
+
+        lectureAccessService.checkLectureAccess(
+                authentication.getName(),
+                lectureId
+        );
+        System.out.println("success ---------------------------------------------------------------------------------------------------------------");
         return ResponseEntity.ok(
                 lectureResourceService
                         .getResourcesByLecture(lectureId)
         );
     }
-
-
     // =====================================================
     // CREATE UPLOAD
     // =====================================================
@@ -60,8 +68,19 @@ public class LectureResourceController {
             @RequestParam String type,
 
             @RequestPart("file")
-            MultipartFile file
+            MultipartFile file,
+
+            Authentication authentication
     ) {
+
+        lectureAccessService.checkLectureAccess(
+                authentication.getName(),
+                lectureId
+        );
+
+        lectureAccessService.requireAdminOrInstructor(
+                authentication.getName()
+        );
 
         LectureResourceResponse response =
                 lectureResourceService
@@ -77,7 +96,6 @@ public class LectureResourceController {
                 .body(response);
     }
 
-
     // =====================================================
     // CREATE DRIVE
     // =====================================================
@@ -92,9 +110,10 @@ public class LectureResourceController {
 
             @RequestParam String type,
 
-            @RequestParam String fileUrl
+            @RequestParam String fileUrl,
+            Authentication authentication
     ) {
-
+        lectureAccessService.requireLectureManagementAccess(authentication.getName(), lectureId);
         LectureResourceResponse response =
                 lectureResourceService
                         .createDriveResource(
@@ -124,8 +143,11 @@ public class LectureResourceController {
 
             @RequestParam String type,
 
-            @RequestParam String fileUrl
+            @RequestParam String fileUrl,
+            Authentication authentication
     ) {
+
+        lectureAccessService.requireLectureManagementAccess(authentication.getName(), lectureId);
 
         LectureResourceResponse response =
                 lectureResourceService
@@ -153,8 +175,10 @@ public class LectureResourceController {
             @PathVariable UUID resourceId,
 
             @RequestBody
-            LectureResourceUpdateRequest request
+            LectureResourceUpdateRequest request,
+            Authentication authentication
     ) {
+        lectureAccessService.requireResourceManagementAccess( authentication.getName(),  resourceId);
 
         return ResponseEntity.ok(
                 lectureResourceService
@@ -180,8 +204,10 @@ public class LectureResourceController {
             @PathVariable UUID resourceId,
 
             @RequestPart("file")
-            MultipartFile file
+            MultipartFile file,
+            Authentication authentication
     ) {
+        lectureAccessService.requireResourceManagementAccess( authentication.getName(),  resourceId);
 
         return ResponseEntity.ok(
                 lectureResourceService
@@ -200,9 +226,11 @@ public class LectureResourceController {
     @DeleteMapping("/{resourceId}")
     public ResponseEntity<Void>
     deleteResource(
-            @PathVariable UUID resourceId
+            @PathVariable UUID resourceId,
+            Authentication authentication
     ) {
-
+        lectureAccessService.requireResourceManagementAccess( authentication.getName(), resourceId
+        );
         lectureResourceService
                 .deleteResource(resourceId);
 

@@ -33,4 +33,5 @@ public interface CourseBatchRepository extends JpaRepository<CourseBatch, UUID> 
     List<CourseBatch> findByInstructorId(UUID userId);
 
     Optional<CourseBatch> findByBatchCode(String batchCode);
+    Optional<CourseBatch> findByIdAndDeletedFalse(UUID id);
 }

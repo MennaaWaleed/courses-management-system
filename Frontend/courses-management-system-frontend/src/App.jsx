@@ -141,14 +141,14 @@ function App() {
                         }
                     />
 
-                    <Route
-                        path="/admin/courses/:courseId/batches"
+                   <Route
+                        path="/admin/batches/:batchId/lectures"
                         element={
-                            <AdminRoute>
-                                <CourseBatches />
-                            </AdminRoute>
+                            <ProtectedRoute allowedRoles={["ADMIN"]}>
+                            <AdminLecturesPage />
+                            </ProtectedRoute>
                         }
-                    />
+                        />
                     <Route
                         path="/admin/courses/:courseId/batches/create"
                         element={
@@ -173,6 +173,14 @@ function App() {
                             element={<AdminLecturesPage />} 
                         />
 
+                    <Route
+                            path="/admin/batches/:batchId/lectures"
+                            element={
+                                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                                <AdminLecturesPage />
+                                </ProtectedRoute>
+                            }
+                        />
                     <Route
                             path="/admin/instructors"
                             element={

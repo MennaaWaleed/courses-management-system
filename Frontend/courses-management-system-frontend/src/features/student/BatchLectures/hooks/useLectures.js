@@ -1,6 +1,6 @@
 // src/features/student/BatchLectures/hooks/useLectures.js
 import { useState, useEffect, useCallback } from 'react';
-import { getLecturesByBatch } from '../../../../api/lectureApi';
+import { getPublishedLecturesByBatch  } from '../../../../api/lectureApi';
 
 export const useLectures = (batchId) => {
   const [lectures, setLectures] = useState([]);
@@ -14,7 +14,7 @@ export const useLectures = (batchId) => {
     setError(null);
     
     try {
-      const data = await getLecturesByBatch(batchId);
+      const data = await getPublishedLecturesByBatch(batchId);
       // Sort by lectureOrder to ensure correct sequence
       const sortedData = data.sort((a, b) => a.lectureOrder - b.lectureOrder);
       setLectures(sortedData);
