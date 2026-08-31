@@ -140,15 +140,15 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
-                   <Route
-                        path="/admin/batches/:batchId/lectures"
-                        element={
-                            <ProtectedRoute allowedRoles={["ADMIN"]}>
-                            <AdminLecturesPage />
-                            </ProtectedRoute>
-                        }
-                        />
+                        <Route
+                            path="/admin/courses/:courseId/batches"
+                            element={
+                                <AdminRoute>
+                                    <CourseBatches />
+                                </AdminRoute>
+                            }
+                          />
+              
                     <Route
                         path="/admin/courses/:courseId/batches/create"
                         element={
@@ -168,19 +168,16 @@ function App() {
                     />
 
 
-                    <Route 
-                            path="/admin/batches/:batchId/lectures" 
-                            element={<AdminLecturesPage />} 
-                        />
+           
 
                     <Route
-                            path="/admin/batches/:batchId/lectures"
-                            element={
-                                <ProtectedRoute allowedRoles={["ADMIN"]}>
-                                <AdminLecturesPage />
-                                </ProtectedRoute>
-                            }
-                        />
+                                path="/admin/batches/:batchId/lectures"
+                                element={
+                                    <AdminRoute>
+                                        <AdminLecturesPage />
+                                    </AdminRoute>
+                                }
+                            />
                     <Route
                             path="/admin/instructors"
                             element={
