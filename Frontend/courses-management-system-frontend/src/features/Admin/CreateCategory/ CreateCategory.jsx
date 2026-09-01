@@ -16,7 +16,6 @@ function CreateCategory() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setSaving(true);
         setError("");
 
@@ -29,9 +28,7 @@ function CreateCategory() {
 
         try {
             await createCategory(categoryData);
-
             navigate("/admin/categories");
-
         } catch (error) {
             console.error("Error creating category:", error);
             setError("Could not create category.");
@@ -42,126 +39,43 @@ function CreateCategory() {
 
     return (
         <div className="create-category">
-
             <div className="create-category-header">
-
                 <h1>Create New Category</h1>
-
-                <button
-                    className="back-button"
-                    onClick={() => navigate("/admin/categories")}
-                >
+                <button className="back-button" onClick={() => navigate("/admin/categories")}>
                     ← Back
                 </button>
-
             </div>
 
-            <form
-                className="create-category-form"
-                onSubmit={handleSubmit}
-            >
+            <form className="create-category-form" onSubmit={handleSubmit}>
+                <label>Category Name</label>
+                <input type="text" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} required />
 
-                <label>
-                    Category Name
-                </label>
+                <label>Short Description</label>
+                <input type="text" value={shortDescription} onChange={(e) => setShortDescription(e.target.value)} required />
 
-                <input
-                    type="text"
-                    value={categoryName}
-                    onChange={(e) =>
-                        setCategoryName(e.target.value)
-                    }
-                    required
-                />
+                <label>Description</label>
+                <textarea value={categoryDescription} onChange={(e) => setCategoryDescription(e.target.value)} required />
 
-
-                <label>
-                    Short Description
-                </label>
-
-                <input
-                    type="text"
-                    value={shortDescription}
-                    onChange={(e) =>
-                        setShortDescription(e.target.value)
-                    }
-                    required
-                />
-
-
-                <label>
-                    Description
-                </label>
-
-                <textarea
-                    value={categoryDescription}
-                    onChange={(e) =>
-                        setCategoryDescription(e.target.value)
-                    }
-                    required
-                />
-
-
-                <label>
-                    Category Image
-                </label>
-
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                        setImage(e.target.files[0])
-                    }
-                />
-
+                <label>Category Image</label>
+                <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
 
                 {image && (
                     <div className="image-preview">
-
-                        <img
-                            src={URL.createObjectURL(image)}
-                            alt="Category preview"
-                        />
-
+                        <img src={URL.createObjectURL(image)} alt="Category preview" />
                     </div>
                 )}
 
-
-                {error && (
-                    <p className="create-error">
-                        {error}
-                    </p>
-                )}
-
+                {error && <p className="create-error">{error}</p>}
 
                 <div className="create-category-actions">
-
-                    <button
-                        type="button"
-                        className="cancel-button"
-                        onClick={() =>
-                            navigate("/admin/categories")
-                        }
-                    >
+                    <button type="button" className="cancel-button" onClick={() => navigate("/admin/categories")}>
                         Cancel
                     </button>
-
-
-                    <button
-                        type="submit"
-                        className="save-button"
-                        disabled={saving}
-                    >
-                        {saving
-                            ? "Creating..."
-                            : "Create Category"
-                        }
+                    <button type="submit" className="save-button" disabled={saving}>
+                        {saving ? "Creating..." : "Create Category"}
                     </button>
-
                 </div>
-
             </form>
-
         </div>
     );
 }

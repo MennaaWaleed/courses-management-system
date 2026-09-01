@@ -1,44 +1,24 @@
 import "./CourseDetails.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { getCourseById, getRelatedCourses } from "../../../api/courseApi";
 import {
-    getCourseById,
-    getRelatedCourses
-} from "../../../api/courseApi";
-
-import {
-    Clock,
-    BookOpen,
-    Tag,
-    ShieldCheck,
-    ArrowLeft,
-    ExternalLink,
-    Sparkles,
-    CheckCircle2,
-    HelpCircle,
-    FileText,
-    Eye,
-    X
+    Clock, BookOpen, Tag, ShieldCheck, ArrowLeft, ExternalLink,
+    Sparkles, CheckCircle2, HelpCircle, FileText, Eye, X
 } from "lucide-react";
-
 import CourseCard from "../../../features/Home/FeaturedCourses/CourseCard";
 import CourseRegistration from "../../../features/CourseRegistration/CourseRegistration";
 
 function CourseDetails() {
-
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [course, setCourse] = useState(null);
     const [relatedCourses, setRelatedCourses] = useState([]);
-
     const [loading, setLoading] = useState(true);
     const [relatedLoading, setRelatedLoading] = useState(true);
     const [showRegistration, setShowRegistration] = useState(false);
     const [error, setError] = useState("");
-    
-    // PDF Modal State
     const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
 
     const BASE_URL = "http://localhost:8080";
@@ -77,7 +57,6 @@ function CourseDetails() {
         fetchCourseData();
     }, [id]);
 
-    // Handle Modal side effects (Scroll lock & Escape key)
     useEffect(() => {
         if (isPdfModalOpen) {
             document.body.style.overflow = 'hidden';
@@ -95,10 +74,6 @@ function CourseDetails() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-
-    /* =========================
-       LOADING STATE
-    ========================= */
     if (loading) {
         return (
             <main className="course-details-page">
@@ -116,9 +91,6 @@ function CourseDetails() {
         );
     }
 
-    /* =========================
-       ERROR STATE
-    ========================= */
     if (error || !course) {
         return (
             <main className="course-details-page">
@@ -141,23 +113,16 @@ function CourseDetails() {
     const imageUrl = `${BASE_URL}${course.imageUrl}`;
     const iconUrl = `${BASE_URL}${course.iconUrl}`;
     const categories = course.categories || [];
-
-    // Safely parse Content URL
     const rawContentUrl = course.contentUrl || course.content_url;
     const safeContentUrl = rawContentUrl ? `${BASE_URL}${encodeURI(rawContentUrl)}` : null;
 
     return (
         <main className="course-details-page">
-
-            {/* =========================
-                HERO SECTION
-            ========================= */}
             <section className="course-details-page__hero">
                 <div className="course-details-page__hero-glow"></div>
                 <div className="course-details-page__container">
                     <div className="course-details-page__hero-content">
                         <div className="course-details-page__info">
-                            
                             <div className="course-details-page__categories">
                                 {categories.map(category => (
                                     <span key={category.id} className="course-details-page__category">
@@ -165,18 +130,15 @@ function CourseDetails() {
                                     </span>
                                 ))}
                             </div>
-
                             <div className="course-details-page__title">
                                 {course.iconUrl && (
                                     <img src={iconUrl} alt="" className="course-details-page__icon" />
                                 )}
                                 <h1>{course.courseName}</h1>
                             </div>
-
                             <p className="course-details-page__short-description">
                                 {course.shortDescription}
                             </p>
-
                             <div className="course-details-page__meta">
                                 <div className="course-details-page__meta-item">
                                     <div className="course-details-page__meta-icon"><Clock size={18} /></div>
@@ -203,7 +165,6 @@ function CourseDetails() {
                                 </div>
                             </div>
                         </div>
-
                         <div className="course-details-page__image-wrapper">
                             <div className="course-details-page__image-frame">
                                 <img src={imageUrl} alt={course.courseName} className="course-details-page__image" />
@@ -213,13 +174,9 @@ function CourseDetails() {
                 </div>
             </section>
 
-            {/* =========================
-                CONTENT SECTION
-            ========================= */}
             <section className="course-details-page__content">
                 <div className="course-details-page__container">
                     <div className="course-details-page__content-grid">
-
                         <div className="course-details-page__description">
                             <span className="course-details-page__section-badge">
                                 <Sparkles size={14} /> About This Course
@@ -244,10 +201,7 @@ function CourseDetails() {
                             </div>
                         </div>
 
-                        {/* Sidebar */}
                         <aside className="course-details-page__sidebar">
-                            
-                            {/* --- NEW PREMIUM PDF RESOURCE CARD --- */}
                             {safeContentUrl && (
                                 <div className="course-details-page__content-card">
                                     <div className="course-details-page__content-header">
@@ -304,9 +258,6 @@ function CourseDetails() {
                 </div>
             </section>
 
-            {/* =========================
-                RELATED COURSES
-            ========================= */}
             {!relatedLoading && relatedCourses.length > 0 && (
                 <section className="course-details-page__related">
                     <div className="course-details-page__container">
@@ -326,14 +277,10 @@ function CourseDetails() {
                 </section>
             )}
 
-            {/* Registration */}
             {showRegistration && (
                 <CourseRegistration course={course} onClose={() => setShowRegistration(false)} />
             )}
 
-            {/* =========================
-                PDF VIEWER MODAL
-            ========================= */}
             {isPdfModalOpen && safeContentUrl && (
                 <div className="course-details-page__pdf-modal-overlay" onClick={() => setIsPdfModalOpen(false)}>
                     <div className="course-details-page__pdf-modal" onClick={(e) => e.stopPropagation()}>
@@ -352,7 +299,6 @@ function CourseDetails() {
                             </div>
                         </div>
                         <div className="course-details-page__pdf-modal-body">
-                            {/* Appending #toolbar=0 prevents standard browser downloading/printing clutter for a cleaner look */}
                             <iframe 
                                 src={`${safeContentUrl}#toolbar=0`} 
                                 title="Course Curriculum PDF Viewer"
@@ -362,7 +308,6 @@ function CourseDetails() {
                     </div>
                 </div>
             )}
-
         </main>
     );
 }
