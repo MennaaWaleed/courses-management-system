@@ -1,4 +1,3 @@
-
 To do list:
 
 -check if the password in register is strong
@@ -13,5 +12,8 @@ To do list:
 - in course page related courses must be published and is deleted false
 - student can change password
 - dark mode
-
-
+-Handle search instructor by name or email in manage instructors
+-ability to change password for (Students,instructor, admin)
+-handle when forget passwords
+-course page
+-handle many requests in the same time
