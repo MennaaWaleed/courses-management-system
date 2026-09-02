@@ -17,3 +17,4 @@ To do list:
 -handle when forget passwords
 -course page
 -handle many requests in the same time
+-Add "Add to wishlist" button in course page and next to course image in the category courses page
