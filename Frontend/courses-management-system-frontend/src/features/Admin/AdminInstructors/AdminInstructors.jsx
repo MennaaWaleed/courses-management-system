@@ -7,6 +7,7 @@ import {
     toggleInstructorStatus,
     deleteInstructor
 } from '../../../api/adminInstructorApi';
+
 import {
     Search,
     Plus,
@@ -16,19 +17,21 @@ import {
     Trash2,
     X
 } from 'lucide-react';
+
 import './AdminInstructors.css';
 
 export default function AdminInstructors() {
+
     const [instructors, setInstructors] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // Modal States
+
     const [modalConfig, setModalConfig] = useState({
         isOpen: false,
         type: null
-    }); // type: 'create', 'edit', 'password'
+    });
 
     const [selectedInstructor, setSelectedInstructor] = useState(null);
 
@@ -42,75 +45,90 @@ export default function AdminInstructors() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Success / Error Message Box
+
     const [message, setMessage] = useState({
         show: false,
         text: '',
         type: 'error'
     });
 
-    // Delete Confirmation Box
+
     const [deleteConfirmation, setDeleteConfirmation] = useState({
         show: false,
         id: null,
         name: ''
     });
 
+
     useEffect(() => {
-        fetchInstructors();
-    }, []);
+
+        const delay = setTimeout(() => {
+            fetchInstructors(searchTerm);
+        }, 300);
+
+        return () => clearTimeout(delay);
+
+    }, [searchTerm]);
+
 
     const fetchInstructors = async (search = '') => {
+
         setLoading(true);
 
         try {
+
             const response = await getInstructors(search);
+
             setInstructors(response.data);
+
             setError('');
+
         } catch (err) {
+
             setError('Failed to load instructors.');
+
         } finally {
+
             setLoading(false);
+
         }
     };
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        fetchInstructors(searchTerm);
-    };
 
     const handleInputChange = (e) => {
+
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
+
     };
 
-    // =========================
-    // Message Box
-    // =========================
 
     const showMessage = (text, type = 'error') => {
+
         setMessage({
             show: true,
             text,
             type
         });
+
     };
 
     const closeMessage = () => {
+
         setMessage({
             show: false,
             text: '',
             type: 'error'
         });
+
     };
 
-    // =========================
-    // Modal
-    // =========================
+
 
     const closeModals = () => {
+
         setModalConfig({
             isOpen: false,
             type: null
@@ -125,10 +143,13 @@ export default function AdminInstructors() {
             phone: '',
             password: ''
         });
+
     };
 
     const openModal = (type, instructor = null) => {
+
         if (instructor) {
+
             setSelectedInstructor(instructor);
 
             setFormData({
@@ -138,7 +159,9 @@ export default function AdminInstructors() {
                 phone: instructor.phoneNumber || '',
                 password: ''
             });
+
         } else {
+
             setFormData({
                 firstName: '',
                 lastName: '',
@@ -146,24 +169,29 @@ export default function AdminInstructors() {
                 phone: '',
                 password: ''
             });
+
         }
 
         setModalConfig({
             isOpen: true,
             type
         });
+
     };
 
-    // =========================
-    // Create / Edit / Password
-    // =========================
+
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+
         setIsSubmitting(true);
 
         try {
+
+
             if (modalConfig.type === 'create') {
+
                 await createInstructor({
                     ...formData,
                     phoneNumber: formData.phone
@@ -171,14 +199,18 @@ export default function AdminInstructors() {
 
                 closeModals();
 
-                await fetchInstructors();
+                await fetchInstructors(searchTerm);
 
                 showMessage(
                     'Instructor created successfully.',
                     'success'
                 );
 
-            } else if (modalConfig.type === 'edit') {
+            }
+
+
+            else if (modalConfig.type === 'edit') {
+
                 await updateInstructor(
                     selectedInstructor.id,
                     {
@@ -189,14 +221,19 @@ export default function AdminInstructors() {
 
                 closeModals();
 
-                await fetchInstructors();
+                await fetchInstructors(searchTerm);
 
                 showMessage(
                     'Instructor details updated successfully.',
                     'success'
                 );
 
-            } else if (modalConfig.type === 'password') {
+            }
+
+
+
+            else if (modalConfig.type === 'password') {
+
                 await changeInstructorPassword(
                     selectedInstructor.id,
                     formData.password
@@ -208,30 +245,38 @@ export default function AdminInstructors() {
                     'Instructor password updated successfully.',
                     'success'
                 );
+
             }
 
         } catch (err) {
+
             const errorMessage =
                 err.response?.data?.message ||
                 err.response?.data ||
                 'An error occurred. Please try again.';
 
-            showMessage(errorMessage, 'error');
+            showMessage(
+                errorMessage,
+                'error'
+            );
 
         } finally {
+
             setIsSubmitting(false);
+
         }
+
     };
 
-    // =========================
-    // Enable / Disable
-    // =========================
+
 
     const handleToggleStatus = async (id) => {
+
         try {
+
             await toggleInstructorStatus(id);
 
-            await fetchInstructors();
+            await fetchInstructors(searchTerm);
 
             showMessage(
                 'Instructor status updated successfully.',
@@ -239,37 +284,46 @@ export default function AdminInstructors() {
             );
 
         } catch (err) {
+
             showMessage(
                 err.response?.data?.message ||
                 'Failed to change instructor status.',
                 'error'
             );
+
         }
+
     };
 
-    // =========================
-    // Delete
-    // =========================
+
 
     const handleDelete = (id, name) => {
+
         setDeleteConfirmation({
             show: true,
             id: id,
             name: name
         });
+
     };
 
     const cancelDelete = () => {
+
         setDeleteConfirmation({
             show: false,
             id: null,
             name: ''
         });
+
     };
 
     const confirmDelete = async () => {
+
         try {
-            await deleteInstructor(deleteConfirmation.id);
+
+            await deleteInstructor(
+                deleteConfirmation.id
+            );
 
             setDeleteConfirmation({
                 show: false,
@@ -277,7 +331,7 @@ export default function AdminInstructors() {
                 name: ''
             });
 
-            await fetchInstructors();
+            await fetchInstructors(searchTerm);
 
             showMessage(
                 'Instructor deleted successfully.',
@@ -285,6 +339,7 @@ export default function AdminInstructors() {
             );
 
         } catch (err) {
+
             setDeleteConfirmation({
                 show: false,
                 id: null,
@@ -296,18 +351,26 @@ export default function AdminInstructors() {
                 'Failed to delete instructor.',
                 'error'
             );
+
         }
+
     };
 
+
+
     return (
+
         <div className="admin-instructors">
 
-            {/* =========================================
-                SUCCESS / ERROR MESSAGE BOX
-            ========================================= */}
+
+
             {message.show && (
+
                 <div className="message-overlay">
-                    <div className={`message-box ${message.type}`}>
+
+                    <div
+                        className={`message-box ${message.type}`}
+                    >
 
                         <div className="message-box__content">
 
@@ -317,7 +380,9 @@ export default function AdminInstructors() {
                                     : 'Success'}
                             </h3>
 
-                            <p>{message.text}</p>
+                            <p>
+                                {message.text}
+                            </p>
 
                         </div>
 
@@ -329,26 +394,36 @@ export default function AdminInstructors() {
                         </button>
 
                     </div>
+
                 </div>
+
             )}
 
-            {/* =========================================
-                DELETE CONFIRMATION BOX
-            ========================================= */}
+
+
             {deleteConfirmation.show && (
+
                 <div className="message-overlay">
+
                     <div className="message-box confirmation">
 
                         <div className="message-box__content">
 
-                            <h3>Confirm Delete</h3>
+                            <h3>
+                                Confirm Delete
+                            </h3>
 
                             <p>
-                                Are you sure you want to permanently delete{' '}
+
+                                Are you sure you want to permanently
+                                delete{' '}
+
                                 <strong>
                                     {deleteConfirmation.name}
                                 </strong>
+
                                 ?
+
                             </p>
 
                         </div>
@@ -372,41 +447,43 @@ export default function AdminInstructors() {
                         </div>
 
                     </div>
+
                 </div>
+
             )}
 
-            {/* =========================================
-                HEADER
-            ========================================= */}
+
             <div className="admin-instructors__header">
 
                 <div>
-                    <h2>Instructor Management</h2>
+
+                    <h2>
+                        Instructor Management
+                    </h2>
 
                     <p>
                         Add, update, and manage your course instructors.
                     </p>
+
                 </div>
 
                 <button
                     className="admin-instructors__btn-primary"
                     onClick={() => openModal('create')}
                 >
+
                     <Plus size={18} />
+
                     Add Instructor
+
                 </button>
 
             </div>
 
-            {/* =========================================
-                SEARCH
-            ========================================= */}
+
             <div className="admin-instructors__toolbar">
 
-                <form
-                    onSubmit={handleSearch}
-                    className="admin-instructors__search"
-                >
+                <div className="admin-instructors__search">
 
                     <Search
                         size={18}
@@ -422,38 +499,48 @@ export default function AdminInstructors() {
                         }
                     />
 
-                    <button type="submit">
-                        Search
-                    </button>
 
-                </form>
+                    {loading && searchTerm && (
+
+                        <span className="search-loading">
+                            Searching...
+                        </span>
+
+                    )}
+
+                </div>
 
             </div>
 
-            {/* =========================================
-                ERROR
-            ========================================= */}
+
             {error && (
+
                 <div className="admin-instructors__error">
+
                     {error}
+
                 </div>
+
             )}
 
-            {/* =========================================
-                TABLE
-            ========================================= */}
+
+
             <div className="admin-instructors__table-container">
 
                 {loading ? (
 
                     <div className="admin-instructors__loading">
+
                         Loading instructors...
+
                     </div>
 
                 ) : instructors.length === 0 ? (
 
                     <div className="admin-instructors__empty">
+
                         No instructors found.
+
                     </div>
 
                 ) : (
@@ -461,13 +548,31 @@ export default function AdminInstructors() {
                     <table className="admin-instructors__table">
 
                         <thead>
+
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
                         </tr>
+
                         </thead>
 
                         <tbody>
@@ -476,40 +581,54 @@ export default function AdminInstructors() {
 
                             <tr key={inst.id}>
 
+
                                 <td className="font-medium">
+
                                     {inst.firstName}{' '}
+
                                     {inst.lastName}
+
                                 </td>
 
+
                                 <td className="text-muted">
+
                                     {inst.email}
+
                                 </td>
 
+
                                 <td className="text-muted">
+
                                     {inst.phoneNumber || 'N/A'}
+
                                 </td>
+
 
                                 <td>
 
-                                        <span
-                                            className={`admin-instructors__badge ${
-                                                inst.enabled
-                                                    ? 'badge-active'
-                                                    : 'badge-disabled'
-                                            }`}
-                                        >
-                                            {inst.enabled
-                                                ? 'Active'
-                                                : 'Disabled'}
-                                        </span>
+                                    <span
+                                        className={`admin-instructors__badge ${
+                                            inst.enabled
+                                                ? 'badge-active'
+                                                : 'badge-disabled'
+                                        }`}
+                                    >
+
+                                        {inst.enabled
+                                            ? 'Active'
+                                            : 'Disabled'}
+
+                                    </span>
 
                                 </td>
+
 
                                 <td>
 
                                     <div className="admin-instructors__actions">
 
-                                        {/* Edit */}
+
                                         <button
                                             onClick={() =>
                                                 openModal(
@@ -519,10 +638,12 @@ export default function AdminInstructors() {
                                             }
                                             title="Edit Details"
                                         >
+
                                             <Edit2 size={16} />
+
                                         </button>
 
-                                        {/* Change Password */}
+
                                         <button
                                             onClick={() =>
                                                 openModal(
@@ -532,10 +653,12 @@ export default function AdminInstructors() {
                                             }
                                             title="Change Password"
                                         >
+
                                             <KeyRound size={16} />
+
                                         </button>
 
-                                        {/* Enable / Disable */}
+
                                         <button
                                             onClick={() =>
                                                 handleToggleStatus(
@@ -553,21 +676,25 @@ export default function AdminInstructors() {
                                                     : 'text-success'
                                             }
                                         >
+
                                             <Power size={16} />
+
                                         </button>
 
-                                        {/* Delete */}
+
                                         <button
                                             onClick={() =>
                                                 handleDelete(
                                                     inst.id,
-                                                    inst.firstName
+                                                    `${inst.firstName} ${inst.lastName}`
                                                 )
                                             }
                                             title="Delete Instructor"
                                             className="text-danger"
                                         >
+
                                             <Trash2 size={16} />
+
                                         </button>
 
                                     </div>
@@ -586,9 +713,8 @@ export default function AdminInstructors() {
 
             </div>
 
-            {/* =========================================
-                CREATE / EDIT / PASSWORD MODAL
-            ========================================= */}
+
+
             {modalConfig.isOpen && (
 
                 <div
@@ -603,37 +729,46 @@ export default function AdminInstructors() {
                         }
                     >
 
-                        {/* Modal Header */}
+
                         <div className="admin-instructors__modal-header">
 
                             <h3>
+
                                 {modalConfig.type === 'create'
+
                                     ? 'Add New Instructor'
+
                                     : modalConfig.type === 'edit'
+
                                         ? 'Edit Instructor Details'
+
                                         : 'Change Password'}
+
                             </h3>
 
                             <button
                                 onClick={closeModals}
                                 type="button"
                             >
+
                                 <X size={20} />
+
                             </button>
 
                         </div>
 
-                        {/* Modal Form */}
+
                         <form
                             onSubmit={handleSubmit}
                             className="admin-instructors__form"
                         >
 
-                            {/* Create / Edit Fields */}
+
                             {(modalConfig.type === 'create' ||
                                 modalConfig.type === 'edit') && (
 
                                 <>
+
 
                                     <div className="form-row">
 
@@ -679,6 +814,7 @@ export default function AdminInstructors() {
 
                                     </div>
 
+
                                     <div className="form-group">
 
                                         <label>
@@ -698,6 +834,7 @@ export default function AdminInstructors() {
                                         />
 
                                     </div>
+
 
                                     <div className="form-group">
 
@@ -719,18 +856,21 @@ export default function AdminInstructors() {
                                     </div>
 
                                 </>
+
                             )}
 
-                            {/* Password */}
+
                             {(modalConfig.type === 'create' ||
                                 modalConfig.type === 'password') && (
 
                                 <div className="form-group">
 
                                     <label>
+
                                         {modalConfig.type === 'create'
                                             ? 'Initial Password'
                                             : 'New Password'}
+
                                     </label>
 
                                     <input
@@ -747,9 +887,10 @@ export default function AdminInstructors() {
                                     />
 
                                 </div>
+
                             )}
 
-                            {/* Modal Footer */}
+
                             <div className="admin-instructors__modal-footer">
 
                                 <button
@@ -766,11 +907,17 @@ export default function AdminInstructors() {
                                     className="admin-instructors__btn-primary"
                                     disabled={isSubmitting}
                                 >
+
                                     {isSubmitting
+
                                         ? 'Saving...'
+
                                         : modalConfig.type === 'password'
+
                                             ? 'Update Password'
+
                                             : 'Save Instructor'}
+
                                 </button>
 
                             </div>
@@ -780,8 +927,10 @@ export default function AdminInstructors() {
                     </div>
 
                 </div>
+
             )}
 
         </div>
+
     );
 }
