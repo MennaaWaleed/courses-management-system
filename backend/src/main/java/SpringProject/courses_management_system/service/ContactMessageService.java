@@ -5,6 +5,9 @@ import SpringProject.courses_management_system.dto.contact.ContactResponse;
 import SpringProject.courses_management_system.model.ContactMessage;
 import org.springframework.stereotype.Service;
 import SpringProject.courses_management_system.repository.ContactMessageRepository;
+
+import java.util.List;
+
 @Service
 public class ContactMessageService {
     private final ContactMessageRepository contactMessageRepository;
@@ -27,5 +30,13 @@ public class ContactMessageService {
         contactMessageRepository.save(contactMessage);
 
         return new ContactResponse("Message sent successfully.");
+    }
+
+    public List<ContactMessage> getAllMessages() {
+        return contactMessageRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public ContactMessage saveMessage(ContactMessage message) {
+        return contactMessageRepository.save(message);
     }
 }
