@@ -3,7 +3,6 @@ To do list:
 -check if the password in register is strong ( menna )
 -check if the email in register exists ( menna )
 -validation for login and register in backend( menna )
--handle when entering negative in course fields (menna)
 - dark mode
 -ability to change password for (Students,instructor, admin)(hakim)
 -handle when forget passwords (hakim)
@@ -21,4 +20,6 @@ Done:
 - in course page related courses must be published and is deleted false
 -Handle search instructor by name or email in manage instructors
 -show password in login (menna)
+-handle when entering negative in course fields (menna)
+
 
