@@ -44,6 +44,12 @@ function CreateCourse() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleKeyDown = (e) => {
+        if (["e", "E", "-", "+"].includes(e.key)) {
+            e.preventDefault();
+        }
+    };
+
     const handleCategoryChange = (categoryIdClicked) => {
         if (categoryIdClicked === categoryId) return;
         setSelectedCategories((prev) => {
@@ -130,15 +136,42 @@ function CreateCourse() {
                 <div className="course-form-row">
                     <div className="form-group">
                         <label>Course Hours</label>
-                        <input type="number" step="0.1" name="courseHours" value={formData.courseHours} onChange={handleChange} required />
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            name="courseHours"
+                            value={formData.courseHours}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            required
+                        />
                     </div>
                     <div className="form-group">
                         <label>Lecture Count</label>
-                        <input type="number" name="lectureCount" value={formData.lectureCount} onChange={handleChange} required />
+                        <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            name="lectureCount"
+                            value={formData.lectureCount}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            required
+                        />
                     </div>
                     <div className="form-group">
                         <label>Price</label>
-                        <input type="number" name="price" value={formData.price} onChange={handleChange} required />
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            required
+                        />
                     </div>
                 </div>
 
