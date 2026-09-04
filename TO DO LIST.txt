@@ -11,7 +11,8 @@ To do list:
 -handle many requests in the same time(hakim)
 - add course registration view in admin (hakim)
 - search instructor is_deletedFalse only (hakim)
-- Course batches Page magement 
+- Course batches Page management
+- when add to wishlist if not login alert login first
 Done:
 -Add "Add to wishlist" button in course page and next to course image in the category courses page
 -changes course page style
