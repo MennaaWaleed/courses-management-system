@@ -1,7 +1,7 @@
 import React from "react";
 import AdminCategories from "../../features/Admin/AdminCategories/AdminCategories.jsx";
 import "./AdminHome.css";
-import { Users, MessageSquare } from "lucide-react"; // <-- Added MessageSquare
+import { Users, MessageSquare, ClipboardList } from "lucide-react"; // <-- Added MessageSquare
 import { useNavigate } from "react-router-dom";
 
 function AdminHome() {
@@ -26,6 +26,13 @@ function AdminHome() {
                         View Messages
                     </button>
 
+                    <button 
+                        className="admin-dashboard-header__btn" 
+                        onClick={() => navigate("/admin/course-registrations")}
+                    >
+                        <ClipboardList size={18} strokeWidth={2.5} />
+                        Course Registrations
+                    </button>
                     <button
                         className="admin-dashboard-header__btn"
                         onClick={() => navigate('/admin/instructors')}

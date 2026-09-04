@@ -13,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage";
 
 import CourseDetails from "./pages/Courses/CourseDetails/CourseDetails";
 import AdminMessages from './features/Admin/AdminMessages/AdminMessages';
+import AdminCourseRegistrations from './features/Admin/AdminCourseRegistrations/AdminCourseRegistrations';
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminCategories from "./features/Admin/AdminCategories/AdminCategories.jsx";
 import EditCategory from "./features/Admin/EditCategory/EditCategory";
@@ -189,6 +190,11 @@ function App() {
                     <Route
                         path="/courses/:id"
                         element={<CourseDetails />}
+                    />
+
+                    <Route
+                        path="/admin/course-registrations"
+                        element={<AdminCourseRegistrations />}
                     />
                     <Route path="/admin/messages" element={<AdminMessages />} />
                 </Routes>
