@@ -9,7 +9,6 @@ To do list:
 -ability to change password for (Students,instructor, admin)(hakim)
 -handle when forget passwords (hakim)
 -handle many requests in the same time(hakim)
-- add course registration view in admin (hakim)
 - search instructor is_deletedFalse only (hakim)
 - Course batches Page management
 - when add to wishlist if not login alert login first
@@ -21,3 +20,4 @@ Done:
 - when delete category the all course be unpublished or is deleted
 - in course page related courses must be published and is deleted false
 -Handle search instructor by name or email in manage instructors
+-add course registration view in admin
