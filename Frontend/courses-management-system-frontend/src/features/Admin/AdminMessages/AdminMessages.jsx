@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getAllMessages } from "../../../api/messageApi";
-import { Search, Eye, Mail, Phone, Calendar, X, ArrowLeft } from "lucide-react";
+import { getAllMessages, deleteMessage, toggleContacted } from "../../../api/messageApi";
+import { Search, Eye, Mail, Phone, Calendar, X, ArrowLeft, Trash2, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./AdminMessages.css";
 
@@ -11,7 +11,6 @@ function AdminMessages() {
     const [error, setError] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
 
-    // State for viewing full message
     const [selectedMessage, setSelectedMessage] = useState(null);
 
     useEffect(() => {
@@ -31,21 +30,47 @@ function AdminMessages() {
         }
     };
 
-    // Filter messages based on search term (Name, Email, or Title)
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this message?")) return;
+        try {
+            await deleteMessage(id);
+            setMessages((prev) => prev.filter(msg => msg.id !== id));
+            if (selectedMessage?.id === id) setSelectedMessage(null);
+        } catch (err) {
+            console.error("Failed to delete message", err);
+            alert("Failed to delete message.");
+        }
+    };
+
+    const handleToggleContacted = async (id) => {
+        try {
+            setMessages((prev) => prev.map(msg =>
+                msg.id === id ? { ...msg, contacted: !msg.contacted } : msg
+            ));
+
+            await toggleContacted(id);
+        } catch (err) {
+            console.error("Failed to update status", err);
+            alert("Failed to update status.");
+            setMessages((prev) => prev.map(msg =>
+                msg.id === id ? { ...msg, contacted: !msg.contacted } : msg
+            ));
+        }
+    };
+
     const filteredMessages = messages.filter(msg =>
         msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         msg.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Helper function to format badge colors based on message type
     const getTypeBadgeClass = (type) => {
         switch (type) {
             case 'COMPLAINT': return 'badge-danger';
             case 'TECHNICAL': return 'badge-warning';
             case 'QUESTION': return 'badge-info';
             case 'SUGGESTION': return 'badge-success';
-            default: return 'badge-secondary'; // GENERAL
+            default: return 'badge-secondary';
         }
     };
 
@@ -84,6 +109,7 @@ function AdminMessages() {
                     <table className="admin-table">
                         <thead>
                         <tr>
+                            <th>Status</th>
                             <th>Date</th>
                             <th>Sender</th>
                             <th>Type</th>
@@ -93,7 +119,18 @@ function AdminMessages() {
                         </thead>
                         <tbody>
                         {filteredMessages.map((msg) => (
-                            <tr key={msg.id}>
+                            <tr key={msg.id} style={{ opacity: msg.contacted ? 0.7 : 1 }}>
+                                <td>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#64748b' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={msg.contacted}
+                                            onChange={() => handleToggleContacted(msg.id)}
+                                            style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                                        />
+                                        {msg.contacted ? "Contacted" : "Pending"}
+                                    </label>
+                                </td>
                                 <td>
                                     <div className="flex-cell text-muted">
                                         <Calendar size={14} />
@@ -107,9 +144,9 @@ function AdminMessages() {
                                     </div>
                                 </td>
                                 <td>
-                                        <span className={`badge ${getTypeBadgeClass(msg.type)}`}>
-                                            {msg.type}
-                                        </span>
+                                    <span className={`badge ${getTypeBadgeClass(msg.type)}`}>
+                                        {msg.type}
+                                    </span>
                                 </td>
                                 <td>
                                     <div className="truncate-text" title={msg.title}>
@@ -117,12 +154,22 @@ function AdminMessages() {
                                     </div>
                                 </td>
                                 <td>
-                                    <button
-                                        className="btn-view"
-                                        onClick={() => setSelectedMessage(msg)}
-                                    >
-                                        <Eye size={16} /> View
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button
+                                            className="btn-view"
+                                            onClick={() => setSelectedMessage(msg)}
+                                        >
+                                            <Eye size={16} /> View
+                                        </button>
+
+                                        <button
+                                            className="btn-view"
+                                            onClick={() => handleDelete(msg.id)}
+                                            style={{ color: '#ef4444', borderColor: '#fca5a5' }}
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -131,10 +178,10 @@ function AdminMessages() {
                 )}
             </div>
 
-            {/* --- Read Message Modal --- */}
             {selectedMessage && (
                 <div className="modal-overlay" onClick={() => setSelectedMessage(null)}>
                     <div className="message-modal" onClick={(e) => e.stopPropagation()}>
+                        {/* existing modal code */}
                         <div className="modal-header">
                             <h2>{selectedMessage.title}</h2>
                             <button className="close-btn" onClick={() => setSelectedMessage(null)}>
@@ -157,11 +204,7 @@ function AdminMessages() {
                                 <span className="meta-label">Type:</span>
                                 <span className={`badge ${getTypeBadgeClass(selectedMessage.type)}`}>{selectedMessage.type}</span>
                             </div>
-                            <div className="meta-item text-muted">
-                                <Calendar size={14} /> {new Date(selectedMessage.createdAt).toLocaleString()}
-                            </div>
                         </div>
-
                         <div className="modal-body">
                             <p>{selectedMessage.message}</p>
                         </div>

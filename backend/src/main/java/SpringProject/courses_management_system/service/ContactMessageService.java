@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import SpringProject.courses_management_system.repository.ContactMessageRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ContactMessageService {
@@ -33,10 +34,21 @@ public class ContactMessageService {
     }
 
     public List<ContactMessage> getAllMessages() {
-        return contactMessageRepository.findAllByOrderByCreatedAtDesc();
+        return contactMessageRepository.findAllByIsDeletedFalseOrderByCreatedAtDesc();
     }
 
-    public ContactMessage saveMessage(ContactMessage message) {
+    public void softDeleteMessage(UUID id) {
+        ContactMessage message = contactMessageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+        message.setDeleted(true);
+        contactMessageRepository.save(message);
+    }
+
+    public ContactMessage toggleContacted(UUID id) {
+        ContactMessage message = contactMessageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Message not found"));
+        message.setContacted(!message.isContacted());
         return contactMessageRepository.save(message);
     }
+
 }

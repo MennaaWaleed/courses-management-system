@@ -9,5 +9,5 @@ import java.util.UUID;
 @Repository
 public interface ContactMessageRepository extends JpaRepository<ContactMessage, UUID> {
 
-    List<ContactMessage> findAllByOrderByCreatedAtDesc();
+    List<ContactMessage> findAllByIsDeletedFalseOrderByCreatedAtDesc();
 }

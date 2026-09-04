@@ -42,4 +42,10 @@ public class ContactMessage {
 
     @Column(name="phone",nullable=false, length=20)
     private String phone;
+
+    @Column(name="is_deleted", nullable=false)
+    private boolean isDeleted = false;
+
+    @Column(name="is_contacted", nullable=false)
+    private boolean isContacted = false;
 }

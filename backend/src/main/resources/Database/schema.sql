@@ -636,3 +636,11 @@ CREATE TABLE enrollment_requests (
 -----------------------------new 28/8-------------------------------------
 ALTER TABLE users
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+
+---------------------------new 4/9----------------------------------------
+ALTER TABLE contactmessage
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE contactmessage
+    ADD COLUMN is_contacted BOOLEAN NOT NULL DEFAULT FALSE;
