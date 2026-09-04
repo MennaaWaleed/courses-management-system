@@ -105,6 +105,7 @@ public class UserService {
         List<Wishlist> wishlistItems = wishlistRepository.findByUserId(userId);
         wishlist = wishlistItems.stream()
                 .map(item -> new WishlistCourseResponse(
+                        item.getCourse().getId(),
                         item.getCourse().getCourseName(),
                         item.getCourse().getPrice()
                 ))

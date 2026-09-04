@@ -4,14 +4,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCourseById, getRelatedCourses } from "../../../api/courseApi";
 import {
     Clock, BookOpen, Tag, ShieldCheck, ArrowLeft, ExternalLink,
-    Sparkles, CheckCircle2, HelpCircle, FileText, Eye, X
+    Sparkles, CheckCircle2, HelpCircle, FileText, Eye, X, Heart
 } from "lucide-react";
 import CourseCard from "../../../features/Home/FeaturedCourses/CourseCard";
 import CourseRegistration from "../../../features/CourseRegistration/CourseRegistration";
+import {
+    addToWishlist,
+    removeFromWishlist,
+    checkWishlist
+} from "../../../api/wishlistApi";
 
 function CourseDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
+
 
     const [course, setCourse] = useState(null);
     const [relatedCourses, setRelatedCourses] = useState([]);
@@ -21,6 +27,21 @@ function CourseDetails() {
     const [error, setError] = useState("");
     const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
 
+    const [isWishlisted, setIsWishlisted] = useState(false);
+    useEffect(() => {
+        const fetchWishlistStatus = async () => {
+            try {
+                const result = await checkWishlist(id);
+                setIsWishlisted(result);
+            } catch (error) {
+                console.error("Error checking wishlist:", error);
+            }
+        };
+
+        if (id) {
+            fetchWishlistStatus();
+        }
+    }, [id]);
     const BASE_URL = "http://localhost:8080";
 
     useEffect(() => {
@@ -73,6 +94,20 @@ function CourseDetails() {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
+
+    const handleWishlistToggle = async () => {
+        try {
+            if (isWishlisted) {
+                await removeFromWishlist(id);
+                setIsWishlisted(false);
+            } else {
+                await addToWishlist(id);
+                setIsWishlisted(true);
+            }
+        } catch (error) {
+            console.error("Wishlist error:", error);
+        }
+    };
 
     if (loading) {
         return (
@@ -214,17 +249,17 @@ function CourseDetails() {
                                         </div>
                                     </div>
                                     <div className="course-details-page__content-actions">
-                                        <button 
-                                            type="button" 
+                                        <button
+                                            type="button"
                                             className="course-details-page__btn-view"
                                             onClick={() => setIsPdfModalOpen(true)}
                                         >
                                             <Eye size={16} /> View PDF
                                         </button>
-                                        <a 
-                                            href={safeContentUrl} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
+                                        <a
+                                            href={safeContentUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                             className="course-details-page__btn-external"
                                             title="Open in new tab"
                                         >
@@ -248,6 +283,36 @@ function CourseDetails() {
                                     <button type="button" className="course-details-page__register-button" onClick={() => setShowRegistration(true)}>
                                         Contact Us to Enroll
                                     </button>
+
+                                    <button
+                                        type="button"
+                                        className={`course-details-page__wishlist-button ${isWishlisted ? 'active' : ''}`}
+                                        onClick={handleWishlistToggle}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '8px',
+                                            width: '100%',
+                                            padding: '12px',
+                                            marginBottom: '10px',
+                                            backgroundColor: isWishlisted ? '#fef2f2' : 'transparent',
+                                            color: isWishlisted ? '#ef4444' : 'inherit',
+                                            border: `1px solid ${isWishlisted ? '#ef4444' : '#e5e7eb'}`,
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            fontWeight: '500',
+                                            transition: 'all 0.2s'
+                                        }}
+                                    >
+                                        <Heart
+                                            size={18}
+                                            fill={isWishlisted ? "#ef4444" : "none"}
+                                            color={isWishlisted ? "#ef4444" : "currentColor"}
+                                        />
+                                        {isWishlisted ? "Added to Wishlist" : "Add to Wishlist"}
+                                    </button>
+
                                     <button type="button" className="course-details-page__back-button" onClick={() => navigate("/courses")}>
                                         <ArrowLeft size={16} /> Back to Courses
                                     </button>
@@ -299,8 +364,8 @@ function CourseDetails() {
                             </div>
                         </div>
                         <div className="course-details-page__pdf-modal-body">
-                            <iframe 
-                                src={`${safeContentUrl}#toolbar=0`} 
+                            <iframe
+                                src={`${safeContentUrl}#toolbar=0`}
                                 title="Course Curriculum PDF Viewer"
                                 className="course-details-page__pdf-iframe"
                             />

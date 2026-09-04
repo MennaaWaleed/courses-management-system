@@ -186,6 +186,10 @@ function App() {
                                 </AdminRoute>
                             }
                         />
+                    <Route
+                        path="/courses/:id"
+                        element={<CourseDetails />}
+                    />
                 </Routes>
             </main>
 
