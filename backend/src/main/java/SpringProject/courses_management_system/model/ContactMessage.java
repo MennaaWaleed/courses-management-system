@@ -1,7 +1,9 @@
 package SpringProject.courses_management_system.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.ZonedDateTime;
@@ -10,6 +12,8 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name="contactmessage")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContactMessage {
 
     @Id
