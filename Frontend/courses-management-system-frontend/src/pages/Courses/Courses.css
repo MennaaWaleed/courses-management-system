@@ -1,25 +1,23 @@
-/* =========================
-   COURSE CATALOG PAGE
-========================= */
-
 .course-catalog-page {
 
     min-height: 100vh;
 
-    background: #F7F8F7;
+    background: #f7f7f5;
+
+    color: #111111;
+
+    font-family: inherit;
+
+    -webkit-font-smoothing: antialiased;
 
 }
 
 
-/* =========================
-   CONTAINER
-========================= */
-
 .course-catalog-page__container {
 
     width: min(
-        1200px,
-        calc(100% - 48px)
+            1200px,
+            calc(100% - 48px)
     );
 
     margin: 0 auto;
@@ -27,18 +25,18 @@
 }
 
 
-/* =========================
-   HERO
-========================= */
-
 .course-catalog-page__hero {
 
     padding:
-        125px
-        0
-        85px;
+            125px
+            0
+            85px;
 
-    background: #111;
+    background: linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #115e59 100%
+    );
 
     color: white;
 
@@ -54,34 +52,38 @@
     align-items: center;
 
     padding:
-        8px
-        16px;
+            8px
+            16px;
 
     border-radius: 999px;
 
     background: rgba(
-        207,
-        255,
-        46,
-        .08
+            20,
+            184,
+            166,
+            0.2
     );
 
     border:
-        1px solid
-        rgba(
-            207,
-            255,
-            46,
-            .25
-        );
+            1px solid
+            rgba(
+                    45,
+                    212,
+                    191,
+                    0.3
+            );
 
-    color: #CFFF2E;
+    color: #5eead4;
 
     font-size: 13px;
 
     font-weight: 600;
 
     margin-bottom: 22px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.3px;
 
 }
 
@@ -91,15 +93,17 @@
     margin: 0;
 
     font-size:
-        clamp(
-            42px,
-            6vw,
-            68px
-        );
+            clamp(
+                    42px,
+                    6vw,
+                    68px
+            );
 
     line-height: 1;
 
     letter-spacing: -2px;
+
+    font-weight: 800;
 
 }
 
@@ -109,17 +113,11 @@
     max-width: 650px;
 
     margin:
-        25px
-        auto
-        0;
+            25px
+            auto
+            0;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .7
-        );
+    color: #cbd5e1;
 
     font-size: 17px;
 
@@ -127,24 +125,15 @@
 
 }
 
-
-/* =========================
-   CONTENT
-========================= */
-
 .course-catalog-page__content {
 
     padding:
-        70px
-        0
-        110px;
+            70px
+            0
+            110px;
 
 }
 
-
-/* =========================
-   GRID
-========================= */
 
 .course-catalog-page__grid {
 
@@ -154,19 +143,14 @@
         repeat(
             3,
             minmax(
-                0,
-                1fr
+                    0,
+                    1fr
             )
         );
 
     gap: 32px;
 
 }
-
-
-/* =========================
-   STATES
-========================= */
 
 .course-catalog-page__state {
 
@@ -191,7 +175,7 @@
 
     font-size: 28px;
 
-    color: #111;
+    color: #111111;
 
 }
 
@@ -200,14 +184,9 @@
 
     margin-top: 12px;
 
-    color: #666;
+    color: #666666;
 
 }
-
-
-/* =========================
-   SKELETON CARD
-========================= */
 
 .course-catalog-skeleton-card {
 
@@ -215,11 +194,19 @@
 
     height: 290px;
 
-    border-radius: 28px;
+    border-radius: 24px;
 
     overflow: hidden;
 
-    background: #e9e9e7;
+    background: #ffffff;
+
+    border:
+            1px solid
+            rgba(0, 0, 0, 0.08);
+
+    box-shadow:
+            0 20px 40px
+            rgba(0, 0, 0, 0.06);
 
 }
 
@@ -237,35 +224,29 @@
 }
 
 
-/* =========================
-   SKELETON
-========================= */
-
 .course-catalog-skeleton {
 
     display: block;
 
     background:
-        linear-gradient(
-            90deg,
-            #dededc 25%,
-            #eeeeec 50%,
-            #dededc 75%
-        );
+            linear-gradient(
+                    90deg,
+                    #f4f4f2 25%,
+                    #eaeae6 50%,
+                    #f4f4f2 75%
+            );
 
     background-size: 200% 100%;
 
     animation:
-        course-catalog-skeleton-loading
-        1.5s
-        infinite;
+            course-catalog-skeleton-loading
+            1.5s
+            infinite;
 
     border-radius: 8px;
 
 }
 
-
-/* CATEGORY */
 
 .course-catalog-skeleton--category {
 
@@ -279,8 +260,6 @@
 
 }
 
-
-/* TITLE */
 
 .course-catalog-skeleton--title {
 
@@ -300,8 +279,6 @@
 }
 
 
-/* FOOTER */
-
 .course-catalog-skeleton-card__footer {
 
     margin-top: 25px;
@@ -315,8 +292,6 @@
 }
 
 
-/* DURATION */
-
 .course-catalog-skeleton--duration {
 
     width: 100px;
@@ -325,8 +300,6 @@
 
 }
 
-
-/* BUTTON */
 
 .course-catalog-skeleton--button {
 
@@ -338,10 +311,6 @@
 
 }
 
-
-/* =========================
-   CATEGORY TABS
-========================= */
 
 .course-catalog-page__categories {
 
@@ -358,10 +327,6 @@
 }
 
 
-/* =========================
-   CATEGORY LIST
-========================= */
-
 .course-catalog-page__categories-list {
 
     display: flex;
@@ -375,26 +340,23 @@
     background: #ffffff;
 
     border:
-        1px solid
-        #e3e7e5;
+            1px solid
+            rgba(0, 0, 0, 0.08);
 
     border-radius: 16px;
 
     box-shadow:
-        0 10px 30px
-        rgba(
-            0,
-            0,
-            0,
-            0.06
-        );
+            0 20px 40px
+            rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+            );
 
 }
 
 
-/* =========================
-   CATEGORY BUTTON
-========================= */
 
 .course-catalog-page__category {
 
@@ -406,11 +368,11 @@
 
     background: transparent;
 
-    color: #555f5c;
+    color: #666666;
 
     padding:
-        12px
-        24px;
+            12px
+            24px;
 
     min-height: 44px;
 
@@ -427,104 +389,82 @@
     cursor: pointer;
 
     transition:
-        background .3s ease,
-        color .3s ease,
-        box-shadow .3s ease,
-        transform .3s ease;
+            background .3s ease,
+            color .3s ease,
+            box-shadow .3s ease,
+            transform .3s ease;
 
 }
 
-
-/* =========================
-   CATEGORY HOVER
-========================= */
 
 .course-catalog-page__category:hover:not(
     .course-catalog-page__category--active
 ) {
 
-    background: #eef8f6;
+    background: rgba(10, 159, 143, 0.08);
 
-    color: #08776d;
+    color: #0A9F8F;
 
 }
 
 
-/* =========================
-   ACTIVE CATEGORY
-========================= */
-
 .course-catalog-page__category--active {
 
-    background: #0A6D60;
+    background: #0A9F8F;
 
     color: #ffffff;
 
     box-shadow:
-        0 5px 20px
-        rgba(
-            13,
-            159,
-            143,
-            .22
-        );
+            0 10px 20px
+            rgba(10, 159, 143, 0.25);
 
 }
 
 
 .course-catalog-page__category--active:hover {
 
-    background: #08776d;
+    background: #078F80;
 
     color: #ffffff;
 
 }
 
 
-/* =========================
-   FOCUS
-========================= */
 
 .course-catalog-page__category:focus-visible {
 
     box-shadow:
-        0 0 0 3px
-        rgba(
-            11,
-            148,
-            135,
-            0.18
-        );
+            0 0 0 3px
+            rgba(
+                    10,
+                    159,
+                    143,
+                    0.2
+            );
 
 }
 
 
-/* =========================
-   SKELETON ANIMATION
-========================= */
 
 @keyframes course-catalog-skeleton-loading {
 
     from {
 
         background-position:
-            200% 0;
+                200% 0;
 
     }
 
     to {
 
         background-position:
-            -200% 0;
+                -200% 0;
 
     }
 
 }
 
 
-/* =========================
-   RESPONSIVE
-========================= */
 
 @media (max-width: 1000px) {
 
@@ -534,8 +474,8 @@
             repeat(
                 2,
                 minmax(
-                    0,
-                    1fr
+                        0,
+                        1fr
                 )
             );
 
@@ -549,9 +489,9 @@
     .course-catalog-page__hero {
 
         padding:
-            105px
-            0
-            70px;
+                105px
+                0
+                70px;
 
     }
 
@@ -559,9 +499,9 @@
     .course-catalog-page__content {
 
         padding:
-            55px
-            0
-            80px;
+                55px
+                0
+                80px;
 
     }
 
@@ -575,9 +515,6 @@
     }
 
 
-    /* =========================
-       CATEGORY SCROLL
-    ========================= */
 
     .course-catalog-page__categories {
 
@@ -586,9 +523,9 @@
         overflow-x: auto;
 
         padding:
-            0
-            4px
-            8px;
+                0
+                4px
+                8px;
 
         margin-bottom: 35px;
 
@@ -624,8 +561,8 @@
     .course-catalog-page__category {
 
         padding:
-            11px
-            19px;
+                11px
+                19px;
 
         min-height: 42px;
 
@@ -661,8 +598,8 @@
     .course-catalog-page__category {
 
         padding:
-            10px
-            17px;
+                10px
+                17px;
 
         min-height: 40px;
 
