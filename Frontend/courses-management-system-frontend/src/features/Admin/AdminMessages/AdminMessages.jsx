@@ -28,7 +28,6 @@ function AdminMessages() {
     const [searchTerm, setSearchTerm] = useState("");
 
     const [selectedMessage, setSelectedMessage] = useState(null);
-
     const [deleteConfirmMessage, setDeleteConfirmMessage] = useState(null);
 
     useEffect(() => {
@@ -101,7 +100,6 @@ function AdminMessages() {
 
             alert("Failed to update status.");
 
-            // Revert change
             setMessages((prev) =>
                 prev.map((msg) =>
                     msg.id === id
@@ -116,29 +114,11 @@ function AdminMessages() {
     };
 
     const filteredMessages = messages.filter((msg) =>
-        msg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        msg.title.toLowerCase().includes(searchTerm.toLowerCase())
+        msg.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        msg.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        msg.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        msg.message?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    const getTypeBadgeClass = (type) => {
-        switch (type) {
-            case "COMPLAINT":
-                return "badge-danger";
-
-            case "TECHNICAL":
-                return "badge-warning";
-
-            case "QUESTION":
-                return "badge-info";
-
-            case "SUGGESTION":
-                return "badge-success";
-
-            default:
-                return "badge-secondary";
-        }
-    };
 
     return (
         <div className="admin-messages-page">
@@ -156,6 +136,7 @@ function AdminMessages() {
 
                     <div>
                         <h1>Contact Messages</h1>
+
                         <p>
                             Review and manage inquiries from users.
                         </p>
@@ -172,7 +153,7 @@ function AdminMessages() {
 
                     <input
                         type="text"
-                        placeholder="Search by name, email, or subject..."
+                        placeholder="Search by name, email, phone, or message..."
                         value={searchTerm}
                         onChange={(e) =>
                             setSearchTerm(e.target.value)
@@ -212,9 +193,9 @@ function AdminMessages() {
                         <tr>
                             <th>Status</th>
                             <th>Date</th>
-                            <th>Sender</th>
-                            <th>Type</th>
-                            <th>Subject</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -230,7 +211,6 @@ function AdminMessages() {
                                 }}
                             >
 
-                                {/* STATUS */}
                                 <td>
 
                                     <label
@@ -267,7 +247,6 @@ function AdminMessages() {
                                 </td>
 
 
-                                {/* DATE */}
                                 <td>
 
                                     <div className="flex-cell text-muted">
@@ -283,7 +262,6 @@ function AdminMessages() {
                                 </td>
 
 
-                                {/* SENDER */}
                                 <td>
 
                                     <div className="sender-info">
@@ -292,43 +270,47 @@ function AdminMessages() {
                                             {msg.name}
                                         </strong>
 
-                                        <span className="text-muted text-sm">
-                                            {msg.email}
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <a
+                                        href={`mailto:${msg.email}`}
+                                        className="contact-link"
+                                    >
+                                        <Mail size={14} />
+                                        {msg.email}
+                                    </a>
+
+                                </td>
+
+
+                                <td>
+
+                                    {msg.phone ? (
+
+                                        <a
+                                            href={`tel:${msg.phone}`}
+                                            className="contact-link"
+                                        >
+                                            <Phone size={14} />
+                                            {msg.phone}
+                                        </a>
+
+                                    ) : (
+
+                                        <span className="text-muted">
+                                            Not provided
                                         </span>
 
-                                    </div>
+                                    )}
 
                                 </td>
 
 
-                                {/* TYPE */}
-                                <td>
-
-                                    <span
-                                        className={`badge ${getTypeBadgeClass(
-                                            msg.type
-                                        )}`}
-                                    >
-                                        {msg.type}
-                                    </span>
-
-                                </td>
-
-
-                                {/* SUBJECT */}
-                                <td>
-
-                                    <div
-                                        className="truncate-text"
-                                        title={msg.title}
-                                    >
-                                        {msg.title}
-                                    </div>
-
-                                </td>
-
-
-                                {/* ACTIONS */}
                                 <td>
 
                                     <div
@@ -338,7 +320,6 @@ function AdminMessages() {
                                         }}
                                     >
 
-                                        {/* VIEW */}
                                         <button
                                             className="btn-view"
                                             onClick={() =>
@@ -350,7 +331,6 @@ function AdminMessages() {
                                         </button>
 
 
-                                        {/* DELETE */}
                                         <button
                                             className="btn-delete-message"
                                             onClick={() =>
@@ -378,7 +358,6 @@ function AdminMessages() {
             </div>
 
 
-
             {selectedMessage && (
 
                 <div
@@ -398,7 +377,7 @@ function AdminMessages() {
                         <div className="modal-header">
 
                             <h2>
-                                {selectedMessage.title}
+                                Contact Message
                             </h2>
 
                             <button
@@ -456,15 +435,13 @@ function AdminMessages() {
                             <div className="meta-item">
 
                                 <span className="meta-label">
-                                    Type:
+                                    Date:
                                 </span>
 
-                                <span
-                                    className={`badge ${getTypeBadgeClass(
-                                        selectedMessage.type
-                                    )}`}
-                                >
-                                    {selectedMessage.type}
+                                <span>
+                                    {new Date(
+                                        selectedMessage.createdAt
+                                    ).toLocaleString()}
                                 </span>
 
                             </div>
@@ -486,6 +463,7 @@ function AdminMessages() {
 
             )}
 
+
             {deleteConfirmMessage && (
 
                 <div
@@ -502,14 +480,10 @@ function AdminMessages() {
                         }
                     >
 
-                        {/* TITLE */}
-
                         <h2>
                             Delete Message
                         </h2>
 
-
-                        {/* MESSAGE */}
 
                         <p className="delete-confirm-text">
 
@@ -528,8 +502,6 @@ function AdminMessages() {
                             This action cannot be undone.
                         </p>
 
-
-                        {/* BUTTONS */}
 
                         <div className="delete-modal-actions">
 
@@ -563,3 +535,4 @@ function AdminMessages() {
 }
 
 export default AdminMessages;
+

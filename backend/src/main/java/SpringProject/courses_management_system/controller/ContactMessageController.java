@@ -23,7 +23,7 @@ public class ContactMessageController {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')") // Secures the endpoint for admins only
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ContactMessage>> getAllMessages() {
         List<ContactMessage> messages = contactMessageService.getAllMessages();
         return ResponseEntity.ok(messages);

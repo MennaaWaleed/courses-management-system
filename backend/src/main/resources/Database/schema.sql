@@ -644,3 +644,8 @@ ALTER TABLE contactmessage
 
 ALTER TABLE contactmessage
     ADD COLUMN is_contacted BOOLEAN NOT NULL DEFAULT FALSE;
+
+--------------------------new 4/9 ------------------------------------------
+ALTER TABLE contactmessage
+DROP COLUMN title,
+DROP COLUMN type;

@@ -24,12 +24,6 @@ public class ContactRequest {
     )
     private String phone;
 
-    @NotBlank(message = "Title is required.")
-    @Size(max = 300, message = "Title cannot exceed 300 characters.")
-    private String title;
-
-    @NotBlank(message = "Type is required.")
-    private String type;
 
     @NotBlank(message = "Message is required.")
     @Size(max = 5000, message = "Message is too long.")

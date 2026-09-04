@@ -24,8 +24,6 @@ public class ContactMessageService {
         contactMessage.setName(request.getName());
         contactMessage.setEmail(request.getEmail());
         contactMessage.setPhone(request.getPhone());
-        contactMessage.setTitle(request.getTitle());
-        contactMessage.setType(request.getType());
         contactMessage.setMessage(request.getMessage());
 
         contactMessageRepository.save(contactMessage);

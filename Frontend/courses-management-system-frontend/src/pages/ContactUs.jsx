@@ -1,20 +1,18 @@
 import "../styles/ContactUs.css";
 import { useState } from "react";
 
-
 function ContactUs() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
-        title: "",
-        type: "",
         message: ""
     });
 
     const [responseMessage, setResponseMessage] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [errors, setErrors] = useState({});
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -30,9 +28,9 @@ function ContactUs() {
     };
 
     const handleSubmit = async (e) => {
-        setErrors({});
-        setResponseMessage("");
         e.preventDefault();
+
+        setErrors({});
         setResponseMessage("");
 
         try {
@@ -54,22 +52,20 @@ function ContactUs() {
                     name: "",
                     email: "",
                     phone: "",
-                    title: "",
-                    type: "",
                     message: ""
                 });
 
                 setErrors({});
-            }
-            else {
+            } else {
+                setIsSuccess(false);
                 setErrors(data);
                 setResponseMessage("");
             }
 
         } catch (error) {
             console.error(error);
-            setResponseMessage("Something went wrong.");
             setIsSuccess(false);
+            setResponseMessage("Something went wrong.");
         }
     };
 
@@ -79,7 +75,6 @@ function ContactUs() {
             <div className="contact-card">
 
                 {/* Header */}
-
                 <div className="contact-header">
                     <h1>Contact Us</h1>
 
@@ -89,13 +84,12 @@ function ContactUs() {
                     </p>
                 </div>
 
-
                 <form
                     className="contact-form"
                     onSubmit={handleSubmit}
                 >
 
-
+                    {/* Name & Email */}
                     <div className="form-row">
 
                         <div className="form-group">
@@ -110,7 +104,9 @@ function ContactUs() {
                             />
 
                             {errors.name && (
-                                <p className="field-error">{errors.name}</p>
+                                <p className="field-error">
+                                    {errors.name}
+                                </p>
                             )}
                         </div>
 
@@ -124,90 +120,36 @@ function ContactUs() {
                                 onChange={handleChange}
                                 placeholder="Enter your email"
                             />
+
                             {errors.email && (
-                                <p className="field-error">{errors.email}</p>
+                                <p className="field-error">
+                                    {errors.email}
+                                </p>
                             )}
                         </div>
 
                     </div>
 
-
-                    <div className="form-row">
-
-                        <div className="form-group">
-                            <label>Phone</label>
-
-                            <input
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                placeholder="Enter your phone number"
-                            />
-                            {errors.phone && (
-                                <p className="field-error">{errors.phone}</p>
-                            )}
-                        </div>
-
-                        <div className="form-group">
-                            <label>Title</label>
-
-                            <input
-                                type="text"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                placeholder="Message title"
-                            />
-                            {errors.title && (
-                                <p className="field-error">{errors.title}</p>
-                            )}
-                        </div>
-
-                    </div>
-
-
+                    {/* Phone */}
                     <div className="form-group">
+                        <label>Phone</label>
 
-                        <label>Type</label>
-
-                        <select
-                            name="type"
-                            value={formData.type}
+                        <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
                             onChange={handleChange}
-                        >
-                            <option value="" disabled>
-                                Select a type
-                            </option>
+                            placeholder="Enter your phone number"
+                        />
 
-                            <option value="GENERAL">
-                                General Inquiry
-                            </option>
-
-                            <option value="QUESTION">
-                                Question
-                            </option>
-
-                            <option value="TECHNICAL">
-                                Technical Issue
-                            </option>
-
-                            <option value="SUGGESTION">
-                                Suggestion
-                            </option>
-
-                            <option value="COMPLAINT">
-                                Complaint
-                            </option>
-                        </select>
-                        {errors.type && (
-                            <p className="field-error">{errors.type}</p>
+                        {errors.phone && (
+                            <p className="field-error">
+                                {errors.phone}
+                            </p>
                         )}
-
                     </div>
 
                     {/* Message */}
-
                     <div className="form-group">
 
                         <label>Message</label>
@@ -219,22 +161,29 @@ function ContactUs() {
                             rows="6"
                             placeholder="Write your message..."
                         ></textarea>
+
                         {errors.message && (
-                            <p className="field-error">{errors.message}</p>
+                            <p className="field-error">
+                                {errors.message}
+                            </p>
                         )}
 
                     </div>
 
                     {/* Response Message */}
-
                     {responseMessage && (
-                        <div className={isSuccess ? "success-message" : "error-message"}>
+                        <div
+                            className={
+                                isSuccess
+                                    ? "success-message"
+                                    : "error-message"
+                            }
+                        >
                             {responseMessage}
                         </div>
                     )}
 
                     {/* Button */}
-
                     <button
                         type="submit"
                         className="send-btn"
@@ -251,3 +200,4 @@ function ContactUs() {
 }
 
 export default ContactUs;
+
