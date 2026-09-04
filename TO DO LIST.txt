@@ -15,6 +15,10 @@ To do list:
 -Handle search instructor by name or email in manage instructors
 -ability to change password for (Students,instructor, admin)
 -handle when forget passwords
--course page
 -handle many requests in the same time
+-add view messages button for admin
+-update the contact us form
+
+Done:
 -Add "Add to wishlist" button in course page and next to course image in the category courses page
+-changes course page style
