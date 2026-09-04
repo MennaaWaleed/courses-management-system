@@ -2,24 +2,19 @@ To do list:
 
 -check if the password in register is strong
 -check if the email in register exists
--edit the contact us page
 -validation for login and register in backend
 -show password in login
-- when logging in then log out then log in again the old data still and didnt disappeared
 -handle when entering negative in course fields
-- edit course page design change colors
-- when delete category the all course be unpublished or is deleted
-- in course page related courses must be published and is deleted false
-- student can change password
 - dark mode
 -Handle search instructor by name or email in manage instructors
 -ability to change password for (Students,instructor, admin)
 -handle when forget passwords
 -handle many requests in the same time
-
+- add course registration view in admin
 Done:
 -Add "Add to wishlist" button in course page and next to course image in the category courses page
 -changes course page style
 -add view messages button for admin
 -update the contact us form
-
+- when delete category the all course be unpublished or is deleted
+- in course page related courses must be published and is deleted false
