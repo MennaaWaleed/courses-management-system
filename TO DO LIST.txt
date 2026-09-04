@@ -1,16 +1,16 @@
 To do list:
 
--check if the password in register is strong
--check if the email in register exists
--validation for login and register in backend
--show password in login
--handle when entering negative in course fields
+-check if the password in register is strong ( menna )
+-check if the email in register exists ( menna )
+-validation for login and register in backend( menna )
+-show password in login (menna)
+-handle when entering negative in course fields (menna)
 - dark mode
--Handle search instructor by name or email in manage instructors
--ability to change password for (Students,instructor, admin)
--handle when forget passwords
--handle many requests in the same time
-- add course registration view in admin
+-ability to change password for (Students,instructor, admin)(hakim)
+-handle when forget passwords (hakim)
+-handle many requests in the same time(hakim)
+- add course registration view in admin (hakim)
+- search instructor is_deletedFalse only (hakim)
 Done:
 -Add "Add to wishlist" button in course page and next to course image in the category courses page
 -changes course page style
@@ -18,3 +18,4 @@ Done:
 -update the contact us form
 - when delete category the all course be unpublished or is deleted
 - in course page related courses must be published and is deleted false
+-Handle search instructor by name or email in manage instructors
