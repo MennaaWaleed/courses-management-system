@@ -273,7 +273,7 @@ public class LectureAccessService {
 
     private User getUser(String email) {
 
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "User not found"

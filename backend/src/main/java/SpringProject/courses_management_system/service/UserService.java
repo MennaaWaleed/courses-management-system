@@ -11,8 +11,10 @@ import SpringProject.courses_management_system.model.User;
 import SpringProject.courses_management_system.model.Wishlist;
 import SpringProject.courses_management_system.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import SpringProject.courses_management_system.dto.User.ChangePasswordRequest;
 
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -28,10 +30,13 @@ public class UserService {
     private final CertificateRepository certificateRepository;
     private final WishlistRepository wishlistRepository;
     private final CourseBatchRepository courseBatchRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
 
     public UserProfileResponse getUserProfile(String email) {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         UUID userId = user.getId();
@@ -121,5 +126,18 @@ public class UserService {
                 wishlist,
                 null
         );
+    }
+    public void changePassword(String email, ChangePasswordRequest request) {
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Verify that the current password matches
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Incorrect current password.");
+        }
+
+        // Encode and set the new password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

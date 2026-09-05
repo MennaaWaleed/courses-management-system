@@ -30,7 +30,7 @@ public class EnrollmentRequestService {
 
     @Transactional
     public EnrollmentRequestDto createRequest(String email, String batchCode) {
-        User student = userRepository.findByEmail(email)
+        User student = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("Student not found."));
 
         CourseBatch batch = batchRepository.findByBatchCode(batchCode)
@@ -64,7 +64,7 @@ public class EnrollmentRequestService {
 
     @Transactional(readOnly = true)
     public List<EnrollmentRequestDto> getMyRequests(String email) {
-        User student = userRepository.findByEmail(email)
+        User student = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("Student not found."));
         return requestRepository.findByUserIdWithDetails(student.getId())
                 .stream().map(this::mapToDto).collect(Collectors.toList());

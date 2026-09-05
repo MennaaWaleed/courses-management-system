@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
 
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail())
+        User user = userRepository.findByEmailAndIsDeletedFalse(loginRequest.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
 
@@ -50,7 +50,7 @@ public class AuthenticationService {
     }
     public RegisterResponse register(RegisterRequest request) {
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmailAndIsDeletedFalse(request.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exists.");
         }
 

@@ -24,7 +24,7 @@ public class WishlistService {
     @Transactional
     public void addToWishlist(String email, UUID courseId) {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
@@ -57,7 +57,7 @@ public class WishlistService {
     @Transactional
     public void removeFromWishlist(String email, UUID courseId) {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
@@ -69,7 +69,7 @@ public class WishlistService {
 
     public boolean isWishlisted(String email, UUID courseId) {
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
