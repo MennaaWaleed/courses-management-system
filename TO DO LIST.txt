@@ -6,7 +6,6 @@ To do list:
 -show password in login (menna)
 -handle when entering negative in course fields (menna)
 - dark mode
--ability to change password for (Students,instructor, admin)(hakim)
 -handle when forget passwords (hakim)
 -handle many requests in the same time(hakim)
 - Course batches Page management
@@ -21,3 +20,4 @@ Done:
 -Handle search instructor by name or email in manage instructors
 -add course registration view in admin
 -search instructor is_deletedFalse only 
+-ability to change password for (Students,instructor, admin)
