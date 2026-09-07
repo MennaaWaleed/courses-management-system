@@ -30,6 +30,8 @@ function SetPassword({ setIsLoggedIn }) {
 
     const handleSetPassword = async (e) => {
         e.preventDefault();
+        if (isLoading) return;
+
         setErrorMessage("");
         setSuccessMessage("");
         setFieldErrors({});
@@ -46,33 +48,41 @@ function SetPassword({ setIsLoggedIn }) {
 
         try {
             setIsLoading(true);
+            const response = await api.post("/auth/set-password", { 
+                email, 
+                password 
+            });
 
-            await api.post("/auth/set-password", { email, password });
+            sessionStorage.setItem("token", response.data.token);
+            sessionStorage.setItem("role", response.data.role);
 
-            const loginResponse = await api.post("/auth/login", { email, password });
-
-            sessionStorage.setItem("token", loginResponse.data.token);
-            sessionStorage.setItem("role", loginResponse.data.role);
-            sessionStorage.removeItem("pendingEmail");
-
-            setIsLoggedIn(true);
-
-            setSuccessMessage("Account created successfully! Logging you in...");
+            setSuccessMessage("Password set successfully! Logging you in...");
+            
+            if (typeof setIsLoggedIn === "function") {
+                setIsLoggedIn(true);
+            }
 
             setTimeout(() => {
-                navigate("/");
-            }, 1500);
+                sessionStorage.removeItem("pendingEmail"); 
+                navigate("/", { replace: true }); 
+            }, 1000);
 
         } catch (error) {
-            const backendMessage = error.response?.data?.message || "";
-
-            if (backendMessage.toLowerCase().includes("already been set")) {
-                navigate("/auth/login", { state: { message: "Your password is already set. Please log in." } });
-            } else if (error.response?.status === 400 && error.response?.data && !backendMessage) {
-                setFieldErrors(error.response.data);
+            const backendMessage = error.response?.data?.message || error.response?.data || "";
+            
+            if (typeof backendMessage === "string" && backendMessage.includes("already been set")) {
+                if (typeof setIsLoggedIn === "function") {
+                    setIsLoggedIn(true);
+                }
+                navigate("/", { replace: true });
             } else {
-                setErrorMessage(backendMessage || "Failed to set password. Try again.");
+                setErrorMessage(
+                    typeof backendMessage === "string" && backendMessage
+                        ? backendMessage
+                        : "Failed to set password. Please try again."
+                );
             }
+        } finally {
             setIsLoading(false);
         }
     };
@@ -84,7 +94,11 @@ function SetPassword({ setIsLoggedIn }) {
                 <h1 className="register__title">Set Password</h1>
                 <p className="register__subtitle">Create a secure password for your account.</p>
 
-                {errorMessage && <div className="register__error" style={{ color: 'red', marginBottom: '15px', fontWeight: 'bold' }}>{errorMessage}</div>}
+                {errorMessage && (
+                    <div className="register__error" style={{ color: 'red', marginBottom: '15px', fontWeight: 'bold' }}>
+                        {errorMessage}
+                    </div>
+                )}
 
                 {successMessage && (
                     <div className="register__success" style={{ color: 'green', marginBottom: '15px', fontWeight: 'bold' }}>

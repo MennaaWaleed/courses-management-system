@@ -89,9 +89,9 @@ function App() {
                         path="/auth/verify-email"
                         element={<VerifyEmail />}
                     />
-                    <Route
-                        path="/auth/set-password"
-                        element={<SetPassword />}
+                <Route 
+                    path="/auth/set-password" 
+                    element={<SetPassword setIsLoggedIn={setIsLoggedIn} />} 
                     />
 
                     <Route path="/courses" element={<Courses />} />

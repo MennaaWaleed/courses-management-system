@@ -68,7 +68,16 @@ public class AuthenticationService {
 
             if (user.isEnabled()) {
                 if (user.getPassword() == null) {
-                    throw new IllegalArgumentException("Email is verified but password is not set.");
+                    user.setEnabled(false);
+
+                    String verificationCode = String.format("%06d", new java.util.Random().nextInt(1000000));
+                    user.setVerificationCode(verificationCode);
+                    user.setVerificationCodeExpiry(ZonedDateTime.now().plusMinutes(10));
+
+                    userRepository.save(user);
+                    emailService.sendVerificationCode(user.getEmail(), verificationCode);
+
+                    throw new IllegalArgumentException("This email is not verified. A new verification code has been sent.");
                 }
 
                 throw new IllegalArgumentException("Email already exists.");
@@ -203,15 +212,17 @@ public class AuthenticationService {
         user.setPassword(
                 passwordEncoder.encode(request.getPassword())
         );
-
         userRepository.save(user);
+
+        String token = jwtService.generateToken(new CustomUserDetails(user));
 
         SetPasswordResponse response = new SetPasswordResponse();
         response.setMessage("Password set successfully.");
+        response.setToken(token);
+        response.setRole(user.getRole().name());
 
         return response;
     }
-
     public void resendVerificationCode(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with this email."));
