@@ -1,5 +1,6 @@
 package SpringProject.courses_management_system.dto.auth;
 
+import SpringProject.courses_management_system.validation.StrongPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -17,7 +18,8 @@ public class RegisterRequest {
     @NotBlank
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Password is required")
+    @StrongPassword
     private String password;
 
     private String phone;
