@@ -1,3 +1,13 @@
+input::-ms-reveal {
+    display: none;
+}
+
+input::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
 .register {
     min-height: 100vh;
     display: flex;

@@ -17,6 +17,7 @@ function Register({setIsLoggedIn}) {
     const [successMessage, setSuccessMessage] = useState("");
 
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const navigate = useNavigate();
 
@@ -142,6 +143,7 @@ function Register({setIsLoggedIn}) {
                         onChange={(e) => setPhone(e.target.value)}
                     />
 
+                    {/* Password Field */}
                     <div className="register__password-wrapper">
                         <input
                             type={showPassword ? "text" : "password"}
@@ -158,13 +160,21 @@ function Register({setIsLoggedIn}) {
                         </button>
                     </div>
 
+                    {/* Confirm Password Field */}
                     <div className="register__password-wrapper">
                         <input
-                            type={showPassword ? "text" : "password"}
+                            type={showConfirmPassword ? "text" : "password"}
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
+                        <button
+                            type="button"
+                            className="register__password-toggle"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                            {showConfirmPassword ? <EyeOff size={20} color="#6b7280" /> : <Eye size={20} color="#6b7280" />}
+                        </button>
                     </div>
 
                     <button type="submit">

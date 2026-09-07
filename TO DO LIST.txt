@@ -3,11 +3,14 @@ To do list:
 -check if the password in register is strong ( menna )
 -check if the email in register exists ( menna )
 -validation for login and register in backend( menna )
-
+-show password in login (menna)
+-handle when entering negative in course fields (menna)
 - dark mode
+-ability to change password for (Students,instructor, admin)(hakim)
 -handle when forget passwords (hakim)
-- Course batches Page management
-- when add to wishlist if not login alert login first
+-handle many requests in the same time(hakim)
+- add course registration view in admin (hakim)
+- search instructor is_deletedFalse only (hakim)
 Done:
 -Add "Add to wishlist" button in course page and next to course image in the category courses page
 -changes course page style
@@ -16,9 +19,3 @@ Done:
 - when delete category the all course be unpublished or is deleted
 - in course page related courses must be published and is deleted false
 -Handle search instructor by name or email in manage instructors
--show password in login (menna)
--handle when entering negative in course fields (menna)
--add course registration view in admin(hakim)
--search instructor is_deletedFalse only (hakim)
--ability to change password for (Students,instructor, admin)(hakim)
--handle many requests in the same time(hakim)

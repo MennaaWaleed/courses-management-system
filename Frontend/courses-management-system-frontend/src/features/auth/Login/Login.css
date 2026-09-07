@@ -105,3 +105,37 @@ body {
     margin: 0;
     overflow-x: hidden;
 }
+
+.password-input-container {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.password-input-container input {
+    padding-right: 40px;
+}
+
+.login .password-input-container .toggle-password-btn {
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    background: transparent !important;
+    border: none !important;
+    width: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.login .password-input-container .toggle-password-btn:hover {
+    background: transparent !important;
+    opacity: 0.7;
+}
