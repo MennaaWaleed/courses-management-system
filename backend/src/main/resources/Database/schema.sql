@@ -649,3 +649,13 @@ ALTER TABLE contactmessage
 ALTER TABLE contactmessage
 DROP COLUMN title,
 DROP COLUMN type;
+
+--------------------------new 7/9 ------------------------------------------
+ALTER TABLE users
+    ADD COLUMN verification_code VARCHAR(6);
+
+ALTER TABLE users
+    ADD COLUMN verification_code_expiry TIMESTAMP WITH TIME ZONE;
+
+ALTER TABLE users
+    ALTER COLUMN password DROP NOT NULL;

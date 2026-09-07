@@ -1,7 +1,7 @@
 package SpringProject.courses_management_system.exception;
 
-import SpringProject.courses_management_system.dto.auth.LoginResponse;
-import SpringProject.courses_management_system.dto.auth.RegisterResponse;
+import SpringProject.courses_management_system.dto.auth.Login.LoginResponse;
+import SpringProject.courses_management_system.dto.auth.Register.RegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

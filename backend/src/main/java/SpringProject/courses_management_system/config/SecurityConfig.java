@@ -48,7 +48,10 @@ public class SecurityConfig {
                                 "/contents/**",
                                 "/resources/**",
                                 "/static/**",
-                                "/api/courses/*/batches"
+                                "/api/courses/*/batches",
+                                "/auth/verify-email",
+                                "/auth/set-password",
+                                "/auth/resend-code"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

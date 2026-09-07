@@ -26,7 +26,7 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", length = 255)
     private String password;
 
     @Column(name = "phone", length = 20)
@@ -37,7 +37,13 @@ public class User {
     private Role role;
 
     @Column(name = "enabled", nullable = false)
-    private boolean enabled = true;
+    private boolean enabled = false;
+
+    @Column(name = "verification_code", length = 6)
+    private String verificationCode;
+
+    @Column(name = "verification_code_expiry")
+    private ZonedDateTime verificationCodeExpiry;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
