@@ -45,5 +45,9 @@ public class CourseRegistration {
         createdAt = LocalDateTime.now();
     }
 
+    @Column(name="is_contacted", nullable=false)
+    private boolean isContacted = false;
+    @Column(name="is_deleted", nullable=false)
+    private boolean isDeleted = false;
     // Getters & Setters
 }

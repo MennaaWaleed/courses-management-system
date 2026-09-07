@@ -644,8 +644,13 @@ ALTER TABLE contactmessage
 
 ALTER TABLE contactmessage
     ADD COLUMN is_contacted BOOLEAN NOT NULL DEFAULT FALSE;
+---------------------------- new 5/9 ------------
+ALTER TABLE course_registrations
+    ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 
---------------------------new 4/9 ------------------------------------------
-ALTER TABLE contactmessage
-DROP COLUMN title,
-DROP COLUMN type;
+ALTER TABLE course_registrations
+    ADD COLUMN is_contacted BOOLEAN NOT NULL DEFAULT FALSE;	
+
+CREATE UNIQUE INDEX idx_unique_pending_request 
+ON enrollment_requests (user_id, batch_id) 
+WHERE status = 'PENDING';

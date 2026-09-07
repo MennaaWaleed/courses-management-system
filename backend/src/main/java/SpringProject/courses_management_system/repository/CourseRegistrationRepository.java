@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -13,4 +14,9 @@ public interface CourseRegistrationRepository extends JpaRepository<CourseRegist
     List<CourseRegistration> findByCourseId(UUID courseId);
 
     List<CourseRegistration> findByStatus(String status);
+    List<CourseRegistration> findAllByIsDeletedFalse();
+
+    Optional<CourseRegistration> findByIdAndIsDeletedFalse(
+            UUID id
+    );
 }

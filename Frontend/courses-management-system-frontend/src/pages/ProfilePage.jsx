@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchUserProfile } from "../api/profileApi";
+import { fetchUserProfile, changeProfilePassword } from "../api/profileApi";
 import { enrollmentRequestApi } from "../api/enrollmentRequestApi";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,7 +12,8 @@ import {
     Download,
     Layers,
     Clock,
-    Send
+    Send,
+    KeyRound
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -32,6 +33,10 @@ export default function ProfilePage() {
     const [joinLoading, setJoinLoading] = useState(false);
     const [joinError, setJoinError] = useState("");
     const [joinSuccess, setJoinSuccess] = useState("");
+
+    const [pwdModalOpen, setPwdModalOpen] = useState(false);
+    const [pwdData, setPwdData] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    const [pwdStatus, setPwdStatus] = useState({ loading: false, error: "", success: "" });
 
     useEffect(() => {
         const loadProfileAndRequests = async () => {
@@ -180,6 +185,37 @@ export default function ProfilePage() {
         navigate(`/courses/${courseId}`);
     };
 
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (pwdData.newPassword !== pwdData.confirmPassword) {
+            setPwdStatus({ loading: false, success: "", error: "New passwords do not match." });
+            return;
+        }
+
+        try {
+            setPwdStatus({ loading: true, error: "", success: "" });
+            await changeProfilePassword({
+                currentPassword: pwdData.currentPassword,
+                newPassword: pwdData.newPassword
+            });
+            setPwdStatus({ loading: false, error: "", success: "Password changed successfully!" });
+            
+            // Clear form and close modal after a delay
+            setTimeout(() => {
+                setPwdModalOpen(false);
+                setPwdData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                setPwdStatus({ loading: false, error: "", success: "" });
+            }, 2000);
+        } catch (err) {
+            setPwdStatus({
+                loading: false,
+                success: "",
+                error: err.response?.data?.message || err.response?.data || "Failed to change password."
+            });
+        }
+    };
+
     if (loading) {
         return (
             <div
@@ -226,7 +262,7 @@ export default function ProfilePage() {
             }}
         >
 
-
+            {/* Profile Header */}
             <div
                 style={{
                     background: "#fff",
@@ -235,7 +271,8 @@ export default function ProfilePage() {
                     border: "1px solid #e2e8f0",
                     display: "flex",
                     alignItems: "center",
-                    gap: "20px"
+                    gap: "20px",
+                    flexWrap: "wrap"
                 }}
             >
                 <div
@@ -261,7 +298,7 @@ export default function ProfilePage() {
                     {profile?.lastName?.[0]}
                 </div>
 
-                <div>
+                <div style={{ flex: 1, minWidth: "200px" }}>
                     <div
                         style={{
                             display: "flex",
@@ -319,12 +356,35 @@ export default function ProfilePage() {
                         }}
                     >
                         <Phone size={16} />
-                        {profile?.phone}
+                        {profile?.phone || "N/A"}
                     </p>
                 </div>
+
+                {/* Change Password Button */}
+                <button
+                    onClick={() => setPwdModalOpen(true)}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        background: "#f8fafc",
+                        color: "#0f172a",
+                        padding: "10px 16px",
+                        borderRadius: "8px",
+                        border: "1px solid #cbd5e1",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                    }}
+                >
+                    <KeyRound size={16} />
+                    Change Password
+                </button>
             </div>
 
 
+            {/* Instructor Specific Section */}
             {role === "INSTRUCTOR" && (
                 <div
                     style={{
@@ -408,9 +468,10 @@ export default function ProfilePage() {
             )}
 
 
+            {/* Student Specific Sections */}
             {role !== "ADMIN" && role !== "INSTRUCTOR" && (
                 <>
-
+                    {/* Enrollment Requests Section */}
                     <div
                         style={{
                             background: "#fff",
@@ -664,7 +725,7 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-
+                    {/* Enrolled Courses Section */}
                     <div
                         style={{
                             background: "#fff",
@@ -788,11 +849,6 @@ export default function ProfilePage() {
                                                                 `/student/batches/${targetBatchId}/lectures`
                                                             );
                                                         } else {
-                                                            console.error(
-                                                                "Missing ID! Backend returned:",
-                                                                course
-                                                            );
-
                                                             alert(
                                                                 "Cannot open course. The backend did not send a batch ID."
                                                             );
@@ -882,7 +938,7 @@ export default function ProfilePage() {
                         )}
                     </div>
 
-
+                    {/* Wishlist Section */}
                     <div
                         style={{
                             background: "#fff",
@@ -1027,7 +1083,7 @@ export default function ProfilePage() {
                 </>
             )}
 
-
+            {/* Certificate View Modal */}
             {modalOpen && (
                 <div
                     style={{
@@ -1189,6 +1245,113 @@ export default function ProfilePage() {
                                 />
                             ) : null}
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Change Password Modal */}
+            {pwdModalOpen && (
+                <div
+                    style={{
+                        position: "fixed",
+                        inset: 0,
+                        backgroundColor: "rgba(15, 23, 42, 0.75)",
+                        backdropFilter: "blur(4px)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 1000,
+                        padding: "16px"
+                    }}
+                >
+                    <div
+                        style={{
+                            background: "#fff",
+                            width: "100%",
+                            maxWidth: "450px",
+                            borderRadius: "14px",
+                            padding: "24px",
+                            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                        }}
+                    >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                            <h3 style={{ margin: 0, fontSize: "18px", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px" }}>
+                                <KeyRound size={20} color="#2563eb" /> Change Password
+                            </h3>
+                            <button
+                                onClick={() => {
+                                    setPwdModalOpen(false);
+                                    setPwdStatus({ loading: false, error: "", success: "" });
+                                    setPwdData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                                }}
+                                style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b" }}
+                            >
+                                <X size={22} />
+                            </button>
+                        </div>
+
+                        {pwdStatus.error && (
+                            <div style={{ color: "#ef4444", background: "#fef2f2", padding: "10px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px" }}>
+                                {pwdStatus.error}
+                            </div>
+                        )}
+                        {pwdStatus.success && (
+                            <div style={{ color: "#059669", background: "#d1fae5", padding: "10px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px" }}>
+                                {pwdStatus.success}
+                            </div>
+                        )}
+
+                        <form onSubmit={handlePasswordSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                                <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>Current Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdData.currentPassword}
+                                    onChange={(e) => setPwdData({ ...pwdData, currentPassword: e.target.value })}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+                                />
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                                <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>New Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    minLength={6}
+                                    value={pwdData.newPassword}
+                                    onChange={(e) => setPwdData({ ...pwdData, newPassword: e.target.value })}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+                                />
+                            </div>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                                <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>Confirm New Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdData.confirmPassword}
+                                    onChange={(e) => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={pwdStatus.loading}
+                                style={{
+                                    background: "#2563eb",
+                                    color: "#fff",
+                                    padding: "12px",
+                                    borderRadius: "8px",
+                                    border: "none",
+                                    fontWeight: "500",
+                                    cursor: pwdStatus.loading ? "not-allowed" : "pointer",
+                                    marginTop: "10px",
+                                    opacity: pwdStatus.loading ? 0.7 : 1
+                                }}
+                            >
+                                {pwdStatus.loading ? "Updating..." : "Update Password"}
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}

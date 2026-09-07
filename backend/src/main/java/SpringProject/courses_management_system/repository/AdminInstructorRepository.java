@@ -13,10 +13,11 @@ import java.util.UUID;
 @Repository
 public interface AdminInstructorRepository extends JpaRepository<User, UUID> {
 
-    @Query("SELECT u FROM User u WHERE u.role = :role AND " +
+    @Query("SELECT u FROM User u WHERE u.role = :role AND u.isDeleted = false AND " +
             "(LOWER(u.firstName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(u.lastName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+            "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.phoneNumber) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     List<User> searchInstructors(@Param("role") Role role, @Param("keyword") String keyword);
 
     boolean existsByEmail(String email);

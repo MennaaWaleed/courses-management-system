@@ -5,7 +5,7 @@
 }
 
 .categories__container {
-    max-width: 1320px;
+    max-width: 1250px;
     margin: 0 auto;
 }
 
@@ -45,7 +45,7 @@
 
     grid-template-columns: repeat(3, minmax(0,1fr));
 
-    gap: 32px;
+    gap: 36px;
 
     perspective: 1600px;
 
