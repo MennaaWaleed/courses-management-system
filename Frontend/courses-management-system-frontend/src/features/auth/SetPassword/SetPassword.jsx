@@ -3,7 +3,7 @@ import logo from "../../../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../../../api/axios";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Check, X } from "lucide-react";
 
 function SetPassword({ setIsLoggedIn }) {
     const [password, setPassword] = useState("");
@@ -31,6 +31,21 @@ function SetPassword({ setIsLoggedIn }) {
         }
     }, [email, navigate]);
 
+    const passwordRules = {
+        minLength: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=~`';]/.test(password)
+    };
+
+    const isPasswordValid =
+        passwordRules.minLength &&
+        passwordRules.uppercase &&
+        passwordRules.lowercase &&
+        passwordRules.number &&
+        passwordRules.special;
+
     const handleSetPassword = async (e) => {
         e.preventDefault();
 
@@ -45,43 +60,8 @@ function SetPassword({ setIsLoggedIn }) {
             return;
         }
 
-        if (password.length < 8) {
-            setFieldErrors({
-                password:
-                    "Password must be at least 8 characters."
-            });
-            return;
-        }
-
-        if (!/[A-Z]/.test(password)) {
-            setFieldErrors({
-                password:
-                    "Password must contain at least one uppercase letter."
-            });
-            return;
-        }
-
-        if (!/[a-z]/.test(password)) {
-            setFieldErrors({
-                password:
-                    "Password must contain at least one lowercase letter."
-            });
-            return;
-        }
-
-        if (!/[0-9]/.test(password)) {
-            setFieldErrors({
-                password:
-                    "Password must contain at least one number."
-            });
-            return;
-        }
-
-        if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=~`';]/.test(password)) {
-            setFieldErrors({
-                password:
-                    "Password must contain at least one special character."
-            });
+        if (!isPasswordValid) {
+            setErrorMessage("Please meet all password requirements.");
             return;
         }
 
@@ -212,7 +192,9 @@ function SetPassword({ setIsLoggedIn }) {
                     onSubmit={handleSetPassword}
                 >
                     <div className="register__field">
+
                         <div className="register__password-wrapper">
+
                             <input
                                 type={
                                     showPassword
@@ -223,13 +205,8 @@ function SetPassword({ setIsLoggedIn }) {
                                 value={password}
                                 onChange={(e) => {
                                     setPassword(e.target.value);
-
-                                    setFieldErrors((prev) => ({
-                                        ...prev,
-                                        password: ""
-                                    }));
-
                                     setErrorMessage("");
+                                    setFieldErrors({});
                                 }}
                             />
 
@@ -254,6 +231,105 @@ function SetPassword({ setIsLoggedIn }) {
                                     />
                                 )}
                             </button>
+
+                        </div>
+
+                        <div
+                            className="password-rules"
+                            style={{
+                                marginTop: "10px",
+                                fontSize: "14px"
+                            }}
+                        >
+                            <div
+                                style={{
+                                    color: passwordRules.minLength
+                                        ? "green"
+                                        : "#6b7280",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px"
+                                }}
+                            >
+                                {passwordRules.minLength ? (
+                                    <Check size={16} />
+                                ) : (
+                                    <X size={16} />
+                                )}
+                                At least 8 characters
+                            </div>
+
+                            <div
+                                style={{
+                                    color: passwordRules.uppercase
+                                        ? "green"
+                                        : "#6b7280",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px"
+                                }}
+                            >
+                                {passwordRules.uppercase ? (
+                                    <Check size={16} />
+                                ) : (
+                                    <X size={16} />
+                                )}
+                                At least one uppercase letter
+                            </div>
+
+                            <div
+                                style={{
+                                    color: passwordRules.lowercase
+                                        ? "green"
+                                        : "#6b7280",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px"
+                                }}
+                            >
+                                {passwordRules.lowercase ? (
+                                    <Check size={16} />
+                                ) : (
+                                    <X size={16} />
+                                )}
+                                At least one lowercase letter
+                            </div>
+
+                            <div
+                                style={{
+                                    color: passwordRules.number
+                                        ? "green"
+                                        : "#6b7280",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px"
+                                }}
+                            >
+                                {passwordRules.number ? (
+                                    <Check size={16} />
+                                ) : (
+                                    <X size={16} />
+                                )}
+                                At least one number
+                            </div>
+
+                            <div
+                                style={{
+                                    color: passwordRules.special
+                                        ? "green"
+                                        : "#6b7280",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px"
+                                }}
+                            >
+                                {passwordRules.special ? (
+                                    <Check size={16} />
+                                ) : (
+                                    <X size={16} />
+                                )}
+                                At least one special character
+                            </div>
                         </div>
 
                         {fieldErrors.password && (
@@ -261,6 +337,7 @@ function SetPassword({ setIsLoggedIn }) {
                                 {fieldErrors.password}
                             </span>
                         )}
+
                     </div>
 
                     <div
@@ -279,7 +356,6 @@ function SetPassword({ setIsLoggedIn }) {
                                 setConfirmPassword(
                                     e.target.value
                                 );
-
                                 setErrorMessage("");
                             }}
                         />
@@ -287,13 +363,14 @@ function SetPassword({ setIsLoggedIn }) {
 
                     <button
                         type="submit"
-                        disabled={isLoading}
+                        disabled={isLoading || !isPasswordValid}
                         style={{ marginTop: "20px" }}
                     >
                         {isLoading
                             ? "Saving..."
                             : "Complete Registration"}
                     </button>
+
                 </form>
             </div>
         </section>
