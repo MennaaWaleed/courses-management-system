@@ -9,6 +9,7 @@ import {
     Heart,
     Award,
     X,
+    Check,
     Download,
     Layers,
     Clock,
@@ -37,6 +38,18 @@ export default function ProfilePage() {
     const [pwdModalOpen, setPwdModalOpen] = useState(false);
     const [pwdData, setPwdData] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
     const [pwdStatus, setPwdStatus] = useState({ loading: false, error: "", success: "" });
+
+    // Live Password Validation Rules
+    const pwdRules = [
+        { id: 'length', label: "At least 8 characters", met: pwdData.newPassword.length >= 8 },
+        { id: 'uppercase', label: "At least one uppercase letter (A-Z)", met: /[A-Z]/.test(pwdData.newPassword) },
+        { id: 'lowercase', label: "At least one lowercase letter (a-z)", met: /[a-z]/.test(pwdData.newPassword) },
+        { id: 'number', label: "At least one number (0-9)", met: /\d/.test(pwdData.newPassword) },
+        { id: 'special', label: "At least one special character", met: /[^a-zA-Z0-9]/.test(pwdData.newPassword) }
+    ];
+
+    const isNewPasswordValid = pwdRules.every(r => r.met);
+    const isFormReadyToSubmit = pwdData.currentPassword && isNewPasswordValid && pwdData.confirmPassword;
 
     useEffect(() => {
         const loadProfileAndRequests = async () => {
@@ -703,7 +716,7 @@ export default function ProfilePage() {
                                                         "PENDING"
                                                             ? "#fef3c7"
                                                             : req.status ===
-                                                            "ACCEPTED"
+                                                              "ACCEPTED"
                                                                 ? "#d1fae5"
                                                                 : "#fee2e2",
                                                     color:
@@ -711,7 +724,7 @@ export default function ProfilePage() {
                                                         "PENDING"
                                                             ? "#d97706"
                                                             : req.status ===
-                                                            "ACCEPTED"
+                                                              "ACCEPTED"
                                                                 ? "#059669"
                                                                 : "#dc2626"
                                                 }}
@@ -1309,20 +1322,48 @@ export default function ProfilePage() {
                                     required
                                     value={pwdData.currentPassword}
                                     onChange={(e) => setPwdData({ ...pwdData, currentPassword: e.target.value })}
-                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", outline: "none" }}
                                 />
                             </div>
+                            
                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                                 <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>New Password</label>
                                 <input
                                     type="password"
                                     required
-                                    minLength={6}
                                     value={pwdData.newPassword}
                                     onChange={(e) => setPwdData({ ...pwdData, newPassword: e.target.value })}
-                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", outline: "none" }}
                                 />
+                                
+                                {/* Live Validation Checklist */}
+                                <div style={{ 
+                                    display: "flex", 
+                                    flexDirection: "column", 
+                                    gap: "8px", 
+                                    background: "#f8fafc", 
+                                    padding: "12px", 
+                                    borderRadius: "8px", 
+                                    border: "1px solid #e2e8f0", 
+                                    marginTop: "4px" 
+                                }}>
+                                    {pwdRules.map(rule => (
+                                        <div key={rule.id} style={{ 
+                                            display: "flex", 
+                                            alignItems: "center", 
+                                            gap: "8px", 
+                                            color: rule.met ? "#059669" : "#ef4444", 
+                                            fontSize: "13px", 
+                                            fontWeight: "500",
+                                            transition: "color 0.2s ease" 
+                                        }}>
+                                            {rule.met ? <Check size={16} /> : <X size={16} />}
+                                            <span>{rule.label}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+
                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                                 <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>Confirm New Password</label>
                                 <input
@@ -1330,13 +1371,13 @@ export default function ProfilePage() {
                                     required
                                     value={pwdData.confirmPassword}
                                     onChange={(e) => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
-                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", outline: "none" }}
                                 />
                             </div>
 
                             <button
                                 type="submit"
-                                disabled={pwdStatus.loading}
+                                disabled={pwdStatus.loading || !isFormReadyToSubmit}
                                 style={{
                                     background: "#2563eb",
                                     color: "#fff",
@@ -1344,9 +1385,10 @@ export default function ProfilePage() {
                                     borderRadius: "8px",
                                     border: "none",
                                     fontWeight: "500",
-                                    cursor: pwdStatus.loading ? "not-allowed" : "pointer",
+                                    cursor: (pwdStatus.loading || !isFormReadyToSubmit) ? "not-allowed" : "pointer",
                                     marginTop: "10px",
-                                    opacity: pwdStatus.loading ? 0.7 : 1
+                                    opacity: (pwdStatus.loading || !isFormReadyToSubmit) ? 0.7 : 1,
+                                    transition: "all 0.2s ease"
                                 }}
                             >
                                 {pwdStatus.loading ? "Updating..." : "Update Password"}
