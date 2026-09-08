@@ -36,7 +36,7 @@
 
 .login input:focus {
     border-color: var(--primary-color, #10b981);
-    box-shadow: 0 0 0 3px rgba(16,185,129,.15);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, .15);
 }
 
 .login button {
@@ -83,6 +83,51 @@
     text-decoration: underline;
 }
 
+/* Password field */
+.password-input-container {
+    position: relative;
+    width: 350px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.password-input-container input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 45px;
+}
+
+.login .password-input-container .toggle-password-btn {
+    position: absolute !important;
+    right: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    background: transparent !important;
+    border: none !important;
+
+    width: auto !important;
+    max-width: none !important;
+    min-height: 0 !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    box-shadow: none !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.login .password-input-container .toggle-password-btn:hover {
+    background: transparent !important;
+    transform: translateY(-50%) !important;
+    opacity: 0.7;
+}
+
 @media (max-width: 480px) {
     .login {
         padding: 20px;
@@ -91,6 +136,10 @@
 
     .login input,
     .login button {
+        width: 100%;
+    }
+
+    .password-input-container {
         width: 100%;
     }
 
@@ -104,38 +153,4 @@
 body {
     margin: 0;
     overflow-x: hidden;
-}
-
-.password-input-container {
-    position: relative;
-    width: fit-content;
-    margin: 0 auto;
-}
-
-.password-input-container input {
-    padding-right: 40px;
-}
-
-.login .password-input-container .toggle-password-btn {
-    position: absolute !important;
-    right: 12px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-
-    background: transparent !important;
-    border: none !important;
-    width: auto !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.login .password-input-container .toggle-password-btn:hover {
-    background: transparent !important;
-    opacity: 0.7;
 }

@@ -41,7 +41,7 @@ function CreateCategory() {
         <div className="create-category">
             <div className="create-category-header">
                 <h1>Create New Category</h1>
-                <button className="back-button" onClick={() => navigate("/admin/categories")}>
+                <button className="back-button" onClick={() => navigate("/")}>
                     ← Back
                 </button>
             </div>
@@ -68,7 +68,7 @@ function CreateCategory() {
                 {error && <p className="create-error">{error}</p>}
 
                 <div className="create-category-actions">
-                    <button type="button" className="cancel-button" onClick={() => navigate("/admin/categories")}>
+                    <button type="button" className="cancel-button" onClick={() => navigate("/")}>
                         Cancel
                     </button>
                     <button type="submit" className="save-button" disabled={saving}>

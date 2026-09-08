@@ -3,11 +3,15 @@ import "./Login.css";
 import api from "../../../api/axios.js";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
+import { Eye, EyeOff } from "lucide-react";
 
 function Login({ setIsLoggedIn }) {
     console.log("Login rendered");
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [needsVerification, setNeedsVerification] = useState(false);
@@ -18,7 +22,11 @@ function Login({ setIsLoggedIn }) {
     useEffect(() => {
         if (location.state?.message) {
             setSuccessMessage(location.state.message);
-            window.history.replaceState({}, document.title);
+
+            window.history.replaceState(
+                {},
+                document.title
+            );
         }
     }, [location]);
 
@@ -35,8 +43,15 @@ function Login({ setIsLoggedIn }) {
 
             console.log(response.data);
 
-            sessionStorage.setItem("token", response.data.token);
-            sessionStorage.setItem("role", response.data.role);
+            sessionStorage.setItem(
+                "token",
+                response.data.token
+            );
+
+            sessionStorage.setItem(
+                "role",
+                response.data.role
+            );
 
             setSuccessMessage("Login successful!");
             setIsLoggedIn(true);
@@ -48,31 +63,59 @@ function Login({ setIsLoggedIn }) {
         } catch (error) {
             console.error(error);
 
-            const backendMessage = error.response?.data?.message || error.response?.data;
+            const backendMessage =
+                error.response?.data?.message ||
+                error.response?.data;
 
-            if (backendMessage && typeof backendMessage === 'string' && backendMessage.includes("verify your email")) {
-                setErrorMessage("Your account is not verified.");
+            if (
+                backendMessage &&
+                typeof backendMessage === "string" &&
+                backendMessage.includes("verify your email")
+            ) {
+                setErrorMessage(
+                    "Your account is not verified."
+                );
+
                 setNeedsVerification(true);
+
             } else if (error.response) {
-                setErrorMessage("Invalid email or password.");
+                setErrorMessage(
+                    "Invalid email or password."
+                );
+
             } else {
-                setErrorMessage("Something went wrong. Please try again.");
+                setErrorMessage(
+                    "Something went wrong. Please try again."
+                );
             }
         }
     };
 
     return (
         <div className="login">
-            <img src={logo} alt="App Logo" className="login-logo" />
+
+            <img
+                src={logo}
+                alt="App Logo"
+                className="login-logo"
+            />
 
             <h1>Login</h1>
 
             {successMessage && (
-                <p className="success-message" style={{ color: "green", marginBottom: "15px", fontWeight: "bold" }}>
+                <p
+                    className="success-message"
+                    style={{
+                        color: "green",
+                        marginBottom: "15px",
+                        fontWeight: "bold"
+                    }}
+                >
                     {successMessage}
                 </p>
             )}
 
+            {/* Email */}
             <input
                 type="email"
                 placeholder="Enter your email"
@@ -83,43 +126,110 @@ function Login({ setIsLoggedIn }) {
                 }}
             />
 
-            <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrorMessage("");
-                }}
-            />
+            {/* Password */}
+            <div className="password-input-container">
 
+                <input
+                    type={
+                        showPassword
+                            ? "text"
+                            : "password"
+                    }
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => {
+                        setPassword(e.target.value);
+                        setErrorMessage("");
+                    }}
+                />
+
+                <button
+                    type="button"
+                    className="toggle-password-btn"
+                    onClick={() =>
+                        setShowPassword(!showPassword)
+                    }
+                    aria-label={
+                        showPassword
+                            ? "Hide password"
+                            : "Show password"
+                    }
+                >
+                    {showPassword ? (
+                        <EyeOff
+                            size={20}
+                            color="#6b7280"
+                        />
+                    ) : (
+                        <Eye
+                            size={20}
+                            color="#6b7280"
+                        />
+                    )}
+                </button>
+
+            </div>
+
+            {/* Error Message */}
             {errorMessage && (
                 <div style={{ marginBottom: "15px" }}>
-                    <p className="error-message" style={{ color: "red", margin: "0 0 5px 0" }}>
+
+                    <p
+                        className="error-message"
+                        style={{
+                            color: "red",
+                            margin: "0 0 5px 0"
+                        }}
+                    >
                         {errorMessage}
                     </p>
+
                     {needsVerification && (
                         <button
                             type="button"
-                            onClick={() => navigate("/auth/verify-email", { state: { email: email } })}
-                            style={{ background: "none", border: "none", color: "#007bff", textDecoration: "underline", cursor: "pointer", padding: 0 }}
+                            onClick={() =>
+                                navigate(
+                                    "/auth/verify-email",
+                                    {
+                                        state: {
+                                            email: email
+                                        }
+                                    }
+                                )
+                            }
+                            style={{
+                                background: "none",
+                                border: "none",
+                                color: "#007bff",
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                                padding: 0
+                            }}
                         >
                             Verify Email Now
                         </button>
                     )}
+
                 </div>
             )}
 
+            {/* Login Button */}
             <button onClick={handleLogin}>
                 Login
             </button>
 
+            {/* Register Link */}
             <p className="signup-text">
                 Don't have an account?{" "}
-                <Link to="/auth/register" className="signup-link">
+
+                <Link
+                    to="/auth/register"
+                    className="signup-link"
+                >
                     Sign Up
                 </Link>
             </p>
+
         </div>
     );
 }

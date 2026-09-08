@@ -18,7 +18,10 @@ function SetPassword({ setIsLoggedIn }) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const email = location.state?.email || sessionStorage.getItem("pendingEmail") || "";
+    const email =
+        location.state?.email ||
+        sessionStorage.getItem("pendingEmail") ||
+        "";
 
     useEffect(() => {
         if (!email) {
@@ -30,6 +33,7 @@ function SetPassword({ setIsLoggedIn }) {
 
     const handleSetPassword = async (e) => {
         e.preventDefault();
+
         if (isLoading) return;
 
         setErrorMessage("");
@@ -41,6 +45,46 @@ function SetPassword({ setIsLoggedIn }) {
             return;
         }
 
+        if (password.length < 8) {
+            setFieldErrors({
+                password:
+                    "Password must be at least 8 characters."
+            });
+            return;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+            setFieldErrors({
+                password:
+                    "Password must contain at least one uppercase letter."
+            });
+            return;
+        }
+
+        if (!/[a-z]/.test(password)) {
+            setFieldErrors({
+                password:
+                    "Password must contain at least one lowercase letter."
+            });
+            return;
+        }
+
+        if (!/[0-9]/.test(password)) {
+            setFieldErrors({
+                password:
+                    "Password must contain at least one number."
+            });
+            return;
+        }
+
+        if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\]\/+=~`';]/.test(password)) {
+            setFieldErrors({
+                password:
+                    "Password must contain at least one special character."
+            });
+            return;
+        }
+
         if (password !== confirmPassword) {
             setErrorMessage("Passwords do not match.");
             return;
@@ -48,40 +92,72 @@ function SetPassword({ setIsLoggedIn }) {
 
         try {
             setIsLoading(true);
-            const response = await api.post("/auth/set-password", { 
-                email, 
-                password 
+
+            const response = await api.post("/auth/set-password", {
+                email,
+                password
             });
 
-            sessionStorage.setItem("token", response.data.token);
-            sessionStorage.setItem("role", response.data.role);
+            sessionStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-            setSuccessMessage("Password set successfully! Logging you in...");
-            
+            sessionStorage.setItem(
+                "role",
+                response.data.role
+            );
+
+            setSuccessMessage(
+                "Password set successfully! Logging you in..."
+            );
+
             if (typeof setIsLoggedIn === "function") {
                 setIsLoggedIn(true);
             }
 
             setTimeout(() => {
-                sessionStorage.removeItem("pendingEmail"); 
-                navigate("/", { replace: true }); 
+                sessionStorage.removeItem("pendingEmail");
+
+                navigate("/", {
+                    replace: true
+                });
             }, 1000);
 
         } catch (error) {
-            const backendMessage = error.response?.data?.message || error.response?.data || "";
-            
-            if (typeof backendMessage === "string" && backendMessage.includes("already been set")) {
+            const backendMessage =
+                error.response?.data?.message ||
+                error.response?.data ||
+                "";
+
+            if (
+                typeof backendMessage === "string" &&
+                backendMessage.includes("already been set")
+            ) {
                 if (typeof setIsLoggedIn === "function") {
                     setIsLoggedIn(true);
                 }
-                navigate("/", { replace: true });
+
+                navigate("/", {
+                    replace: true
+                });
+
+            } else if (
+                error.response?.status === 400 &&
+                error.response?.data &&
+                typeof error.response.data === "object"
+            ) {
+                setFieldErrors(error.response.data);
+
             } else {
                 setErrorMessage(
-                    typeof backendMessage === "string" && backendMessage
+                    typeof backendMessage === "string" &&
+                    backendMessage
                         ? backendMessage
                         : "Failed to set password. Please try again."
                 );
             }
+
         } finally {
             setIsLoading(false);
         }
@@ -90,53 +166,133 @@ function SetPassword({ setIsLoggedIn }) {
     return (
         <section className="register">
             <div className="register__card">
-                <img src={logo} alt="MTC Logo" className="register__logo" />
-                <h1 className="register__title">Set Password</h1>
-                <p className="register__subtitle">Create a secure password for your account.</p>
+
+                <img
+                    src={logo}
+                    alt="MTC Logo"
+                    className="register__logo"
+                />
+
+                <h1 className="register__title">
+                    Set Password
+                </h1>
+
+                <p className="register__subtitle">
+                    Create a secure password for your account.
+                </p>
 
                 {errorMessage && (
-                    <div className="register__error" style={{ color: 'red', marginBottom: '15px', fontWeight: 'bold' }}>
+                    <div
+                        className="register__error"
+                        style={{
+                            color: "red",
+                            marginBottom: "15px",
+                            fontWeight: "bold"
+                        }}
+                    >
                         {errorMessage}
                     </div>
                 )}
 
                 {successMessage && (
-                    <div className="register__success" style={{ color: 'green', marginBottom: '15px', fontWeight: 'bold' }}>
+                    <div
+                        className="register__success"
+                        style={{
+                            color: "green",
+                            marginBottom: "15px",
+                            fontWeight: "bold"
+                        }}
+                    >
                         {successMessage}
                     </div>
                 )}
 
-                <form className="register__form" onSubmit={handleSetPassword}>
+                <form
+                    className="register__form"
+                    onSubmit={handleSetPassword}
+                >
                     <div className="register__field">
                         <div className="register__password-wrapper">
                             <input
-                                type={showPassword ? "text" : "password"}
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
                                 placeholder="Password"
                                 value={password}
-                                onChange={(e) => { setPassword(e.target.value); setFieldErrors({}); }}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+
+                                    setFieldErrors((prev) => ({
+                                        ...prev,
+                                        password: ""
+                                    }));
+
+                                    setErrorMessage("");
+                                }}
                             />
+
                             <button
                                 type="button"
                                 className="register__password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
+                                onClick={() =>
+                                    setShowPassword(
+                                        !showPassword
+                                    )
+                                }
                             >
-                                {showPassword ? <EyeOff size={20} color="#6b7280" /> : <Eye size={20} color="#6b7280" />}
+                                {showPassword ? (
+                                    <EyeOff
+                                        size={20}
+                                        color="#6b7280"
+                                    />
+                                ) : (
+                                    <Eye
+                                        size={20}
+                                        color="#6b7280"
+                                    />
+                                )}
                             </button>
                         </div>
-                        {fieldErrors.password && <span className="register__field-error">{fieldErrors.password}</span>}
+
+                        {fieldErrors.password && (
+                            <span className="register__field-error">
+                                {fieldErrors.password}
+                            </span>
+                        )}
                     </div>
 
-                    <div className="register__password-wrapper" style={{ marginTop: '15px' }}>
+                    <div
+                        className="register__password-wrapper"
+                        style={{ marginTop: "15px" }}
+                    >
                         <input
-                            type={showPassword ? "text" : "password"}
+                            type={
+                                showPassword
+                                    ? "text"
+                                    : "password"
+                            }
                             placeholder="Confirm Password"
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={(e) => {
+                                setConfirmPassword(
+                                    e.target.value
+                                );
+
+                                setErrorMessage("");
+                            }}
                         />
                     </div>
 
-                    <button type="submit" disabled={isLoading} style={{ marginTop: '20px' }}>
-                        {isLoading ? "Saving..." : "Complete Registration"}
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        style={{ marginTop: "20px" }}
+                    >
+                        {isLoading
+                            ? "Saving..."
+                            : "Complete Registration"}
                     </button>
                 </form>
             </div>
