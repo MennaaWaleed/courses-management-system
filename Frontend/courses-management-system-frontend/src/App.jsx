@@ -23,10 +23,13 @@ import CreateCourse from "./features/Admin/CreateCourse/CreateCourse";
 import EditCourse from "./features/Admin/EditCourse/EditCourse";
 import CourseBatches from "./features/Admin/BatchesManagement/CourseBatches/CourseBatches";
 import CreateBatch from "./features/Admin/BatchesManagement/CreateBatch/CreateBatch";
-import AdminEnrollmentRequests from "./features/Admin/AdminEnrollmentRequests"
+import AdminEnrollmentRequests from "./features/Admin/AdminEnrollmentRequests";
 import BatchLectures from './features/student/BatchLectures/pages/BatchLectures';
 import AdminLecturesPage from './features/Admin/ManageLectures/pages/AdminLecturesPage';
 import AdminInstructors from "./features/Admin/AdminInstructors/AdminInstructors";
+import VerifyEmail from './features/auth/VerifyEmail/VerifyEmail';
+import SetPassword from './features/auth/SetPassword/SetPassword';
+
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
         return <Navigate to="/auth/login" replace />;
@@ -79,14 +82,29 @@ function App() {
                         path="/auth/login"
                         element={<Login setIsLoggedIn={setIsLoggedIn} />}
                     />
-
                     <Route
                         path="/auth/register"
                         element={<Register setIsLoggedIn={setIsLoggedIn} />}
                     />
+                    <Route
+                        path="/auth/verify-email"
+                        element={<VerifyEmail />}
+                    />
+                <Route
+                    path="/auth/set-password"
+                    element={<SetPassword setIsLoggedIn={setIsLoggedIn} />}
+                    />
 
                     <Route path="/courses" element={<Courses />} />
                     <Route path="/courses/:id" element={<CourseDetails />} />
+
+                    <Route
+                        path="/student/batches/:batchId/lectures"
+                        element={<BatchLectures />}
+                    />
+
+                    <Route path="/admin/messages" element={<AdminMessages />} />
+                    <Route path="/admin/enrollment-requests" element={<AdminEnrollmentRequests />} />
 
                     <Route
                         path="/admin/categories"
@@ -96,7 +114,6 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
                     <Route
                         path="/admin/categories/:id/edit"
                         element={
@@ -105,7 +122,6 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
                     <Route
                         path="/admin/categories/create"
                         element={
@@ -114,7 +130,6 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
                     <Route
                         path="/admin/categories/:categoryId/courses"
                         element={
@@ -123,7 +138,6 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
                     <Route
                         path="/admin/categories/:categoryId/courses/create"
                         element={
@@ -132,7 +146,6 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
                     <Route
                         path="/admin/courses/edit/:id"
                         element={
@@ -141,15 +154,14 @@ function App() {
                             </AdminRoute>
                         }
                     />
-                        <Route
-                            path="/admin/courses/:courseId/batches"
-                            element={
-                                <AdminRoute>
-                                    <CourseBatches />
-                                </AdminRoute>
-                            }
-                          />
-              
+                    <Route
+                        path="/admin/courses/:courseId/batches"
+                        element={
+                            <AdminRoute>
+                                <CourseBatches />
+                            </AdminRoute>
+                        }
+                    />
                     <Route
                         path="/admin/courses/:courseId/batches/create"
                         element={
@@ -172,13 +184,13 @@ function App() {
            
 
                     <Route
-                                path="/admin/batches/:batchId/lectures"
-                                element={
-                                    <AdminRoute>
-                                        <AdminLecturesPage />
-                                    </AdminRoute>
-                                }
-                            />
+                        path="/admin/batches/:batchId/lectures"
+                        element={
+                            <AdminRoute>
+                                <AdminLecturesPage />
+                            </AdminRoute>
+                        }
+                    />
                     <Route
                             path="/admin/instructors"
                             element={
@@ -191,6 +203,8 @@ function App() {
                         path="/courses/:id"
                         element={<CourseDetails />}
                     />
+
+
 
                     <Route
                         path="/admin/course-registrations"

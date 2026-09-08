@@ -1,4 +1,4 @@
-package SpringProject.courses_management_system.dto.auth;
+package SpringProject.courses_management_system.dto.auth.Login;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

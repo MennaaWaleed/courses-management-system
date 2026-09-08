@@ -3,21 +3,16 @@ import logo from "../../../assets/images/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../../../api/axios";
-import { Eye, EyeOff } from "lucide-react";
 
-function Register({setIsLoggedIn}) {
+function Register() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
     const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -25,9 +20,9 @@ function Register({setIsLoggedIn}) {
         e.preventDefault();
 
         setErrorMessage("");
-        setSuccessMessage("");
+        setFieldErrors({});
 
-        if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+        if (!firstName || !lastName || !email || !phone) {
             setErrorMessage("Please fill in all fields.");
             return;
         }
@@ -38,104 +33,72 @@ function Register({setIsLoggedIn}) {
             return;
         }
 
-        if (password !== confirmPassword) {
-            setErrorMessage("Passwords do not match.");
-            return;
-        }
-
         try {
+            setIsLoading(true);
             const response = await api.post("/auth/register", {
                 firstName,
                 lastName,
                 email,
-                phone,
-                password
+                phone
             });
 
-            if (response.data && response.data.token) {
-                sessionStorage.setItem("token", response.data.token);
-            }
 
-            setErrorMessage("");
-            setSuccessMessage("Registration successful! ");
-            setIsLoggedIn(true);
-
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setPhone("");
-            setPassword("");
-            setConfirmPassword("");
-
-            setTimeout(() => {
-                navigate("/");
-            }, 1000);
+            navigate("/auth/verify-email", { state: { email: email } });
 
         } catch (error) {
-            setSuccessMessage("");
-            if (error.response && error.response.data && error.response.data.message) {
-                setErrorMessage(error.response.data.message);
-            } else {
+            const backendMessage = error.response?.data?.message || "";
+
+            if (backendMessage.includes("This email is not verified")) {
+                navigate("/auth/verify-email", { state: { email: email } });
+            }
+            else if (backendMessage.includes("password is not set")) {
+                navigate("/auth/set-password", { state: { email: email } });
+            }
+            else if (error.response?.status === 400 && error.response?.data && !backendMessage) {
+                setFieldErrors(error.response.data);
+            }
+            else if (backendMessage) {
+                setErrorMessage(backendMessage);
+            }
+            else {
                 setErrorMessage("Registration failed. Please try again.");
             }
-
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <section className="register">
             <div className="register__card">
-                <img
-                    src={logo}
-                    alt="MTC Logo"
-                    className="register__logo"
-                />
+                <img src={logo} alt="MTC Logo" className="register__logo" />
+                <h1 className="register__title">Create Account</h1>
+                <p className="register__subtitle">Join us and start learning today.</p>
 
-                <h1 className="register__title">
-                    Create Account
-                </h1>
-
-                <p className="register__subtitle">
-                    Join us and start learning today.
-                </p>
-
-                {errorMessage && (
-                    <div style={{ color: "red", marginTop: "15px", fontWeight: "bold" }}>
-                        {errorMessage}
-                    </div>
-                )}
-
-                {successMessage && (
-                    <div style={{ color: "green", marginTop: "15px", fontWeight: "bold" }}>
-                        {successMessage}
-                    </div>
-                )}
+                {errorMessage && <div className="register__error">{errorMessage}</div>}
 
                 <form className="register__form" onSubmit={handleRegister}>
                     <input
                         type="text"
                         placeholder="First Name"
                         value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
+                        onChange={(e) => { setFirstName(e.target.value); setFieldErrors({}); }}
                     />
-
                     <input
                         type="text"
                         placeholder="Last Name"
                         value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
+                        onChange={(e) => { setLastName(e.target.value); setFieldErrors({}); }}
                     />
-
-                    <input
-                        type="email"
-                        placeholder="Email Address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-
+                    <div className="register__field">
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => { setEmail(e.target.value); setFieldErrors({}); }}
+                        />
+                        {fieldErrors.email && <span className="register__field-error">{fieldErrors.email}</span>}
+                    </div>
                     <input
                         type="text"
                         placeholder="Phone Number"
@@ -143,50 +106,14 @@ function Register({setIsLoggedIn}) {
                         onChange={(e) => setPhone(e.target.value)}
                     />
 
-                    {/* Password Field */}
-                    <div className="register__password-wrapper">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <button
-                            type="button"
-                            className="register__password-toggle"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <EyeOff size={20} color="#6b7280" /> : <Eye size={20} color="#6b7280" />}
-                        </button>
-                    </div>
-
-                    {/* Confirm Password Field */}
-                    <div className="register__password-wrapper">
-                        <input
-                            type={showConfirmPassword ? "text" : "password"}
-                            placeholder="Confirm Password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                        <button
-                            type="button"
-                            className="register__password-toggle"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        >
-                            {showConfirmPassword ? <EyeOff size={20} color="#6b7280" /> : <Eye size={20} color="#6b7280" />}
-                        </button>
-                    </div>
-
-                    <button type="submit">
-                        Register
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? "Loading..." : "Continue"}
                     </button>
                 </form>
 
                 <p className="register__login-text">
                     Already have an account?{" "}
-                    <Link to="/auth/login" className="register__login-link">
-                        Login
-                    </Link>
+                    <Link to="/auth/login" className="register__login-link">Login</Link>
                 </p>
             </div>
         </section>

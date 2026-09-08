@@ -649,8 +649,22 @@ ALTER TABLE course_registrations
     ADD COLUMN is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 
 ALTER TABLE course_registrations
-    ADD COLUMN is_contacted BOOLEAN NOT NULL DEFAULT FALSE;	
+    ADD COLUMN is_contacted BOOLEAN NOT NULL DEFAULT FALSE;
 
-CREATE UNIQUE INDEX idx_unique_pending_request 
-ON enrollment_requests (user_id, batch_id) 
+CREATE UNIQUE INDEX idx_unique_pending_request
+ON enrollment_requests (user_id, batch_id)
 WHERE status = 'PENDING';
+--------------------------new 4/9 ------------------------------------------
+ALTER TABLE contactmessage
+DROP COLUMN title,
+DROP COLUMN type;
+
+--------------------------new 7/9 ------------------------------------------
+ALTER TABLE users
+    ADD COLUMN verification_code VARCHAR(6);
+
+ALTER TABLE users
+    ADD COLUMN verification_code_expiry TIMESTAMP WITH TIME ZONE;
+
+ALTER TABLE users
+    ALTER COLUMN password DROP NOT NULL;

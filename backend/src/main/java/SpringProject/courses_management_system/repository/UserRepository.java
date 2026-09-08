@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmailAndIsDeletedFalse(String email);
     List<User> findByRoleAndIsDeletedFalse(Role role);
+    boolean existsByEmail(String email);
+    void deleteByEnabledFalseAndVerificationCodeExpiryBefore(ZonedDateTime now);
 }
