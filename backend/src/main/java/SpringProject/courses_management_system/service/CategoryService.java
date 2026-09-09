@@ -21,9 +21,8 @@ import java.util.UUID;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CourseRepository courseRepository; // تم إضافة CourseRepository هنا
+    private final CourseRepository courseRepository;
 
-    // حقن (Injection) للـ CourseRepository في الـ Constructor
     public CategoryService(CategoryRepository categoryRepository, CourseRepository courseRepository) {
         this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
@@ -81,11 +80,32 @@ public class CategoryService {
         return convertToResponse(category);
     }
 
+    // ==========================================
+    // تم التعديل هنا للتحكم في حالة الكورس عند عمل Unpublish
+    // ==========================================
+    @Transactional
     public CategoryResponse togglePublished(UUID id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        category.setPublished(!category.isPublished());
+
+        boolean isNowPublished = !category.isPublished();
+        category.setPublished(isNowPublished);
         Category savedCategory = categoryRepository.save(category);
+
+        if (!isNowPublished) {
+            List<Course> courses = courseRepository.findAdminCoursesByCategoryId(id);
+
+            for (Course course : courses) {
+                boolean hasOtherPublishedCategories = course.getCategories().stream()
+                        .anyMatch(c -> !c.getId().equals(id) && c.isPublished() && !c.isDeleted());
+
+                if (!hasOtherPublishedCategories) {
+                    course.setPublished(false);
+                    courseRepository.save(course);
+                }
+            }
+        }
+
         return convertToResponse(savedCategory);
     }
 
@@ -124,35 +144,26 @@ public class CategoryService {
         return convertToResponse(updatedCategory);
     }
 
-    // ==========================================
-    // تم التعديل هنا لتنفيذ اللوجيك المطلوب
-    // ==========================================
     @Transactional
     public void deleteCategory(UUID id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        // 1. عمل Soft Delete للـ Category الأساسية
         category.setDeleted(true);
         categoryRepository.save(category);
 
-        // 2. نجيب كل الكورسات اللي تبع الـ Category دي
         List<Course> courses = courseRepository.findAdminCoursesByCategoryId(id);
 
         for (Course course : courses) {
-            // 3. بنمسح الـ Category دي من الكورس عشان متبقاش مرتبطة بيه
             course.getCategories().removeIf(c -> c.getId().equals(id));
 
-            // 4. بنشيك هل الكورس لسه عنده أي Category تانية شغالة (مش ممسوحة)
             boolean hasOtherActiveCategories = course.getCategories().stream()
                     .anyMatch(c -> !c.isDeleted());
 
-            // 5. لو معندوش أي Category شغالة، نمسح الكورس (Soft Delete = true)
             if (!hasOtherActiveCategories) {
                 course.setDeleted(true);
             }
 
-            // 6. نحفظ التعديلات على الكورس
             courseRepository.save(course);
         }
     }
