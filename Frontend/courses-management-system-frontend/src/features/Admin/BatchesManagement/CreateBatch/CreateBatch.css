@@ -1,24 +1,66 @@
+:root {
+    --batch-bg: transparent;
+    --batch-card-bg: #ffffff;
+    --batch-text-main: #111827;
+    --batch-text-heading: #111827;
+    --batch-text-muted: #64748b;
+    --batch-text-label: #374151;
+    --batch-border: #e1e5ea;
+    --batch-divider: #f0f2f5;
+    --batch-input-bg: #f9fafb;
+    --batch-input-border: #d1d5db;
+    --batch-shadow: rgba(0, 0, 0, 0.05);
+
+    --batch-btn-bg: #ffffff;
+    --batch-btn-border: #d1d5db;
+    --batch-btn-text: #4b5563;
+    --batch-btn-hover: #f3f4f6;
+
+    --primary-color: #0fa88f;
+    --primary-dark: #0c8772;
+}
+
+[data-theme="dark"] {
+    --batch-card-bg: #1f1f23;
+    --batch-text-main: #ffffff;
+    --batch-text-heading: #ffffff;
+    --batch-text-muted: #94a3b8;
+    --batch-text-label: #ffffff;
+    --batch-border: #3f3f46;
+    --batch-divider: #27272a;
+    --batch-input-bg: #2a2a2e;
+    --batch-input-border: #52525b;
+    --batch-shadow: rgba(0, 0, 0, 0.3);
+
+    --batch-btn-bg: #27272a;
+    --batch-btn-border: #3f3f46;
+    --batch-btn-text: #ffffff;
+    --batch-btn-hover: #3f3f46;
+}
+
 .create-batch-container {
     max-width: 800px;
     margin: 40px auto;
     padding: 35px;
-    background: #ffffff;
+    background: var(--batch-card-bg);
     border-radius: 14px;
-    border: 1px solid #e1e5ea;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--batch-border);
+    box-shadow: 0 4px 12px var(--batch-shadow);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .create-batch-header {
-    border-bottom: 2px solid #f0f2f5;
+    border-bottom: 2px solid var(--batch-divider);
     padding-bottom: 20px;
     margin-bottom: 25px;
+    transition: border-color 0.3s ease;
 }
 
 .create-batch-header .back-button {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    color: #4b5563;
+    background-color: var(--batch-btn-bg);
+    border: 1px solid var(--batch-btn-border);
+    color: var(--batch-btn-text);
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
@@ -29,21 +71,23 @@
 }
 
 .create-batch-header .back-button:hover {
-    background-color: #f3f4f6;
-    color: #111827;
+    background-color: var(--batch-btn-hover);
+    color: var(--batch-text-heading);
 }
 
 .create-batch-header h1 {
     font-size: 2rem;
     font-weight: 800;
-    color: #111827;
+    color: var(--batch-text-heading);
     margin: 0 0 6px 0;
+    transition: color 0.3s ease;
 }
 
 .create-batch-header p {
     font-size: 0.95rem;
-    color: #64748b;
+    color: var(--batch-text-muted);
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 .create-batch-form .form-grid {
@@ -65,32 +109,52 @@
 .create-batch-form label {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #374151;
+    color: var(--batch-text-label);
+    transition: color 0.3s ease;
 }
 
 .create-batch-form input,
 .create-batch-form select {
     padding: 11px 14px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--batch-input-border);
     border-radius: 8px;
     font-size: 0.95rem;
-    color: #111827;
-    background-color: #f9fafb;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    color: var(--batch-text-main);
+    background-color: var(--batch-input-bg);
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s ease, color 0.3s ease;
 }
 
 .create-batch-form input:focus,
 .create-batch-form select:focus {
-    border-color: #0fa88f;
+    border-color: var(--primary-color);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(15, 168, 143, 0.15);
-    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(15, 168, 143, 0.25);
+    background-color: var(--batch-card-bg);
+}
+
+[data-theme="dark"] .create-batch-form select {
+    background-color: var(--batch-input-bg);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .create-batch-form select option {
+    background-color: #1f1f23;
+    color: #ffffff;
+    padding: 12px;
+}
+
+[data-theme="dark"] .create-batch-form input[type="datetime-local"],
+[data-theme="dark"] .create-batch-form input[type="date"],
+[data-theme="dark"] .create-batch-form input[type="time"] {
+    background-color: var(--batch-input-bg) !important;
+    color: #ffffff !important;
+    color-scheme: dark;
 }
 
 .error-banner {
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #dc2626;
+    background-color: rgba(220, 38, 38, 0.15);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    color: #f87171;
     padding: 12px 16px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -103,7 +167,8 @@
     gap: 12px;
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #f0f2f5;
+    border-top: 1px solid var(--batch-divider);
+    transition: border-color 0.3s ease;
 }
 
 .form-actions button {
@@ -116,13 +181,13 @@
 }
 
 .form-actions .cancel-btn {
-    background-color: #f3f4f6;
-    border: 1px solid #d1d5db;
-    color: #4b5563;
+    background-color: var(--batch-btn-bg);
+    border: 1px solid var(--batch-btn-border);
+    color: var(--batch-btn-text);
 }
 
 .form-actions .cancel-btn:hover {
-    background-color: #e5e7eb;
+    background-color: var(--batch-btn-hover);
 }
 
 .form-actions .submit-btn {
@@ -144,7 +209,7 @@
     text-align: center;
     padding: 80px 20px;
     font-size: 1.1rem;
-    color: #64748b;
+    color: var(--batch-text-muted);
 }
 
 @media (max-width: 650px) {
@@ -156,4 +221,20 @@
     .create-batch-form .form-grid {
         grid-template-columns: 1fr;
     }
+}
+
+[data-theme="dark"] .create-batch-form input:-webkit-autofill,
+[data-theme="dark"] .create-batch-form input:-webkit-autofill:hover,
+[data-theme="dark"] .create-batch-form input:-webkit-autofill:focus,
+[data-theme="dark"] .create-batch-form input:-webkit-autofill:active,
+[data-theme="dark"] .create-batch-form select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px var(--batch-input-bg) inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-theme="dark"] .create-batch-form input,
+[data-theme="dark"] .create-batch-form select {
+    color-scheme: dark;
 }

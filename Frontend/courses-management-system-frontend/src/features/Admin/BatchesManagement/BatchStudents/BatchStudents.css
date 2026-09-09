@@ -1,10 +1,54 @@
+:root {
+    --std-modal-bg: #ffffff;
+    --std-text-main: #111827;
+    --std-text-heading: #374151;
+    --std-text-secondary: #4b5563;
+    --std-text-muted: #9ca3af;
+    --std-border: #e5e7eb;
+    --std-divider: #f3f4f6;
+
+    --std-controls-bg: #f9fafb;
+    --std-input-bg: #ffffff;
+    --std-input-border: #d1d5db;
+
+    --std-badge-bg: #e0e7ff;
+    --std-badge-text: #3730a3;
+
+    --std-table-th-bg: #ffffff;
+    --std-table-hover: #f8fafc;
+
+    --std-message-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+    --std-modal-bg: #1f1f23;
+    --std-text-main: #f8fafc;
+    --std-text-heading: #f8fafc;
+    --std-text-secondary: #d1d5db;
+    --std-text-muted: #71717a;
+    --std-border: #3f3f46;
+    --std-divider: #27272a;
+
+    --std-controls-bg: #27272a;
+    --std-input-bg: #2a2a2e;
+    --std-input-border: #52525b;
+
+    --std-badge-bg: rgba(99, 102, 241, 0.2);
+    --std-badge-text: #a5b4fc;
+
+    --std-table-th-bg: #1f1f23;
+    --std-table-hover: #27272a;
+
+    --std-message-bg: #1f1f23;
+}
+
 .students-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(17, 24, 39, 0.6);
+    background-color: rgba(17, 24, 39, 0.75);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,16 +57,18 @@
 }
 
 .students-modal-content {
-    background-color: #ffffff;
+    background-color: var(--std-modal-bg);
     width: 95%;
     max-width: 900px;
     height: 80vh;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
     animation: slideUp 0.3s ease-out forwards;
     position: relative;
+    border: 1px solid var(--std-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 @keyframes slideUp {
@@ -35,24 +81,26 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--std-border);
+    transition: border-color 0.3s ease;
 }
 
 .students-modal-header h2 {
     margin: 0;
     font-size: 1.25rem;
-    color: #374151;
+    color: var(--std-text-heading);
+    transition: color 0.3s ease;
 }
 
 .students-modal-header h2 span {
-    color: #1d4ed8;
+    color: #3b82f6;
 }
 
 .students-close-btn {
     background: none;
     border: none;
     font-size: 1.75rem;
-    color: #9ca3af;
+    color: var(--std-text-muted);
     cursor: pointer;
     line-height: 1;
     transition: color 0.2s;
@@ -62,34 +110,36 @@
     color: #ef4444;
 }
 
-
 .students-modal-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 24px;
-    background-color: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
+    background-color: var(--std-controls-bg);
+    border-bottom: 1px solid var(--std-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .students-search-input {
     width: 300px;
     padding: 10px 14px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--std-input-border);
     border-radius: 6px;
     font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.2s;
+    background-color: var(--std-input-bg);
+    color: var(--std-text-main);
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
 }
 
 .students-search-input:focus {
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .students-count-badge {
-    background-color: #e0e7ff;
-    color: #3730a3;
+    background-color: var(--std-badge-bg);
+    color: var(--std-badge-text);
     padding: 6px 12px;
     border-radius: 9999px;
     font-size: 0.85rem;
@@ -109,24 +159,30 @@
 }
 
 .inner-students-table th {
-    background-color: #ffffff;
-    color: #4b5563;
+    background-color: var(--std-table-th-bg);
+    color: var(--std-text-secondary);
     font-size: 0.85rem;
     font-weight: 600;
     text-transform: uppercase;
     padding: 12px 16px;
     text-align: left;
-    border-bottom: 2px solid #e5e7eb;
+    border-bottom: 2px solid var(--std-border);
     position: sticky;
     top: 0;
     z-index: 10;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .inner-students-table td {
     padding: 14px 16px;
-    border-bottom: 1px solid #f3f4f6;
-    color: #111827;
+    border-bottom: 1px solid var(--std-divider);
+    color: var(--std-text-main);
     font-size: 0.9rem;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.inner-students-table tbody tr:hover {
+    background-color: var(--std-table-hover);
 }
 
 .student-name-cell {
@@ -136,7 +192,7 @@
 .students-loading, .no-students {
     text-align: center;
     padding: 40px;
-    color: #6b7280;
+    color: var(--std-text-muted);
     font-size: 1rem;
 }
 
@@ -156,30 +212,30 @@
 }
 
 .change-batch-btn {
-    background-color: #f0fdf4;
-    color: #166534;
-    border-color: #bbf7d0;
+    background-color: rgba(22, 101, 52, 0.15);
+    color: #4ade80;
+    border-color: rgba(34, 197, 94, 0.3);
 }
 
 .change-batch-btn:hover:not(:disabled) {
-    background-color: #dcfce7;
+    background-color: rgba(34, 197, 94, 0.25);
 }
 
 .change-batch-btn:disabled {
-    background-color: #f3f4f6;
-    color: #9ca3af;
-    border-color: #e5e7eb;
+    background-color: rgba(113, 113, 122, 0.1);
+    color: var(--std-text-muted);
+    border-color: var(--std-border);
     cursor: not-allowed;
 }
 
 .remove-student-btn {
-    background-color: #fef2f2;
-    color: #dc2626;
-    border-color: #fecaca;
+    background-color: rgba(220, 38, 38, 0.15);
+    color: #f87171;
+    border-color: rgba(220, 38, 38, 0.3);
 }
 
 .remove-student-btn:hover {
-    background-color: #fee2e2;
+    background-color: rgba(220, 38, 38, 0.25);
 }
 
 .change-batch-controls {
@@ -190,20 +246,22 @@
 
 .change-batch-controls select {
     padding: 6px 10px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--std-input-border);
     border-radius: 6px;
     font-size: 0.85rem;
     outline: none;
+    background-color: var(--std-input-bg);
+    color: var(--std-text-main);
 }
 
 .cancel-change-btn {
-    background-color: #f3f4f6;
-    color: #4b5563;
-    border-color: #d1d5db;
+    background-color: var(--std-controls-bg);
+    color: var(--std-text-secondary);
+    border-color: var(--std-input-border);
 }
 
 .cancel-change-btn:hover {
-    background-color: #e5e7eb;
+    background-color: var(--std-border);
 }
 
 .student-message-overlay {
@@ -212,7 +270,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(15, 23, 42, 0.7);
     backdrop-filter: blur(2px);
     display: flex;
     align-items: center;
@@ -223,12 +281,14 @@
 .student-message-box {
     width: 380px;
     max-width: 90%;
-    background: #ffffff;
+    background: var(--std-message-bg);
     border-radius: 14px;
     padding: 28px 24px;
     text-align: center;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
     animation: studentMessageAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid var(--std-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 @keyframes studentMessageAppear {
@@ -255,32 +315,34 @@
 }
 
 .student-message-icon.success {
-    background: #dcfce7;
-    color: #16a34a;
+    background: rgba(22, 163, 74, 0.15);
+    color: #4ade80;
 }
 
 .student-message-icon.error {
-    background: #fee2e2;
-    color: #dc2626;
+    background: rgba(220, 38, 38, 0.15);
+    color: #f87171;
 }
 
 .student-message-icon.confirm {
-    background: #fef3c7;
-    color: #d97706;
+    background: rgba(217, 119, 6, 0.15);
+    color: #fbbf24;
 }
 
 .student-message-box h3 {
     margin: 0 0 8px;
     font-size: 1.25rem;
-    color: #1f2937;
+    color: var(--std-text-heading);
     font-weight: 600;
+    transition: color 0.3s ease;
 }
 
 .student-message-box p {
     margin: 0 0 24px;
-    color: #4b5563;
+    color: var(--std-text-secondary);
     font-size: 0.95rem;
     line-height: 1.5;
+    transition: color 0.3s ease;
 }
 
 .student-message-buttons {
@@ -318,12 +380,13 @@
 }
 
 .message-cancel-btn {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--std-controls-bg);
+    color: var(--std-text-secondary);
+    border: 1px solid var(--std-border);
 }
 
 .message-cancel-btn:hover {
-    background: #e5e7eb;
+    background: var(--std-border);
 }
 
 .message-single-ok {

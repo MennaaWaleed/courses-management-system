@@ -1,27 +1,69 @@
+:root {
+    --emodal-bg: #ffffff;
+    --emodal-text-main: #111827;
+    --emodal-text-heading: #111827;
+    --emodal-text-label: #374151;
+    --emodal-border: #e5e7eb;
+
+    --emodal-input-bg: #ffffff;
+    --emodal-input-border: #d1d5db;
+
+    --emodal-cancel-bg: #f3f4f6;
+    --emodal-cancel-text: #374151;
+    --emodal-cancel-border: #d1d5db;
+}
+
+[data-theme="dark"] {
+    --emodal-bg: #1f1f23;
+    --emodal-text-main: #f8fafc;
+    --emodal-text-heading: #f8fafc;
+    --emodal-text-label: #f1f5f9;
+    --emodal-border: #3f3f46;
+
+    --emodal-input-bg: #2a2a2e;
+    --emodal-input-border: #52525b;
+
+    --emodal-cancel-bg: #27272a;
+    --emodal-cancel-text: #e4e4e7;
+    --emodal-cancel-border: #3f3f46;
+}
+
 .edit-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(17, 24, 39, 0.6);
+    background-color: rgba(17, 24, 39, 0.75);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1050;
     backdrop-filter: blur(4px);
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 .edit-modal-content {
-    background-color: #ffffff;
-    width: 90%;
+    background-color: var(--emodal-bg);
+    width: 100%;
     max-width: 600px;
+    max-height: 90vh;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
     padding: 24px;
     animation: slideUp 0.3s ease-out forwards;
+    border: 1px solid var(--emodal-border);
+    overflow-y: auto;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .edit-modal-header {
@@ -29,23 +71,26 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--emodal-border);
     padding-bottom: 12px;
+    transition: border-color 0.3s ease;
 }
 
 .edit-modal-header h2 {
     margin: 0;
     font-size: 1.25rem;
-    color: #111827;
+    color: var(--emodal-text-heading);
+    transition: color 0.3s ease;
 }
 
 .edit-close-btn {
     background: none;
     border: none;
     font-size: 1.75rem;
-    color: #9ca3af;
+    color: var(--emodal-text-label);
     cursor: pointer;
     line-height: 1;
+    transition: color 0.2s;
 }
 
 .edit-close-btn:hover {
@@ -61,6 +106,7 @@
 .form-row {
     display: flex;
     gap: 16px;
+    width: 100%;
 }
 
 .form-group {
@@ -68,28 +114,63 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 0;
 }
 
 .form-group label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #374151;
+    color: var(--emodal-text-label);
+    transition: color 0.3s ease;
 }
 
 .form-group input,
 .form-group select {
+    width: 100%;
     padding: 10px 12px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--emodal-input-border);
     border-radius: 6px;
     font-size: 0.9rem;
     outline: none;
-    transition: border-color 0.2s;
+    background-color: var(--emodal-input-bg);
+    color: var(--emodal-text-main);
+    box-sizing: border-box;
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .edit-batch-form select {
+    background-color: var(--emodal-input-bg);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .edit-batch-form select option {
+    background-color: #1f1f23;
+    color: #ffffff;
+    padding: 10px;
+}
+
+[data-theme="dark"] .edit-batch-form input[type="datetime-local"],
+[data-theme="dark"] .edit-batch-form input[type="date"],
+[data-theme="dark"] .edit-batch-form input[type="time"] {
+    background-color: var(--emodal-input-bg) !important;
+    color: #ffffff !important;
+    color-scheme: dark;
+}
+
+[data-theme="dark"] .edit-batch-form input:-webkit-autofill,
+[data-theme="dark"] .edit-batch-form input:-webkit-autofill:hover,
+[data-theme="dark"] .edit-batch-form input:-webkit-autofill:focus,
+[data-theme="dark"] .edit-batch-form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--emodal-input-bg) inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .edit-modal-actions {
@@ -97,8 +178,9 @@
     justify-content: flex-end;
     gap: 12px;
     margin-top: 10px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--emodal-border);
     padding-top: 16px;
+    transition: border-color 0.3s ease;
 }
 
 .edit-cancel-btn, .edit-save-btn {
@@ -108,16 +190,17 @@
     font-size: 0.9rem;
     cursor: pointer;
     border: none;
+    transition: background-color 0.2s ease;
 }
 
 .edit-cancel-btn {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
+    background-color: var(--emodal-cancel-bg);
+    color: var(--emodal-cancel-text);
+    border: 1px solid var(--emodal-cancel-border);
 }
 
 .edit-cancel-btn:hover {
-    background-color: #e5e7eb;
+    background-color: var(--emodal-border);
 }
 
 .edit-save-btn {
@@ -137,5 +220,27 @@
 .edit-loading {
     text-align: center;
     padding: 40px;
-    color: #6b7280;
+    color: var(--emodal-text-label);
+}
+
+@media (max-width: 650px) {
+    .edit-modal-content {
+        padding: 16px;
+        max-height: 95vh;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .edit-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .edit-cancel-btn, .edit-save-btn {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
 }

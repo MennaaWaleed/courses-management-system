@@ -1,9 +1,54 @@
+:root {
+    --inst-bg: #f8fafc;
+    --inst-card-bg: #ffffff;
+    --inst-text-main: #1e293b;
+    --inst-text-sub: #64748b;
+    --inst-text-muted: #94a3b8;
+    --inst-border: #e2e8f0;
+    --inst-divider: #f1f5f9;
+
+    --inst-input-bg: #ffffff;
+    --inst-input-border: #cbd5e1;
+    --inst-toolbar-btn-bg: #f1f5f9;
+
+    --inst-modal-bg: #ffffff;
+    --inst-modal-header-text: #1e293b;
+
+    --inst-btn-cancel-bg: #ffffff;
+    --inst-btn-cancel-text: #475569;
+
+    --primary-color: #0fa88f;
+    --primary-dark: #0c8772;
+}
+
+[data-theme="dark"] {
+    --inst-bg: #18181b;
+    --inst-card-bg: #1f1f23;
+    --inst-text-main: #f8fafc;
+    --inst-text-sub: #9ca3af;
+    --inst-text-muted: #71717a;
+    --inst-border: #3f3f46;
+    --inst-divider: #27272a;
+
+    --inst-правляющий: #2a2a2e;
+    --inst-input-bg: #2a2a2e;
+    --inst-input-border: #52525b;
+    --inst-toolbar-btn-bg: #27272a;
+
+    --inst-modal-bg: #1f1f23;
+    --inst-modal-header-text: #f8fafc;
+
+    --inst-btn-cancel-bg: #27272a;
+    --inst-btn-cancel-text: #e4e4e7;
+}
 
 .admin-instructors {
     padding: 24px;
-    background: #f8fafc;
+    background: var(--inst-bg);
     min-height: calc(100vh - 80px);
     font-family: 'Inter', sans-serif;
+    color: var(--inst-text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .admin-instructors__header {
@@ -16,37 +61,44 @@
 .admin-instructors__header h2 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--inst-text-main);
     margin: 0 0 4px 0;
+    transition: color 0.3s ease;
 }
 
 .admin-instructors__header p {
-    color: #64748b;
+    color: var(--inst-text-sub);
     margin: 0;
     font-size: 0.9rem;
+    transition: color 0.3s ease;
 }
 
 .admin-instructors__btn-primary {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: #2563eb;
+    background-color: var(--primary-color, #0fa88f);
     color: white;
     border: none;
     padding: 10px 16px;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(15, 168, 143, 0.15);
 }
 
 .admin-instructors__btn-primary:hover {
-    background-color: #1d4ed8;
+    background-color: var(--primary-dark, #0c8772);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(15, 168, 143, 0.25);
 }
 
 .admin-instructors__btn-primary:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .admin-instructors__toolbar {
@@ -56,12 +108,13 @@
 .admin-instructors__search {
     display: flex;
     align-items: center;
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--inst-card-bg);
+    border: 1px solid var(--inst-border);
     border-radius: 8px;
     padding: 6px 12px;
     width: 100%;
     max-width: 400px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .admin-instructors__search input {
@@ -70,27 +123,32 @@
     padding: 8px;
     width: 100%;
     font-size: 0.9rem;
+    background: transparent;
+    color: var(--inst-text-main);
 }
 
 .admin-instructors__search button {
-    background: #f1f5f9;
+    background: var(--inst-toolbar-btn-bg);
     border: none;
     padding: 6px 12px;
     border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
-    color: #475569;
+    color: var(--inst-text-sub);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .admin-instructors__search button:hover {
-    background: #e2e8f0;
+    background: var(--inst-border);
+    color: var(--inst-text-main);
 }
 
 .admin-instructors__table-container {
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--inst-card-bg);
+    border: 1px solid var(--inst-border);
     border-radius: 12px;
     overflow: hidden;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .admin-instructors__table {
@@ -99,22 +157,24 @@
 }
 
 .admin-instructors__table th {
-    background: #f8fafc;
+    background: var(--inst-bg);
     padding: 14px 20px;
     text-align: left;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #475569;
-    border-bottom: 1px solid #e2e8f0;
+    color: var(--inst-text-sub);
+    border-bottom: 1px solid var(--inst-border);
     text-transform: uppercase;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .admin-instructors__table td {
     padding: 16px 20px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--inst-border);
     font-size: 0.95rem;
-    color: #1e293b;
+    color: var(--inst-text-main);
     vertical-align: middle;
+    transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .font-medium {
@@ -122,7 +182,7 @@
 }
 
 .text-muted {
-    color: #64748b;
+    color: var(--inst-text-sub);
 }
 
 .admin-instructors__badge {
@@ -133,13 +193,13 @@
 }
 
 .badge-active {
-    background: #dcfce7;
-    color: #059669;
+    background: rgba(5, 150, 105, 0.15);
+    color: #34d399;
 }
 
 .badge-disabled {
-    background: #fee2e2;
-    color: #dc2626;
+    background: rgba(220, 38, 38, 0.15);
+    color: #f87171;
 }
 
 .admin-instructors__actions {
@@ -148,9 +208,9 @@
 }
 
 .admin-instructors__actions button {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #475569;
+    background: var(--inst-bg);
+    border: 1px solid var(--inst-border);
+    color: var(--inst-text-sub);
     padding: 6px;
     border-radius: 6px;
     cursor: pointer;
@@ -160,83 +220,74 @@
 }
 
 .admin-instructors__actions button:hover {
-    background: #f1f5f9;
-    color: #0f172a;
+    background: var(--inst-divider);
+    color: var(--inst-text-main);
 }
 
 .admin-instructors__actions .text-danger:hover {
     color: #ef4444;
     border-color: #fca5a5;
-    background: #fef2f2;
+    background: rgba(239, 68, 68, 0.15);
 }
 
 .admin-instructors__actions .text-warning:hover {
-    color: #d97706;
+    color: #fbbf24;
 }
 
 .admin-instructors__actions .text-success:hover {
-    color: #059669;
+    color: #34d399;
 }
-
-
-/* =========================================
-   MODALS
-========================================= */
 
 .admin-instructors__modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(15, 23, 42, 0.75);
     backdrop-filter: blur(4px);
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     z-index: 1000;
     padding: 20px;
 }
 
 .admin-instructors__modal {
-    background: white;
+    background: var(--inst-modal-bg);
     width: 100%;
     max-width: 500px;
     border-radius: 12px;
-
-    box-shadow:
-            0 20px 25px -5px rgba(0, 0, 0, 0.1),
-            0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--inst-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .admin-instructors__modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 20px 24px;
-
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--inst-border);
+    transition: border-color 0.3s ease;
 }
 
 .admin-instructors__modal-header h3 {
     margin: 0;
     font-size: 1.25rem;
-    color: #1e293b;
+    color: var(--inst-modal-header-text);
+    transition: color 0.3s ease;
 }
 
 .admin-instructors__modal-header button {
     background: none;
     border: none;
     cursor: pointer;
-    color: #64748b;
-
+    color: var(--inst-text-sub);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .admin-instructors__modal-header button:hover {
-    color: #1e293b;
+    color: var(--inst-text-main);
 }
 
 .admin-instructors__form {
@@ -257,52 +308,57 @@
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #475569;
+    color: var(--inst-text-sub);
     margin-bottom: 6px;
+    transition: color 0.3s ease;
 }
 
 .form-group input {
     width: 100%;
     padding: 10px 12px;
-
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--inst-input-border);
     border-radius: 8px;
-
     outline: none;
-
-    transition: border-color 0.2s;
-
+    background: var(--inst-input-bg) !important;
+    color: var(--inst-text-main) !important;
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
     box-sizing: border-box;
 }
 
 .form-group input:focus {
-    border-color: #2563eb;
+    border-color: var(--primary-color, #0fa88f);
+}
+
+[data-theme="dark"] .admin-instructors__form input:-webkit-autofill,
+[data-theme="dark"] .admin-instructors__form input:-webkit-autofill:hover,
+[data-theme="dark"] .admin-instructors__form input:-webkit-autofill:focus,
+[data-theme="dark"] .admin-instructors__form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--inst-input-bg) inset !important;
+    -webkit-text-fill-color: var(--inst-text-main) !important;
+    caret-color: var(--inst-text-main);
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .admin-instructors__modal-footer {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-
     margin-top: 8px;
 }
 
 .btn-cancel {
-    background: white;
-    border: 1px solid #cbd5e1;
-    color: #475569;
-
+    background: var(--inst-btn-cancel-bg);
+    border: 1px solid var(--inst-input-border);
+    color: var(--inst-btn-cancel-text);
     padding: 10px 16px;
-
     border-radius: 8px;
-
     font-weight: 600;
-
     cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-cancel:hover {
-    background: #f8fafc;
+    background: var(--inst-divider);
 }
 
 .btn-cancel:disabled {
@@ -310,67 +366,42 @@
     cursor: not-allowed;
 }
 
-
-/* =========================================
-   MODAL ERROR BOX
-========================================= */
-
 .admin-instructors__modal-error-box {
     display: flex;
     align-items: center;
     gap: 8px;
-
-    background-color: #fef2f2;
-    color: #ef4444;
-
+    background-color: rgba(220, 38, 38, 0.15);
+    color: #f87171;
     padding: 12px 16px;
-
     border-radius: 6px;
-
-    border: 1px solid #f87171;
-
+    border: 1px solid rgba(220, 38, 38, 0.3);
     margin-bottom: 20px;
-
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-
-/* =========================================
-   CUSTOM MESSAGE BOX
-========================================= */
-
 .message-overlay {
     position: fixed;
     inset: 0;
-
-    background: rgba(15, 23, 42, 0.45);
+    background: rgba(15, 23, 42, 0.7);
     backdrop-filter: blur(3px);
-
     display: flex;
     align-items: flex-start;
     justify-content: center;
-
     padding-top: 18px;
-
     z-index: 9999;
 }
 
 .message-box {
     width: 560px;
     max-width: calc(100% - 32px);
-
-    background: #ffffff;
-
+    background: var(--inst-card-bg);
     border-radius: 18px;
-
-    box-shadow:
-            0 20px 25px -5px rgba(0, 0, 0, 0.15),
-            0 10px 10px -5px rgba(0, 0, 0, 0.08);
-
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
     overflow: hidden;
-
     animation: messageBoxSlideDown 0.2s ease-out;
+    border: 1px solid var(--inst-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .message-box__content {
@@ -379,137 +410,90 @@
 
 .message-box__content h3 {
     margin: 0 0 12px;
-
     font-size: 20px;
     font-weight: 700;
-
-    color: #1e293b;
+    color: var(--inst-text-main);
+    transition: color 0.3s ease;
 }
 
 .message-box__content p {
     margin: 0;
-
     font-size: 16px;
     line-height: 1.5;
-
-    color: #475569;
-
+    color: var(--inst-text-sub);
     word-break: break-word;
+    transition: color 0.3s ease;
 }
-
-
-/* =========================================
-   OK BUTTON
-========================================= */
 
 .message-box__ok {
     display: block;
-
     margin: 0 20px 18px auto;
-
     padding: 10px 22px;
-
     border: none;
     border-radius: 9px;
-
-    background: #2563eb;
+    background: var(--primary-color, #0fa88f);
     color: white;
-
     font-size: 14px;
     font-weight: 600;
-
     cursor: pointer;
-
-    transition:
-            background-color 0.2s ease,
-            transform 0.1s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .message-box__ok:hover {
-    background: #1d4ed8;
+    background: var(--primary-dark, #0c8772);
 }
 
 .message-box__ok:active {
     transform: scale(0.97);
 }
 
-
-/* =========================================
-   ERROR / SUCCESS
-========================================= */
-
 .message-box.error {
-    border-top: 4px solid #dc2626;
+    border-top: 4px solid #ef4444;
 }
 
 .message-box.success {
-    border-top: 4px solid #16a34a;
+    border-top: 4px solid #34d399;
 }
 
-
-/* =========================================
-   DELETE CONFIRMATION
-========================================= */
-
 .message-box.confirmation {
-    border-top: 4px solid #dc2626;
+    border-top: 4px solid #ef4444;
 }
 
 .message-box__actions {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
     gap: 10px;
-
     padding: 0 20px 18px;
 }
 
 .message-box__cancel,
 .message-box__delete {
     padding: 10px 20px;
-
     border-radius: 9px;
-
     font-size: 14px;
     font-weight: 600;
-
     cursor: pointer;
-
-    transition:
-            background-color 0.2s ease,
-            border-color 0.2s ease,
-            transform 0.1s ease;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
 }
 
-
-/* Cancel */
-
 .message-box__cancel {
-    background: white;
-
-    color: #475569;
-
-    border: 1px solid #cbd5e1;
+    background: var(--inst-btn-cancel-bg);
+    color: var(--inst-text-sub);
+    border: 1px solid var(--inst-input-border);
 }
 
 .message-box__cancel:hover {
-    background: #f8fafc;
-    border-color: #94a3b8;
+    background: var(--inst-divider);
 }
 
 .message-box__cancel:active {
     transform: scale(0.97);
 }
 
-
-/* Delete */
-
 .message-box__delete {
     background: #dc2626;
-
     color: white;
-
     border: 1px solid #dc2626;
 }
 
@@ -521,31 +505,18 @@
 .message-box__delete:active {
     transform: scale(0.97);
 }
-
-
-/* =========================================
-   MESSAGE BOX ANIMATION
-========================================= */
-
 @keyframes messageBoxSlideDown {
     from {
         opacity: 0;
         transform: translateY(-15px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-
-/* =========================================
-   RESPONSIVE
-========================================= */
-
 @media (max-width: 600px) {
-
     .admin-instructors {
         padding: 16px;
     }
@@ -589,4 +560,18 @@
     .message-box__actions {
         padding: 0 20px 18px;
     }
+}
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover,
+[data-theme="dark"] input:-webkit-autofill:focus,
+[data-theme="dark"] input:-webkit-autofill:active,
+[data-theme="dark"] select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px var(--inst-input-bg) inset !important;
+    -webkit-text-fill-color: var(--inst-text-main) !important;
+    caret-color: var(--inst-text-main);
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-theme="dark"] input {
+    color-scheme: dark;
 }
