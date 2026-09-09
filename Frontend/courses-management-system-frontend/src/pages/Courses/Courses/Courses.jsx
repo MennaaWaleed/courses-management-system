@@ -1,8 +1,8 @@
 import "./Courses.css";
 import { useEffect, useState } from "react";
-import { getCourses } from "../../api/courseApi";
-import { getPublishedCategories } from "../../api/categoryApi";
-import CourseCard from "../../features/Home/FeaturedCourses/CourseCard";
+import { getCourses } from "../../../api/courseApi.js";
+import { getPublishedCategories } from "../../../api/categoryApi.js";
+import CourseCard from "../../../features/home/FeaturedCourses/CourseCard.jsx";
 import { useSearchParams } from "react-router-dom";
 
 function Courses() {
@@ -12,7 +12,6 @@ function Courses() {
     const [error, setError] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // activeCategory now holds the category ID instead of the name
     const activeCategoryId = searchParams.get("category") || "All";
 
     useEffect(() => {
@@ -21,7 +20,6 @@ function Courses() {
                 setLoading(true);
                 setError("");
                 
-                // Fetch both courses and published categories simultaneously
                 const [coursesResponse, categoriesResponse] = await Promise.all([
                     getCourses(),
                     getPublishedCategories()
@@ -41,7 +39,6 @@ function Courses() {
         fetchData();
     }, []);
 
-    // Filter by checking if the course's categoryIds array includes the active ID
     const filteredCourses = activeCategoryId === "All"
         ? courses
         : courses.filter(course =>
@@ -75,14 +72,11 @@ function Courses() {
             <section className="course-catalog-page__content">
                 <div className="course-catalog-page__container">
                     
-                    {/* ==========================================
-                        CATEGORY FILTER BUTTONS 
-                    ========================================== */}
+
                     {!loading && !error && (
                         <div className="course-catalog-page__categories">
                             <div className="course-catalog-page__categories-list">
                                 
-                                {/* Always render the "All Courses" button */}
                                 <button
                                     type="button"
                                     className={`course-catalog-page__category ${
@@ -93,7 +87,6 @@ function Courses() {
                                     All Courses
                                 </button>
 
-                                {/* Render fetched categories */}
                                 {categories.map(category => (
                                     <button
                                         key={category.id}

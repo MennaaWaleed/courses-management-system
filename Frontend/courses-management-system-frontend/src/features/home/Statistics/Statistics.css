@@ -15,9 +15,6 @@
 
 }
 
-/* ===========================
-   Header
-=========================== */
 
 .statistics__header{
 
@@ -73,9 +70,6 @@
 
 }
 
-/* ===========================
-   Grid
-=========================== */
 
 .statistics__grid{
 
@@ -87,10 +81,6 @@
     
 
 }
-
-/* ===========================
-   Card
-=========================== */
 
 .statistics__card{
 
@@ -112,7 +102,6 @@
         
          opacity: 0;
     transform: translateY(50px);
-    /* animation: statCardUp .8s ease forwards; */
 
 }
 
@@ -156,10 +145,6 @@
 
 }
 
-/* ===========================
-   Icon
-=========================== */
-
 .statistics__icon{
 
     width:72px;
@@ -193,10 +178,6 @@
 
 }
 
-/* ===========================
-   Number
-=========================== */
-
 .statistics__card h3{
 
     margin:0;
@@ -211,7 +192,6 @@
 
 }
 
-/* Counter */
 
 .statistics__card h3:first-of-type{
 
@@ -219,7 +199,6 @@
 
 }
 
-/* Text */
 
 .statistics__card p{
 
@@ -233,9 +212,6 @@
 
 }
 
-/* ===========================
-   Responsive
-=========================== */
 
 @media(max-width:992px){
 
@@ -276,10 +252,6 @@
 }
 
 
-
-/* ===========================
-   Autodesk Card
-=========================== */
 
 .statistics__card--autodesk{
 
@@ -342,4 +314,83 @@
 
     color:var(--primary-dark);
 
+}
+
+
+html[data-theme="dark"] .statistics {
+    background: #17171a;
+}
+
+html[data-theme="dark"] .statistics__header h2 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .statistics__header p {
+    color: #a1a1aa;
+}
+
+html[data-theme="dark"] .statistics__badge {
+    background: rgba(11, 159, 138, 0.14);
+    color: #0b9f8a;
+}
+
+
+html[data-theme="dark"] .statistics__card {
+    background: #1f1f23;
+    border-color: #303036;
+    box-shadow:
+            0 12px 35px rgba(0, 0, 0, 0.30);
+}
+
+html[data-theme="dark"] .statistics__card:hover {
+    box-shadow:
+            0 24px 55px rgba(11, 159, 138, 0.15);
+}
+
+html[data-theme="dark"] .statistics__icon {
+    background: rgba(11, 159, 138, 0.14);
+    color: #0b9f8a;
+}
+
+html[data-theme="dark"] .statistics__card:hover .statistics__icon {
+    background: #0b9f8a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .statistics__card h3 {
+    color: #0b9f8a;
+}
+
+html[data-theme="dark"] .statistics__card p {
+    color: #a1a1aa;
+}
+
+
+html[data-theme="dark"] .statistics__card--autodesk {
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(11, 159, 138, 0.10),
+                    rgba(11, 159, 138, 0.20)
+            );
+
+    border-color: rgba(11, 159, 138, 0.30);
+}
+
+html[data-theme="dark"] .statistics__card--autodesk .statistics__icon {
+    background: #0b9f8a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .statistics__official {
+    background: #27272b;
+    color: #0b9f8a;
+}
+
+html[data-theme="dark"] .statistics__card--autodesk h3 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .statistics__card--autodesk p {
+    color: #0b9f8a;
 }

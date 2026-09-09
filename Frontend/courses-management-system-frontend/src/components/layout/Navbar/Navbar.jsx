@@ -1,12 +1,16 @@
 import "./Navbar.css";
 import logo from "../../../assets/images/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Navbar({ isLoggedIn, handleLogout }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
+
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem("theme") || "light";
+    });
 
     const links = [
         { title: "Home", href: "/" },
@@ -14,6 +18,15 @@ function Navbar({ isLoggedIn, handleLogout }) {
         { title: "About", href: "/" },
         { title: "Contact", href: "/contact" }
     ];
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    };
 
     useEffect(() => {
         document.body.style.overflow = menuOpen ? "hidden" : "auto";
@@ -68,6 +81,14 @@ function Navbar({ isLoggedIn, handleLogout }) {
                     </ul>
 
                     <div className="navbar__actions">
+                        <button
+                            className="navbar__theme-btn"
+                            onClick={toggleTheme}
+                            aria-label="Toggle Dark Mode"
+                        >
+                            {theme === "light" ? <Moon size={22} /> : <Sun size={22} />}
+                        </button>
+
                         {isLoggedIn ? (
                             <div className="navbar__user-actions">
                                 <button
@@ -131,6 +152,19 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 </ul>
 
                 <div className="navbar__drawer-actions">
+                    {/* Theme Toggle Button (Mobile Drawer) */}
+                    <button
+                        className="navbar__theme-btn drawer-theme-btn"
+                        onClick={toggleTheme}
+                        aria-label="Toggle Dark Mode"
+                    >
+                        {theme === "light" ? (
+                            <><Moon size={20} /> <span>Dark Mode</span></>
+                        ) : (
+                            <><Sun size={20} /> <span>Light Mode</span></>
+                        )}
+                    </button>
+
                     {isLoggedIn ? (
                         <div className="navbar__drawer-user">
                             <button

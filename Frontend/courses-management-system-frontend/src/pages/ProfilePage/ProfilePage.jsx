@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { fetchUserProfile, changeProfilePassword } from "../api/profileApi";
-import { enrollmentRequestApi } from "../api/enrollmentRequestApi";
+import { fetchUserProfile, changeProfilePassword } from "../../api/profileApi";
+import { enrollmentRequestApi } from "../../api/enrollmentRequestApi";
 import { useNavigate } from "react-router-dom";
+import "./ProfilePage.css";
 import {
     Mail,
     Phone,
@@ -200,7 +201,7 @@ export default function ProfilePage() {
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (pwdData.newPassword !== pwdData.confirmPassword) {
             setPwdStatus({ loading: false, success: "", error: "New passwords do not match." });
             return;
@@ -213,8 +214,7 @@ export default function ProfilePage() {
                 newPassword: pwdData.newPassword
             });
             setPwdStatus({ loading: false, error: "", success: "Password changed successfully!" });
-            
-            // Clear form and close modal after a delay
+
             setTimeout(() => {
                 setPwdModalOpen(false);
                 setPwdData({ currentPassword: "", newPassword: "", confirmPassword: "" });
@@ -237,7 +237,7 @@ export default function ProfilePage() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    color: "#64748b"
+                    color: "var(--profile-text-muted, #64748b)"
                 }}
             >
                 Loading profile...
@@ -253,7 +253,7 @@ export default function ProfilePage() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    color: "#ef4444"
+                    color: "var(--profile-error-text, #ef4444)"
                 }}
             >
                 {error}
@@ -265,6 +265,7 @@ export default function ProfilePage() {
 
     return (
         <div
+            className="profile-page"
             style={{
                 maxWidth: "800px",
                 margin: "40px auto",
@@ -278,14 +279,15 @@ export default function ProfilePage() {
             {/* Profile Header */}
             <div
                 style={{
-                    background: "#fff",
+                    background: "var(--profile-card-bg, #fff)",
                     padding: "24px",
                     borderRadius: "12px",
-                    border: "1px solid #e2e8f0",
+                    border: "1px solid var(--profile-border, #e2e8f0)",
                     display: "flex",
                     alignItems: "center",
                     gap: "20px",
-                    flexWrap: "wrap"
+                    flexWrap: "wrap",
+                    transition: "background-color 0.3s ease, border-color 0.3s ease"
                 }}
             >
                 <div
@@ -295,16 +297,17 @@ export default function ProfilePage() {
                         borderRadius: "50%",
                         background:
                             role === "ADMIN"
-                                ? "#7c3aed"
+                                ? "var(--profile-admin-avatar, #7c3aed)"
                                 : role === "INSTRUCTOR"
-                                    ? "#0891b2"
-                                    : "#2563eb",
+                                    ? "var(--brand-secondary, #0891b2)"
+                                    : "var(--brand-primary, #2563eb)",
                         color: "#fff",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: "24px",
-                        fontWeight: "bold"
+                        fontWeight: "bold",
+                        transition: "background-color 0.3s ease"
                     }}
                 >
                     {profile?.firstName?.[0]}
@@ -323,8 +326,9 @@ export default function ProfilePage() {
                             style={{
                                 fontSize: "22px",
                                 fontWeight: "bold",
-                                color: "#1e293b",
-                                margin: 0
+                                color: "var(--profile-text-main, #1e293b)",
+                                margin: 0,
+                                transition: "color 0.3s ease"
                             }}
                         >
                             {profile?.firstName} {profile?.lastName}
@@ -336,8 +340,9 @@ export default function ProfilePage() {
                                 fontWeight: "600",
                                 padding: "3px 8px",
                                 borderRadius: "9999px",
-                                background: "#f1f5f9",
-                                color: "#475569"
+                                background: "var(--profile-tag-bg, #f1f5f9)",
+                                color: "var(--profile-tag-text, #475569)",
+                                transition: "background-color 0.3s ease, color 0.3s ease"
                             }}
                         >
                             {role}
@@ -349,9 +354,10 @@ export default function ProfilePage() {
                             display: "flex",
                             alignItems: "center",
                             gap: "8px",
-                            color: "#64748b",
+                            color: "var(--profile-text-muted, #64748b)",
                             margin: "6px 0 0",
-                            fontSize: "14px"
+                            fontSize: "14px",
+                            transition: "color 0.3s ease"
                         }}
                     >
                         <Mail size={16} />
@@ -363,9 +369,10 @@ export default function ProfilePage() {
                             display: "flex",
                             alignItems: "center",
                             gap: "8px",
-                            color: "#64748b",
+                            color: "var(--profile-text-muted, #64748b)",
                             margin: "4px 0 0",
-                            fontSize: "14px"
+                            fontSize: "14px",
+                            transition: "color 0.3s ease"
                         }}
                     >
                         <Phone size={16} />
@@ -380,11 +387,11 @@ export default function ProfilePage() {
                         display: "flex",
                         alignItems: "center",
                         gap: "6px",
-                        background: "#f8fafc",
-                        color: "#0f172a",
+                        background: "var(--profile-item-bg, #f8fafc)",
+                        color: "var(--profile-text-main, #0f172a)",
                         padding: "10px 16px",
                         borderRadius: "8px",
-                        border: "1px solid #cbd5e1",
+                        border: "1px solid var(--profile-input-border, #cbd5e1)",
                         fontSize: "14px",
                         fontWeight: "500",
                         cursor: "pointer",
@@ -401,24 +408,26 @@ export default function ProfilePage() {
             {role === "INSTRUCTOR" && (
                 <div
                     style={{
-                        background: "#fff",
+                        background: "var(--profile-card-bg, #fff)",
                         padding: "24px",
                         borderRadius: "12px",
-                        border: "1px solid #e2e8f0"
+                        border: "1px solid var(--profile-border, #e2e8f0)",
+                        transition: "background-color 0.3s ease, border-color 0.3s ease"
                     }}
                 >
                     <h2
                         style={{
                             fontSize: "18px",
                             fontWeight: "bold",
-                            color: "#1e293b",
+                            color: "var(--profile-text-main, #1e293b)",
                             display: "flex",
                             alignItems: "center",
                             gap: "8px",
-                            marginBottom: "16px"
+                            marginBottom: "16px",
+                            transition: "color 0.3s ease"
                         }}
                     >
-                        <Layers size={20} color="#0891b2" />
+                        <Layers size={20} color="var(--brand-secondary, #0891b2)" />
                         Assigned Batches
                     </h2>
 
@@ -426,8 +435,9 @@ export default function ProfilePage() {
                     profile.assignedBatches.length === 0 ? (
                         <p
                             style={{
-                                color: "#94a3b8",
-                                fontSize: "14px"
+                                color: "var(--profile-text-muted, #94a3b8)",
+                                fontSize: "14px",
+                                transition: "color 0.3s ease"
                             }}
                         >
                             No course batches currently assigned.
@@ -446,10 +456,10 @@ export default function ProfilePage() {
                                         key={idx}
                                         style={{
                                             padding: "14px",
-                                            background: "#f8fafc",
+                                            background: "var(--profile-item-bg, #f8fafc)",
                                             borderRadius: "8px",
-                                            border:
-                                                "1px solid #f1f5f9"
+                                            border: "1px solid var(--profile-item-border, #f1f5f9)",
+                                            transition: "background-color 0.3s ease, border-color 0.3s ease"
                                         }}
                                     >
                                         <h3
@@ -457,7 +467,8 @@ export default function ProfilePage() {
                                                 margin: 0,
                                                 fontSize: "15px",
                                                 fontWeight: "600",
-                                                color: "#1e293b"
+                                                color: "var(--profile-text-main, #1e293b)",
+                                                transition: "color 0.3s ease"
                                             }}
                                         >
                                             {batch.courseName}
@@ -467,7 +478,8 @@ export default function ProfilePage() {
                                             style={{
                                                 margin: "4px 0 0",
                                                 fontSize: "13px",
-                                                color: "#64748b"
+                                                color: "var(--profile-text-muted, #64748b)",
+                                                transition: "color 0.3s ease"
                                             }}
                                         >
                                             Batch: {batch.batchName}
@@ -487,10 +499,11 @@ export default function ProfilePage() {
                     {/* Enrollment Requests Section */}
                     <div
                         style={{
-                            background: "#fff",
+                            background: "var(--profile-card-bg, #fff)",
                             padding: "24px",
                             borderRadius: "12px",
-                            border: "1px solid #e2e8f0"
+                            border: "1px solid var(--profile-border, #e2e8f0)",
+                            transition: "background-color 0.3s ease, border-color 0.3s ease"
                         }}
                     >
                         <div
@@ -505,16 +518,17 @@ export default function ProfilePage() {
                                 style={{
                                     fontSize: "18px",
                                     fontWeight: "bold",
-                                    color: "#1e293b",
+                                    color: "var(--profile-text-main, #1e293b)",
                                     display: "flex",
                                     alignItems: "center",
                                     gap: "8px",
-                                    margin: 0
+                                    margin: 0,
+                                    transition: "color 0.3s ease"
                                 }}
                             >
                                 <Clock
                                     size={20}
-                                    color="#f59e0b"
+                                    color="var(--profile-warning-icon, #f59e0b)"
                                 />
                                 Enrollment Requests
                             </h2>
@@ -542,12 +556,13 @@ export default function ProfilePage() {
                                     minWidth: "200px",
                                     padding: "10px 14px",
                                     borderRadius: "8px",
-                                    border:
-                                        "1px solid #cbd5e1",
+                                    border: "1px solid var(--profile-input-border, #cbd5e1)",
                                     outline: "none",
                                     fontSize: "14px",
                                     textTransform: "uppercase",
-                                    background: "#f8fafc"
+                                    background: "var(--profile-input-bg, #f8fafc)",
+                                    color: "var(--profile-text-main, #1e293b)",
+                                    transition: "background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease"
                                 }}
                             />
 
@@ -558,7 +573,7 @@ export default function ProfilePage() {
                                     !batchCode.trim()
                                 }
                                 style={{
-                                    background: "#0f172a",
+                                    background: "var(--profile-join-btn-bg, #0f172a)",
                                     color: "#fff",
                                     padding: "10px 20px",
                                     borderRadius: "8px",
@@ -577,7 +592,8 @@ export default function ProfilePage() {
                                         joinLoading ||
                                         !batchCode.trim()
                                             ? 0.7
-                                            : 1
+                                            : 1,
+                                    transition: "background-color 0.3s ease"
                                 }}
                             >
                                 <Send size={16} />
@@ -591,14 +607,14 @@ export default function ProfilePage() {
                         {joinError && (
                             <div
                                 style={{
-                                    color: "#ef4444",
+                                    color: "var(--profile-error-text, #ef4444)",
                                     fontSize: "13.5px",
                                     marginBottom: "20px",
-                                    background: "#fef2f2",
+                                    background: "var(--profile-error-bg, #fef2f2)",
                                     padding: "10px 12px",
                                     borderRadius: "6px",
-                                    border:
-                                        "1px solid #fecaca"
+                                    border: "1px solid var(--profile-error-border, #fecaca)",
+                                    transition: "all 0.3s ease"
                                 }}
                             >
                                 <strong>Error:</strong>{" "}
@@ -609,14 +625,14 @@ export default function ProfilePage() {
                         {joinSuccess && (
                             <div
                                 style={{
-                                    color: "#059669",
+                                    color: "var(--profile-success-text, #059669)",
                                     fontSize: "13.5px",
                                     marginBottom: "20px",
-                                    background: "#d1fae5",
+                                    background: "var(--profile-success-bg, #d1fae5)",
                                     padding: "10px 12px",
                                     borderRadius: "6px",
-                                    border:
-                                        "1px solid #a7f3d0"
+                                    border: "1px solid var(--profile-success-border, #a7f3d0)",
+                                    transition: "all 0.3s ease"
                                 }}
                             >
                                 {joinSuccess}
@@ -627,11 +643,11 @@ export default function ProfilePage() {
                         myRequests.length === 0 ? (
                             <p
                                 style={{
-                                    color: "#94a3b8",
+                                    color: "var(--profile-text-muted, #94a3b8)",
                                     fontSize: "14px",
-                                    borderTop:
-                                        "1px solid #e2e8f0",
-                                    paddingTop: "16px"
+                                    borderTop: "1px solid var(--profile-border, #e2e8f0)",
+                                    paddingTop: "16px",
+                                    transition: "color 0.3s ease, border-color 0.3s ease"
                                 }}
                             >
                                 No pending or recent
@@ -643,9 +659,9 @@ export default function ProfilePage() {
                                     display: "flex",
                                     flexDirection: "column",
                                     gap: "12px",
-                                    borderTop:
-                                        "1px solid #e2e8f0",
-                                    paddingTop: "16px"
+                                    borderTop: "1px solid var(--profile-border, #e2e8f0)",
+                                    paddingTop: "16px",
+                                    transition: "border-color 0.3s ease"
                                 }}
                             >
                                 {myRequests.map(
@@ -654,79 +670,57 @@ export default function ProfilePage() {
                                             key={idx}
                                             style={{
                                                 display: "flex",
-                                                justifyContent:
-                                                    "space-between",
-                                                alignItems:
-                                                    "center",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
                                                 padding: "14px",
-                                                background:
-                                                    "#f8fafc",
-                                                borderRadius:
-                                                    "8px",
-                                                border:
-                                                    "1px solid #f1f5f9"
+                                                background: "var(--profile-item-bg, #f8fafc)",
+                                                borderRadius: "8px",
+                                                border: "1px solid var(--profile-item-border, #f1f5f9)",
+                                                transition: "background-color 0.3s ease, border-color 0.3s ease"
                                             }}
                                         >
                                             <div>
                                                 <h3
                                                     style={{
                                                         margin: 0,
-                                                        fontSize:
-                                                            "15px",
-                                                        fontWeight:
-                                                            "600",
-                                                        color:
-                                                            "#1e293b"
+                                                        fontSize: "15px",
+                                                        fontWeight: "600",
+                                                        color: "var(--profile-text-main, #1e293b)",
+                                                        transition: "color 0.3s ease"
                                                     }}
                                                 >
-                                                    {
-                                                        req.courseName
-                                                    }
+                                                    {req.courseName}
                                                 </h3>
 
                                                 <p
                                                     style={{
-                                                        margin:
-                                                            "4px 0 0",
-                                                        fontSize:
-                                                            "13px",
-                                                        color:
-                                                            "#64748b"
+                                                        margin: "4px 0 0",
+                                                        fontSize: "13px",
+                                                        color: "var(--profile-text-muted, #64748b)",
+                                                        transition: "color 0.3s ease"
                                                     }}
                                                 >
-                                                    Batch:{" "}
-                                                    {
-                                                        req.batchName
-                                                    }
+                                                    Batch: {req.batchName}
                                                 </p>
                                             </div>
 
                                             <span
                                                 style={{
-                                                    fontSize:
-                                                        "12px",
-                                                    fontWeight:
-                                                        "bold",
-                                                    padding:
-                                                        "6px 12px",
-                                                    borderRadius:
-                                                        "6px",
-                                                    backgroundColor:
-                                                        req.status ===
-                                                        "PENDING"
-                                                            ? "#fef3c7"
-                                                            : req.status ===
-                                                              "ACCEPTED"
-                                                                ? "#d1fae5"
-                                                                : "#fee2e2",
-                                                    color:
-                                                        req.status ===
-                                                        "PENDING"
-                                                            ? "#d97706"
-                                                            : req.status ===
-                                                              "ACCEPTED"
-                                                                ? "#059669"
-                                                                : "#dc2626"
+                                                    fontSize: "12px",
+                                                    fontWeight: "bold",
+                                                    padding: "6px 12px",
+                                                    borderRadius: "6px",
+                                                    transition: "background-color 0.3s ease, color 0.3s ease",
+                                                    backgroundColor: req.status === "PENDING"
+                                                        ? "var(--profile-pending-bg, #fef3c7)"
+                                                        : req.status === "ACCEPTED"
+                                                            ? "var(--profile-success-bg, #d1fae5)"
+                                                            : "var(--profile-error-bg, #fee2e2)",
+                                                    color: req.status === "PENDING"
+                                                        ? "var(--profile-pending-text, #d97706)"
+                                                        : req.status === "ACCEPTED"
+                                                            ? "var(--profile-success-text, #059669)"
+                                                            : "var(--profile-error-text, #dc2626)"
                                                 }}
                                             >
                                                 {req.status}
@@ -741,26 +735,28 @@ export default function ProfilePage() {
                     {/* Enrolled Courses Section */}
                     <div
                         style={{
-                            background: "#fff",
+                            background: "var(--profile-card-bg, #fff)",
                             padding: "24px",
                             borderRadius: "12px",
-                            border: "1px solid #e2e8f0"
+                            border: "1px solid var(--profile-border, #e2e8f0)",
+                            transition: "background-color 0.3s ease, border-color 0.3s ease"
                         }}
                     >
                         <h2
                             style={{
                                 fontSize: "18px",
                                 fontWeight: "bold",
-                                color: "#1e293b",
+                                color: "var(--profile-text-main, #1e293b)",
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "8px",
-                                marginBottom: "16px"
+                                marginBottom: "16px",
+                                transition: "color 0.3s ease"
                             }}
                         >
                             <BookOpen
                                 size={20}
-                                color="#2563eb"
+                                color="var(--brand-primary, #2563eb)"
                             />
                             Enrolled Courses
                         </h2>
@@ -769,8 +765,9 @@ export default function ProfilePage() {
                         profile.enrolledCourses.length === 0 ? (
                             <p
                                 style={{
-                                    color: "#94a3b8",
-                                    fontSize: "14px"
+                                    color: "var(--profile-text-muted, #94a3b8)",
+                                    fontSize: "14px",
+                                    transition: "color 0.3s ease"
                                 }}
                             >
                                 No enrolled courses yet.
@@ -789,63 +786,48 @@ export default function ProfilePage() {
                                             key={idx}
                                             style={{
                                                 display: "flex",
-                                                justifyContent:
-                                                    "space-between",
-                                                alignItems:
-                                                    "center",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
                                                 padding: "14px",
-                                                background:
-                                                    "#f8fafc",
-                                                borderRadius:
-                                                    "8px",
-                                                border:
-                                                    "1px solid #f1f5f9",
+                                                background: "var(--profile-item-bg, #f8fafc)",
+                                                borderRadius: "8px",
+                                                border: "1px solid var(--profile-item-border, #f1f5f9)",
                                                 flexWrap: "wrap",
-                                                gap: "10px"
+                                                gap: "10px",
+                                                transition: "background-color 0.3s ease, border-color 0.3s ease"
                                             }}
                                         >
                                             <div>
                                                 <h3
                                                     style={{
                                                         margin: 0,
-                                                        fontSize:
-                                                            "15px",
-                                                        fontWeight:
-                                                            "600",
-                                                        color:
-                                                            "#1e293b"
+                                                        fontSize: "15px",
+                                                        fontWeight: "600",
+                                                        color: "var(--profile-text-main, #1e293b)",
+                                                        transition: "color 0.3s ease"
                                                     }}
                                                 >
-                                                    {
-                                                        course.courseName
-                                                    }
+                                                    {course.courseName}
                                                 </h3>
 
                                                 <p
                                                     style={{
-                                                        margin:
-                                                            "4px 0 0",
-                                                        fontSize:
-                                                            "13px",
-                                                        color:
-                                                            "#64748b"
+                                                        margin: "4px 0 0",
+                                                        fontSize: "13px",
+                                                        color: "var(--profile-text-muted, #64748b)",
+                                                        transition: "color 0.3s ease"
                                                     }}
                                                 >
-                                                    {
-                                                        course.batchName
-                                                    }
+                                                    {course.batchName}
                                                 </p>
                                             </div>
 
                                             <div
                                                 style={{
-                                                    display:
-                                                        "flex",
-                                                    alignItems:
-                                                        "center",
+                                                    display: "flex",
+                                                    alignItems: "center",
                                                     gap: "8px",
-                                                    flexWrap:
-                                                        "wrap"
+                                                    flexWrap: "wrap"
                                                 }}
                                             >
                                                 <button
@@ -855,9 +837,7 @@ export default function ProfilePage() {
                                                             course.courseBatchId ||
                                                             course.id;
 
-                                                        if (
-                                                            targetBatchId
-                                                        ) {
+                                                        if (targetBatchId) {
                                                             navigate(
                                                                 `/student/batches/${targetBatchId}/lectures`
                                                             );
@@ -868,36 +848,21 @@ export default function ProfilePage() {
                                                         }
                                                     }}
                                                     style={{
-                                                        display:
-                                                            "flex",
-                                                        alignItems:
-                                                            "center",
+                                                        display: "flex",
+                                                        alignItems: "center",
                                                         gap: "6px",
-                                                        background:
-                                                            "#f1f5f9",
-                                                        color:
-                                                            "#1e293b",
-                                                        padding:
-                                                            "8px 16px",
-                                                        borderRadius:
-                                                            "8px",
-                                                        border:
-                                                            "1px solid #cbd5e1",
-                                                        fontSize:
-                                                            "14px",
-                                                        fontWeight:
-                                                            "500",
-                                                        cursor:
-                                                            "pointer",
-                                                        transition:
-                                                            "all 0.2s ease"
+                                                        background: "var(--profile-tag-bg, #f1f5f9)",
+                                                        color: "var(--profile-text-main, #1e293b)",
+                                                        padding: "8px 16px",
+                                                        borderRadius: "8px",
+                                                        border: "1px solid var(--profile-input-border, #cbd5e1)",
+                                                        fontSize: "14px",
+                                                        fontWeight: "500",
+                                                        cursor: "pointer",
+                                                        transition: "all 0.2s ease"
                                                     }}
                                                 >
-                                                    <BookOpen
-                                                        size={
-                                                            16
-                                                        }
-                                                    />
+                                                    <BookOpen size={16} />
                                                     View Course
                                                 </button>
 
@@ -910,36 +875,21 @@ export default function ProfilePage() {
                                                             )
                                                         }
                                                         style={{
-                                                            display:
-                                                                "flex",
-                                                            alignItems:
-                                                                "center",
+                                                            display: "flex",
+                                                            alignItems: "center",
                                                             gap: "6px",
-                                                            background:
-                                                                "#2563eb",
-                                                            color:
-                                                                "#fff",
-                                                            padding:
-                                                                "8px 16px",
-                                                            borderRadius:
-                                                                "8px",
-                                                            border:
-                                                                "none",
-                                                            fontSize:
-                                                                "14px",
-                                                            fontWeight:
-                                                                "500",
-                                                            cursor:
-                                                                "pointer",
-                                                            transition:
-                                                                "all 0.2s ease"
+                                                            background: "var(--brand-primary, #2563eb)",
+                                                            color: "#fff",
+                                                            padding: "8px 16px",
+                                                            borderRadius: "8px",
+                                                            border: "none",
+                                                            fontSize: "14px",
+                                                            fontWeight: "500",
+                                                            cursor: "pointer",
+                                                            transition: "all 0.2s ease"
                                                         }}
                                                     >
-                                                        <Award
-                                                            size={
-                                                                16
-                                                            }
-                                                        />
+                                                        <Award size={16} />
                                                         Certificate
                                                     </button>
                                                 )}
@@ -954,26 +904,28 @@ export default function ProfilePage() {
                     {/* Wishlist Section */}
                     <div
                         style={{
-                            background: "#fff",
+                            background: "var(--profile-card-bg, #fff)",
                             padding: "24px",
                             borderRadius: "12px",
-                            border: "1px solid #e2e8f0"
+                            border: "1px solid var(--profile-border, #e2e8f0)",
+                            transition: "background-color 0.3s ease, border-color 0.3s ease"
                         }}
                     >
                         <h2
                             style={{
                                 fontSize: "18px",
                                 fontWeight: "bold",
-                                color: "#1e293b",
+                                color: "var(--profile-text-main, #1e293b)",
                                 display: "flex",
                                 alignItems: "center",
                                 gap: "8px",
-                                marginBottom: "16px"
+                                marginBottom: "16px",
+                                transition: "color 0.3s ease"
                             }}
                         >
                             <Heart
                                 size={20}
-                                color="#ef4444"
+                                color="var(--profile-error-text, #ef4444)"
                             />
                             Wishlist
                         </h2>
@@ -982,8 +934,9 @@ export default function ProfilePage() {
                         profile.wishlist.length === 0 ? (
                             <p
                                 style={{
-                                    color: "#94a3b8",
-                                    fontSize: "14px"
+                                    color: "var(--profile-text-muted, #94a3b8)",
+                                    fontSize: "14px",
+                                    transition: "color 0.3s ease"
                                 }}
                             >
                                 Your wishlist is empty.
@@ -1002,89 +955,62 @@ export default function ProfilePage() {
                                             key={idx}
                                             style={{
                                                 display: "flex",
-                                                justifyContent:
-                                                    "space-between",
-                                                alignItems:
-                                                    "center",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
                                                 padding: "14px",
-                                                background:
-                                                    "#f8fafc",
-                                                borderRadius:
-                                                    "8px",
-                                                border:
-                                                    "1px solid #f1f5f9",
+                                                background: "var(--profile-item-bg, #f8fafc)",
+                                                borderRadius: "8px",
+                                                border: "1px solid var(--profile-item-border, #f1f5f9)",
                                                 flexWrap: "wrap",
-                                                gap: "10px"
+                                                gap: "10px",
+                                                transition: "background-color 0.3s ease, border-color 0.3s ease"
                                             }}
                                         >
                                             <div>
                                                 <span
                                                     style={{
-                                                        fontSize:
-                                                            "15px",
-                                                        fontWeight:
-                                                            "500",
-                                                        color:
-                                                            "#1e293b"
+                                                        fontSize: "15px",
+                                                        fontWeight: "500",
+                                                        color: "var(--profile-text-main, #1e293b)",
+                                                        transition: "color 0.3s ease"
                                                     }}
                                                 >
-                                                    {
-                                                        item.courseName
-                                                    }
+                                                    {item.courseName}
                                                 </span>
 
                                                 <p
                                                     style={{
-                                                        margin:
-                                                            "4px 0 0",
-                                                        fontSize:
-                                                            "15px",
-                                                        fontWeight:
-                                                            "bold",
-                                                        color:
-                                                            "#059669"
+                                                        margin: "4px 0 0",
+                                                        fontSize: "15px",
+                                                        fontWeight: "bold",
+                                                        color: "var(--profile-success-text, #059669)",
+                                                        transition: "color 0.3s ease"
                                                     }}
                                                 >
-                                                    {item.price?.toLocaleString()}{" "}
-                                                    EGP
+                                                    {item.price?.toLocaleString()} EGP
                                                 </p>
                                             </div>
 
                                             <button
                                                 onClick={() =>
-                                                    handleViewWishlistCourse(
-                                                        item
-                                                    )
+                                                    handleViewWishlistCourse(item)
                                                 }
                                                 style={{
-                                                    display:
-                                                        "flex",
-                                                    alignItems:
-                                                        "center",
+                                                    display: "flex",
+                                                    alignItems: "center",
                                                     gap: "6px",
-                                                    background:
-                                                        "#f1f5f9",
-                                                    color:
-                                                        "#1e293b",
-                                                    padding:
-                                                        "8px 16px",
-                                                    borderRadius:
-                                                        "8px",
-                                                    border:
-                                                        "1px solid #cbd5e1",
-                                                    fontSize:
-                                                        "14px",
-                                                    fontWeight:
-                                                        "500",
-                                                    cursor:
-                                                        "pointer",
-                                                    transition:
-                                                        "all 0.2s ease"
+                                                    background: "var(--profile-tag-bg, #f1f5f9)",
+                                                    color: "var(--profile-text-main, #1e293b)",
+                                                    padding: "8px 16px",
+                                                    borderRadius: "8px",
+                                                    border: "1px solid var(--profile-input-border, #cbd5e1)",
+                                                    fontSize: "14px",
+                                                    fontWeight: "500",
+                                                    cursor: "pointer",
+                                                    transition: "all 0.2s ease"
                                                 }}
                                             >
-                                                <BookOpen
-                                                    size={16}
-                                                />
+                                                <BookOpen size={16} />
                                                 View Course
                                             </button>
                                         </div>
@@ -1102,8 +1028,7 @@ export default function ProfilePage() {
                     style={{
                         position: "fixed",
                         inset: 0,
-                        backgroundColor:
-                            "rgba(15, 23, 42, 0.75)",
+                        backgroundColor: "rgba(15, 23, 42, 0.75)",
                         backdropFilter: "blur(4px)",
                         display: "flex",
                         alignItems: "center",
@@ -1115,7 +1040,7 @@ export default function ProfilePage() {
                 >
                     <div
                         style={{
-                            background: "#fff",
+                            background: "var(--profile-card-bg, #fff)",
                             width: "100%",
                             maxWidth: "900px",
                             height: "90vh",
@@ -1123,8 +1048,8 @@ export default function ProfilePage() {
                             display: "flex",
                             flexDirection: "column",
                             overflow: "hidden",
-                            boxShadow:
-                                "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                            transition: "background-color 0.3s ease"
                         }}
                         onClick={(e) =>
                             e.stopPropagation()
@@ -1134,12 +1059,11 @@ export default function ProfilePage() {
                             style={{
                                 display: "flex",
                                 alignItems: "center",
-                                justifyContent:
-                                    "space-between",
+                                justifyContent: "space-between",
                                 padding: "16px 20px",
-                                borderBottom:
-                                    "1px solid #e2e8f0",
-                                background: "#f8fafc"
+                                borderBottom: "1px solid var(--profile-border, #e2e8f0)",
+                                background: "var(--profile-item-bg, #f8fafc)",
+                                transition: "background-color 0.3s ease, border-color 0.3s ease"
                             }}
                         >
                             <div
@@ -1151,7 +1075,7 @@ export default function ProfilePage() {
                             >
                                 <Award
                                     size={20}
-                                    color="#2563eb"
+                                    color="var(--brand-primary, #2563eb)"
                                 />
 
                                 <h3
@@ -1159,7 +1083,8 @@ export default function ProfilePage() {
                                         margin: 0,
                                         fontSize: "16px",
                                         fontWeight: "600",
-                                        color: "#1e293b"
+                                        color: "var(--profile-text-main, #1e293b)",
+                                        transition: "color 0.3s ease"
                                     }}
                                 >
                                     {pdfTitle} Certificate
@@ -1178,28 +1103,20 @@ export default function ProfilePage() {
                                         onClick={handleDownload}
                                         style={{
                                             display: "flex",
-                                            alignItems:
-                                                "center",
+                                            alignItems: "center",
                                             gap: "6px",
-                                            background:
-                                                "#059669",
+                                            background: "var(--profile-success-text, #059669)",
                                             color: "#fff",
-                                            padding:
-                                                "7px 14px",
-                                            borderRadius:
-                                                "6px",
+                                            padding: "7px 14px",
+                                            borderRadius: "6px",
                                             border: "none",
-                                            cursor:
-                                                "pointer",
-                                            fontSize:
-                                                "13px",
-                                            fontWeight:
-                                                "500"
+                                            cursor: "pointer",
+                                            fontSize: "13px",
+                                            fontWeight: "500",
+                                            transition: "background-color 0.3s ease"
                                         }}
                                     >
-                                        <Download
-                                            size={15}
-                                        />
+                                        <Download size={15} />
                                         Download PDF
                                     </button>
                                 )}
@@ -1212,11 +1129,11 @@ export default function ProfilePage() {
                                         background: "none",
                                         border: "none",
                                         cursor: "pointer",
-                                        color: "#64748b",
+                                        color: "var(--profile-text-muted, #64748b)",
                                         display: "flex",
-                                        alignItems:
-                                            "center",
-                                        padding: "4px"
+                                        alignItems: "center",
+                                        padding: "4px",
+                                        transition: "color 0.3s ease"
                                     }}
                                 >
                                     <X size={22} />
@@ -1229,7 +1146,8 @@ export default function ProfilePage() {
                                 flex: 1,
                                 width: "100%",
                                 height: "100%",
-                                background: "#525659"
+                                background: "var(--profile-pdf-bg, #525659)",
+                                transition: "background-color 0.3s ease"
                             }}
                         >
                             {pdfLoading ? (
@@ -1237,10 +1155,8 @@ export default function ProfilePage() {
                                     style={{
                                         color: "#fff",
                                         display: "flex",
-                                        alignItems:
-                                            "center",
-                                        justifyContent:
-                                            "center",
+                                        alignItems: "center",
+                                        justifyContent: "center",
                                         height: "100%"
                                     }}
                                 >
@@ -1279,17 +1195,18 @@ export default function ProfilePage() {
                 >
                     <div
                         style={{
-                            background: "#fff",
+                            background: "var(--profile-card-bg, #fff)",
                             width: "100%",
                             maxWidth: "450px",
                             borderRadius: "14px",
                             padding: "24px",
-                            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                            transition: "background-color 0.3s ease"
                         }}
                     >
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                            <h3 style={{ margin: 0, fontSize: "18px", color: "#1e293b", display: "flex", alignItems: "center", gap: "8px" }}>
-                                <KeyRound size={20} color="#2563eb" /> Change Password
+                            <h3 style={{ margin: 0, fontSize: "18px", color: "var(--profile-text-main, #1e293b)", display: "flex", alignItems: "center", gap: "8px", transition: "color 0.3s ease" }}>
+                                <KeyRound size={20} color="var(--brand-primary, #2563eb)" /> Change Password
                             </h3>
                             <button
                                 onClick={() => {
@@ -1297,65 +1214,66 @@ export default function ProfilePage() {
                                     setPwdStatus({ loading: false, error: "", success: "" });
                                     setPwdData({ currentPassword: "", newPassword: "", confirmPassword: "" });
                                 }}
-                                style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b" }}
+                                style={{ background: "none", border: "none", cursor: "pointer", color: "var(--profile-text-muted, #64748b)", transition: "color 0.3s ease" }}
                             >
                                 <X size={22} />
                             </button>
                         </div>
 
                         {pwdStatus.error && (
-                            <div style={{ color: "#ef4444", background: "#fef2f2", padding: "10px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px" }}>
+                            <div style={{ color: "var(--profile-error-text, #ef4444)", background: "var(--profile-error-bg, #fef2f2)", border: "1px solid var(--profile-error-border, #fecaca)", padding: "10px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px", transition: "all 0.3s ease" }}>
                                 {pwdStatus.error}
                             </div>
                         )}
                         {pwdStatus.success && (
-                            <div style={{ color: "#059669", background: "#d1fae5", padding: "10px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px" }}>
+                            <div style={{ color: "var(--profile-success-text, #059669)", background: "var(--profile-success-bg, #d1fae5)", border: "1px solid var(--profile-success-border, #a7f3d0)", padding: "10px", borderRadius: "6px", marginBottom: "16px", fontSize: "14px", transition: "all 0.3s ease" }}>
                                 {pwdStatus.success}
                             </div>
                         )}
 
                         <form onSubmit={handlePasswordSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>Current Password</label>
+                                <label style={{ fontSize: "14px", fontWeight: "500", color: "var(--profile-tag-text, #475569)", transition: "color 0.3s ease" }}>Current Password</label>
                                 <input
                                     type="password"
                                     required
                                     value={pwdData.currentPassword}
                                     onChange={(e) => setPwdData({ ...pwdData, currentPassword: e.target.value })}
-                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", outline: "none" }}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid var(--profile-input-border, #cbd5e1)", outline: "none", background: "var(--profile-input-bg, #ffffff)", color: "var(--profile-text-main, #1e293b)", transition: "all 0.3s ease" }}
                                 />
                             </div>
-                            
+
                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>New Password</label>
+                                <label style={{ fontSize: "14px", fontWeight: "500", color: "var(--profile-tag-text, #475569)", transition: "color 0.3s ease" }}>New Password</label>
                                 <input
                                     type="password"
                                     required
                                     value={pwdData.newPassword}
                                     onChange={(e) => setPwdData({ ...pwdData, newPassword: e.target.value })}
-                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", outline: "none" }}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid var(--profile-input-border, #cbd5e1)", outline: "none", background: "var(--profile-input-bg, #ffffff)", color: "var(--profile-text-main, #1e293b)", transition: "all 0.3s ease" }}
                                 />
-                                
+
                                 {/* Live Validation Checklist */}
-                                <div style={{ 
-                                    display: "flex", 
-                                    flexDirection: "column", 
-                                    gap: "8px", 
-                                    background: "#f8fafc", 
-                                    padding: "12px", 
-                                    borderRadius: "8px", 
-                                    border: "1px solid #e2e8f0", 
-                                    marginTop: "4px" 
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "8px",
+                                    background: "var(--profile-item-bg, #f8fafc)",
+                                    padding: "12px",
+                                    borderRadius: "8px",
+                                    border: "1px solid var(--profile-border, #e2e8f0)",
+                                    marginTop: "4px",
+                                    transition: "background-color 0.3s ease, border-color 0.3s ease"
                                 }}>
                                     {pwdRules.map(rule => (
-                                        <div key={rule.id} style={{ 
-                                            display: "flex", 
-                                            alignItems: "center", 
-                                            gap: "8px", 
-                                            color: rule.met ? "#059669" : "#ef4444", 
-                                            fontSize: "13px", 
+                                        <div key={rule.id} style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "8px",
+                                            color: rule.met ? "var(--profile-success-text, #059669)" : "var(--profile-error-text, #ef4444)",
+                                            fontSize: "13px",
                                             fontWeight: "500",
-                                            transition: "color 0.2s ease" 
+                                            transition: "color 0.2s ease"
                                         }}>
                                             {rule.met ? <Check size={16} /> : <X size={16} />}
                                             <span>{rule.label}</span>
@@ -1365,13 +1283,13 @@ export default function ProfilePage() {
                             </div>
 
                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                <label style={{ fontSize: "14px", fontWeight: "500", color: "#475569" }}>Confirm New Password</label>
+                                <label style={{ fontSize: "14px", fontWeight: "500", color: "var(--profile-tag-text, #475569)", transition: "color 0.3s ease" }}>Confirm New Password</label>
                                 <input
                                     type="password"
                                     required
                                     value={pwdData.confirmPassword}
                                     onChange={(e) => setPwdData({ ...pwdData, confirmPassword: e.target.value })}
-                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid #cbd5e1", outline: "none" }}
+                                    style={{ padding: "10px", borderRadius: "6px", border: "1px solid var(--profile-input-border, #cbd5e1)", outline: "none", background: "var(--profile-input-bg, #ffffff)", color: "var(--profile-text-main, #1e293b)", transition: "all 0.3s ease" }}
                                 />
                             </div>
 
@@ -1379,7 +1297,7 @@ export default function ProfilePage() {
                                 type="submit"
                                 disabled={pwdStatus.loading || !isFormReadyToSubmit}
                                 style={{
-                                    background: "#2563eb",
+                                    background: "var(--brand-primary, #2563eb)",
                                     color: "#fff",
                                     padding: "12px",
                                     borderRadius: "8px",

@@ -108,7 +108,6 @@
 
 
 
-/*  Skeleton Loading */
 
 .category-skeleton{
 
@@ -160,4 +159,38 @@
 
     }
 
+}
+html[data-theme="dark"] .categories {
+    background: #17171a;
+}
+
+html[data-theme="dark"] .categories__header h2 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .categories__header p {
+    color: #a1a1aa;
+}
+
+html[data-theme="dark"] .categories__badge {
+    background: rgba(11, 159, 138, 0.14);
+    color: #0b9f8a;
+}
+
+html[data-theme="dark"] .categories__grid:hover .category-card:not(.is-active) {
+    filter: brightness(0.82);
+}
+
+html[data-theme="dark"] .category-skeleton {
+    background: #27272b;
+}
+
+html[data-theme="dark"] .category-skeleton::after {
+    background:
+            linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.08),
+                    transparent
+            );
 }

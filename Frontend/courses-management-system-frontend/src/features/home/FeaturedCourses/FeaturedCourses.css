@@ -87,3 +87,20 @@ grid-template-columns:1fr;
 }
 
 }
+
+html[data-theme="dark"] .featured-courses {
+    background: #17171a;
+}
+
+html[data-theme="dark"] .featured-courses__header h2 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .featured-courses__header p {
+    color: #a1a1aa;
+}
+
+html[data-theme="dark"] .featured-courses__badge {
+    background: rgba(11, 159, 138, 0.14);
+    color: #0b9f8a;
+}

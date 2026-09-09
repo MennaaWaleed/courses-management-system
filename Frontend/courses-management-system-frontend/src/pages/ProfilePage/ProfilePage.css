@@ -1,0 +1,78 @@
+:root {
+    --profile-card-bg: #ffffff;
+    --profile-border: #e2e8f0;
+    --profile-text-main: #1e293b;
+    --profile-text-muted: #64748b;
+    --profile-tag-bg: #f1f5f9;
+    --profile-tag-text: #475569;
+    --profile-item-bg: #f8fafc;
+    --profile-item-border: #f1f5f9;
+    --profile-input-bg: #f8fafc;
+    --profile-input-border: #cbd5e1;
+    --profile-join-btn-bg: #0f172a;
+    --profile-pdf-bg: #525659;
+
+    --profile-error-text: #ef4444;
+    --profile-error-bg: #fef2f2;
+    --profile-error-border: #fecaca;
+
+    --profile-success-text: #059669;
+    --profile-success-bg: #d1fae5;
+    --profile-success-border: #a7f3d0;
+
+    --profile-pending-text: #d97706;
+    --profile-pending-bg: #fef3c7;
+
+    --brand-primary: #2563eb;
+    --brand-secondary: #0891b2;
+    --profile-admin-avatar: #7c3aed;
+    --profile-warning-icon: #f59e0b;
+}
+
+[data-theme="dark"] {
+    --profile-card-bg: #1f1f23;
+    --profile-border: #3f3f46;
+    --profile-text-main: #f8fafc;
+    --profile-text-muted: #9ca3af;
+    --profile-tag-bg: #303036;
+    --profile-tag-text: #d1d5db;
+    --profile-item-bg: #2a2a2e;
+    --profile-item-border: #3f3f46;
+    --profile-input-bg: #2a2a2e;
+    --profile-input-border: #3f3f46;
+    --profile-join-btn-bg: #0ca592;
+    --profile-pdf-bg: #2a2a2e;
+
+    --profile-error-text: #f87171;
+    --profile-error-bg: rgba(220, 38, 38, 0.15);
+    --profile-error-border: rgba(220, 38, 38, 0.3);
+
+    --profile-success-text: #34d399;
+    --profile-success-bg: rgba(5, 150, 105, 0.15);
+    --profile-success-border: rgba(5, 150, 105, 0.3);
+
+    --profile-pending-text: #fbbf24;
+    --profile-pending-bg: rgba(217, 119, 6, 0.15);
+
+    --brand-primary: #0ca592;
+    --brand-secondary: #0ca592;
+    --profile-admin-avatar: #9333ea;
+    --profile-warning-icon: #fbbf24;
+}
+
+
+.profile-page input:focus {
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 3px rgba(12, 165, 146, 0.15) !important;
+}
+
+html[data-theme="dark"] .profile-page input:-webkit-autofill,
+html[data-theme="dark"] .profile-page input:-webkit-autofill:hover,
+html[data-theme="dark"] .profile-page input:-webkit-autofill:focus,
+html[data-theme="dark"] .profile-page input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--profile-input-bg) inset !important;
+    -webkit-text-fill-color: var(--profile-text-main) !important;
+    caret-color: var(--profile-text-main);
+    border-color: var(--profile-input-border);
+    transition: background-color 5000s ease-in-out 0s, box-shadow 0s !important;
+}

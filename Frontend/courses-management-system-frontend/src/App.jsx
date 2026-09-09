@@ -3,13 +3,13 @@ import Navbar from "./components/layout/Navbar/Navbar";
 import Footer from "./components/layout/Footer/Footer";
 import ScrollToTop from "./components/common/ScrollToTop";
 
-import HomePage from "./pages/HomePage";
-import ContactUs from "./pages/ContactUs";
-import Courses from "./pages/Courses/Courses";
+import HomePage from "./pages/HomePage/HomePage";
+import ContactUs from "./pages/ContactUs/ContactUs";
+import Courses from "./pages/Courses/Courses/Courses";
 import Login from "./features/auth/Login/Login";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Register from "./features/auth/Register/Register";
-import ProfilePage from "./pages/ProfilePage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 import CourseDetails from "./pages/Courses/CourseDetails/CourseDetails";
 import AdminMessages from './features/Admin/AdminMessages/AdminMessages';
@@ -31,6 +31,7 @@ import VerifyEmail from './features/auth/VerifyEmail/VerifyEmail';
 import SetPassword from './features/auth/SetPassword/SetPassword';
 import AllBatches from "./features/Admin/BatchesManagement/AllBatches/AllBatches.jsx";
 import ForgotPassword from './features/auth/ForgotPassword/ForgotPassword';
+import { useEffect } from "react";
 
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
@@ -40,7 +41,14 @@ function ProtectedRoute({ isLoggedIn, children }) {
 }
 
 function App() {
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem("theme") || "light";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+    }, []);
+
     const navigate = useNavigate();
+
 
     const [isLoggedIn, setIsLoggedIn] = useState(() => {
         const token = sessionStorage.getItem("token");

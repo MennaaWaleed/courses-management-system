@@ -447,3 +447,160 @@
         transform: scale(1);
     }
 }
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+html[data-theme="dark"] {
+    background-color: #17171a;
+}
+
+html[data-theme="dark"] body {
+    background-color: #17171a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .admin-categories {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .admin-header {
+    border-bottom-color: #303036;
+}
+
+html[data-theme="dark"] .admin-header h1 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .admin-category-card {
+    background: #1f1f23;
+    border-color: #303036;
+    box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.25),
+            0 8px 20px rgba(0, 0, 0, 0.30);
+}
+
+html[data-theme="dark"] .admin-category-card:hover {
+    border-color: #414149;
+    box-shadow:
+            0 6px 10px rgba(0, 0, 0, 0.30),
+            0 18px 35px rgba(0, 0, 0, 0.40);
+}
+
+html[data-theme="dark"] .card-image-container {
+    background: #27272b;
+}
+
+html[data-theme="dark"] .card-header h2 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .status-published {
+    background: #063b2f;
+    color: #6ee7b7;
+    border-color: #087f70;
+}
+
+html[data-theme="dark"] .status-draft {
+    background: #27272b;
+    color: #a1a1aa;
+    border-color: #3f3f46;
+}
+
+html[data-theme="dark"] .edit-button {
+    background: #27272b;
+    border-color: #414149;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .edit-button:hover {
+    background: #323238;
+    border-color: #5a5a63;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .publish-button {
+    background: #0b9f8a;
+    border-color: #0b9f8a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .publish-button:hover {
+    background: #087f70;
+    border-color: #087f70;
+}
+
+html[data-theme="dark"] .unpublish-button {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .unpublish-button:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+html[data-theme="dark"] .create-category-button {
+    background-color: #0b9f8a;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .create-category-button:hover {
+    background-color: #087f70;
+}
+
+html[data-theme="dark"] .loading-spinner {
+    color: #a1a1aa;
+}
+
+
+/* =========================================
+   DARK MODE MODAL
+========================================= */
+
+html[data-theme="dark"] .modal-overlay {
+    background: rgba(0, 0, 0, 0.70);
+}
+
+html[data-theme="dark"] .delete-modal {
+    background: #1f1f23;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.50);
+}
+
+html[data-theme="dark"] .delete-modal h2 {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .delete-modal p {
+    color: #a1a1aa;
+}
+
+html[data-theme="dark"] .delete-modal strong {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .delete-warning {
+    color: #f87171 !important;
+}
+
+html[data-theme="dark"] .cancel-button {
+    background: #27272b;
+    border-color: #414149;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .cancel-button:hover {
+    background: #323238;
+}
+
+html[data-theme="dark"] .confirm-delete-button {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .confirm-delete-button:hover {
+    background: #dc2626;
+}
