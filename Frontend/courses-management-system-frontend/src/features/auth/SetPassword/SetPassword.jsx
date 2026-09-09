@@ -19,14 +19,17 @@ function SetPassword({ setIsLoggedIn }) {
     const location = useLocation();
 
     const email = location.state?.email || sessionStorage.getItem("pendingEmail") || "";
+    const isReset = location.state?.isReset || false;
+    const verificationCode = location.state?.code || "";
 
     useEffect(() => {
-        if (!email) {
+        // If it's a reset operation, require the code.
+        if (!email || (isReset && !verificationCode)) {
             navigate("/auth/register");
-        } else {
+        } else if (!isReset) {
             sessionStorage.setItem("pendingEmail", email);
         }
-    }, [email, navigate]);
+    }, [email, isReset, verificationCode, navigate]);
 
     const handleSetPassword = async (e) => {
         e.preventDefault();
@@ -48,10 +51,22 @@ function SetPassword({ setIsLoggedIn }) {
 
         try {
             setIsLoading(true);
-            const response = await api.post("/auth/set-password", { 
-                email, 
-                password 
-            });
+            let response;
+
+            if (isReset) {
+                // Call the new Reset endpoint
+                response = await api.post("/auth/reset-password", { 
+                    email, 
+                    code: verificationCode, 
+                    password 
+                });
+            } else {
+                // Call the existing Registration Set-Password endpoint
+                response = await api.post("/auth/set-password", { 
+                    email, 
+                    password 
+                });
+            }
 
             sessionStorage.setItem("token", response.data.token);
             sessionStorage.setItem("role", response.data.role);
@@ -70,11 +85,19 @@ function SetPassword({ setIsLoggedIn }) {
         } catch (error) {
             const backendMessage = error.response?.data?.message || error.response?.data || "";
             
-            if (typeof backendMessage === "string" && backendMessage.includes("already been set")) {
-                if (typeof setIsLoggedIn === "function") {
-                    setIsLoggedIn(true);
-                }
+            // Handle specific case where code expires while typing password
+            if (isReset && typeof backendMessage === "string" && backendMessage.toLowerCase().includes("expired")) {
+                setErrorMessage("Your verification code has expired. Please request a new one.");
+                setTimeout(() => navigate("/auth/forgot-password"), 2000);
+                return;
+            }
+
+            if (!isReset && typeof backendMessage === "string" && backendMessage.includes("already been set")) {
+                if (typeof setIsLoggedIn === "function") setIsLoggedIn(true);
                 navigate("/", { replace: true });
+            } else if (error.response?.status === 400 && error.response?.data && !backendMessage) {
+                // Catch @StrongPassword validation errors specifically
+                setFieldErrors(error.response.data);
             } else {
                 setErrorMessage(
                     typeof backendMessage === "string" && backendMessage
@@ -91,7 +114,7 @@ function SetPassword({ setIsLoggedIn }) {
         <section className="register">
             <div className="register__card">
                 <img src={logo} alt="MTC Logo" className="register__logo" />
-                <h1 className="register__title">Set Password</h1>
+                <h1 className="register__title">{isReset ? "Enter New Password" : "Set Password"}</h1>
                 <p className="register__subtitle">Create a secure password for your account.</p>
 
                 {errorMessage && (
@@ -136,7 +159,7 @@ function SetPassword({ setIsLoggedIn }) {
                     </div>
 
                     <button type="submit" disabled={isLoading} style={{ marginTop: '20px' }}>
-                        {isLoading ? "Saving..." : "Complete Registration"}
+                        {isLoading ? "Saving..." : (isReset ? "Reset Password" : "Complete Registration")}
                     </button>
                 </form>
             </div>

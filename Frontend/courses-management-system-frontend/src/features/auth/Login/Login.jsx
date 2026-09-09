@@ -33,8 +33,6 @@ function Login({ setIsLoggedIn }) {
                 password,
             });
 
-            console.log(response.data);
-
             sessionStorage.setItem("token", response.data.token);
             sessionStorage.setItem("role", response.data.role);
 
@@ -46,8 +44,6 @@ function Login({ setIsLoggedIn }) {
             }, 1000);
 
         } catch (error) {
-            console.error(error);
-
             const backendMessage = error.response?.data?.message || error.response?.data;
 
             if (backendMessage && typeof backendMessage === 'string' && backendMessage.includes("verify your email")) {
@@ -101,7 +97,7 @@ function Login({ setIsLoggedIn }) {
                     {needsVerification && (
                         <button
                             type="button"
-                            onClick={() => navigate("/auth/verify-email", { state: { email: email } })}
+                            onClick={() => navigate("/auth/verify-email", { state: { email: email, isReset: false } })}
                             style={{ background: "none", border: "none", color: "#007bff", textDecoration: "underline", cursor: "pointer", padding: 0 }}
                         >
                             Verify Email Now
@@ -113,6 +109,13 @@ function Login({ setIsLoggedIn }) {
             <button onClick={handleLogin}>
                 Login
             </button>
+
+            {/* NEW: Forgot Password Link */}
+            <p className="signup-text" style={{ marginTop: "8px", marginBottom: "0" }}>
+                <Link to="/auth/forgot-password" style={{ color: "#6b7280", fontWeight: "normal" }}>
+                    Forgot your password?
+                </Link>
+            </p>
 
             <p className="signup-text">
                 Don't have an account?{" "}
