@@ -162,7 +162,7 @@ function ContactUs() {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                placeholder="(002)01012345678"
+                                placeholder="+20 10 1234 5678"
                                 className={errors.phone ? "input-error" : ""}
                             />
                             {errors.phone && <span className="field-error">{errors.phone}</span>}

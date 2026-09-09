@@ -1,5 +1,5 @@
 import "./Courses.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getCourses } from "../../../api/courseApi.js";
 import { getPublishedCategories } from "../../../api/categoryApi.js";
 import CourseCard from "../../../features/home/FeaturedCourses/CourseCard.jsx";
@@ -11,6 +11,11 @@ function Courses() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
+
+    // Category Navigation State
+    const scrollContainerRef = useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
 
     const activeCategoryId = searchParams.get("category") || "All";
 
@@ -38,6 +43,36 @@ function Courses() {
 
         fetchData();
     }, []);
+
+    // Category Scroll Logic
+    const checkScroll = () => {
+        if (scrollContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+            // Using Math.round/ceil to prevent high-DPI monitor sub-pixel rounding errors
+            setCanScrollLeft(Math.round(scrollLeft) > 0);
+            setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 1);
+        }
+    };
+
+    useEffect(() => {
+        // Run check on mount, after categories load, and on window resize
+        checkScroll();
+        // A slight timeout guarantees the DOM is fully painted with the new categories
+        const timeout = setTimeout(checkScroll, 100); 
+        window.addEventListener("resize", checkScroll);
+        
+        return () => {
+            clearTimeout(timeout);
+            window.removeEventListener("resize", checkScroll);
+        };
+    }, [categories]);
+
+    const scrollCategories = (direction) => {
+        if (scrollContainerRef.current) {
+            const scrollAmount = direction === "left" ? -250 : 250;
+            scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        }
+    };
 
     const filteredCourses = activeCategoryId === "All"
         ? courses
@@ -72,11 +107,22 @@ function Courses() {
             <section className="course-catalog-page__content">
                 <div className="course-catalog-page__container">
                     
-
                     {!loading && !error && (
                         <div className="course-catalog-page__categories">
-                            <div className="course-catalog-page__categories-list">
-                                
+                            <div 
+                                className="course-catalog-page__categories-list" 
+                                ref={scrollContainerRef}
+                                onScroll={checkScroll}
+                            >
+                                {/* Left Scroll Arrow */}
+                                <div className={`course-catalog-page__filter-nav course-catalog-page__filter-nav--left ${canScrollLeft ? 'is-visible' : ''}`}>
+                                    <button type="button" className="course-catalog-page__filter-btn" onClick={() => scrollCategories('left')} aria-label="Scroll left">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M15 18l-6-6 6-6" />
+                                        </svg>
+                                    </button>
+                                </div>
+
                                 <button
                                     type="button"
                                     className={`course-catalog-page__category ${
@@ -99,6 +145,15 @@ function Courses() {
                                         {category.categoryName}
                                     </button>
                                 ))}
+
+                                {/* Right Scroll Arrow */}
+                                <div className={`course-catalog-page__filter-nav course-catalog-page__filter-nav--right ${canScrollRight ? 'is-visible' : ''}`}>
+                                    <button type="button" className="course-catalog-page__filter-btn" onClick={() => scrollCategories('right')} aria-label="Scroll right">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M9 18l6-6-6-6" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}

@@ -829,10 +829,8 @@
 ========================================= */
 .course-catalog-page__categories {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin-bottom: 45px;
+    /* Removed flex centering on the parent to avoid the flexbox overflow bug */
 }
 
 .course-catalog-page__categories-list {
@@ -844,7 +842,85 @@
     border: 1px solid var(--catalog-border);
     border-radius: 16px;
     box-shadow: 0 20px 40px var(--catalog-shadow);
+    
+    /* Native Scroll Configuration */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    position: relative;
+    max-width: 100%;
+    width: fit-content;
+    margin: 0 auto; /* Centers the block elegantly when items are few */
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-catalog-page__categories-list::-webkit-scrollbar {
+    display: none; /* Chrome, Edge, Safari */
+}
+
+/* Scroll Navigation Arrows (Sticky over scrolling content) */
+.course-catalog-page__filter-nav {
+    position: sticky;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    background: var(--catalog-card-bg);
+    padding: 0 10px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Let clicks pass through if invisible */
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+    align-self: stretch; /* Fills container height for perfect cover */
+}
+
+.course-catalog-page__filter-nav.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.course-catalog-page__filter-nav--left {
+    left: -5px; /* Pulls slightly over the padding to perfectly cover */
+    /* Solid matching shadow fakes a fade effect as text rolls under */
+    box-shadow: 12px 0 15px -5px var(--catalog-card-bg); 
+}
+
+.course-catalog-page__filter-nav--right {
+    right: -5px;
+    box-shadow: -12px 0 15px -5px var(--catalog-card-bg);
+}
+
+.course-catalog-page__filter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--catalog-border);
+    background: var(--catalog-bg);
+    color: var(--catalog-text-main);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px var(--catalog-shadow);
+    flex-shrink: 0;
+}
+
+.course-catalog-page__filter-btn:hover {
+    background: var(--catalog-brand-light);
+    color: var(--catalog-brand);
+    border-color: var(--catalog-brand);
+    transform: scale(1.05);
+}
+
+.course-catalog-page__filter-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(10, 159, 143, 0.25);
+}
+
+.course-catalog-page__filter-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
 .course-catalog-page__category {
@@ -862,6 +938,7 @@
     white-space: nowrap;
     cursor: pointer;
     transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    flex-shrink: 0; /* Prevents pill from squishing */
 }
 
 .course-catalog-page__category:hover:not(.course-catalog-page__category--active) {
@@ -883,7 +960,6 @@
 .course-catalog-page__category:focus-visible {
     box-shadow: 0 0 0 3px rgba(10, 159, 143, 0.2);
 }
-
 /* =========================================
    Responsive Design
 ========================================= */
@@ -904,23 +980,19 @@
         grid-template-columns: 1fr;
         gap: 26px;
     }
-    .course-catalog-page__categories {
-        justify-content: flex-start;
-        overflow-x: auto;
-        padding: 0 4px 8px;
+ .course-catalog-page__categories {
         margin-bottom: 35px;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-    }
-    .course-catalog-page__categories::-webkit-scrollbar {
-        display: none;
     }
     .course-catalog-page__categories-list {
-        flex-shrink: 0;
-        justify-content: flex-start;
-        gap: 3px;
         padding: 4px;
         border-radius: 14px;
+        margin: 0;
+        width: 100%;
+        /* Hardware acceleration for ultra-smooth mobile swiping */
+        -webkit-overflow-scrolling: touch; 
+    }
+   .course-catalog-page__filter-nav {
+        padding: 0 5px; /* Slimmer navigation on tablets */
     }
     .course-catalog-page__category {
         padding: 11px 19px;
@@ -930,14 +1002,12 @@
 }
 
 @media (max-width: 576px) {
-    .course-catalog-page__categories {
-        margin-bottom: 30px;
-        padding-left: 0;
-        padding-right: 0;
+  .course-catalog-page__categories-list {
+        width: auto;
+        margin: 0 15px; /* Avoids flush touches to screen edges */
     }
-    .course-catalog-page__categories-list {
-        width: max-content;
-        max-width: none;
+    .course-catalog-page__filter-nav {
+        padding: 0 2px; /* Very slim for smallest mobile */
     }
     .course-catalog-page__category {
         padding: 10px 17px;
