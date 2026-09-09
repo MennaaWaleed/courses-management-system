@@ -51,7 +51,11 @@ public class SecurityConfig {
                                 "/api/courses/*/batches",
                                 "/auth/verify-email",
                                 "/auth/set-password",
-                                "/auth/resend-code"
+                                "/auth/resend-code",
+                                "/auth/forgot-password",
+                                "/auth/verify-reset-code",
+                                "/auth/reset-password"
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

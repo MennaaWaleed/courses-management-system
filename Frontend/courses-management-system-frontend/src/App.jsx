@@ -30,6 +30,7 @@ import AdminInstructors from "./features/Admin/AdminInstructors/AdminInstructors
 import VerifyEmail from './features/auth/VerifyEmail/VerifyEmail';
 import SetPassword from './features/auth/SetPassword/SetPassword';
 import AllBatches from "./features/Admin/BatchesManagement/AllBatches/AllBatches.jsx";
+import ForgotPassword from './features/auth/ForgotPassword/ForgotPassword';
 
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
@@ -212,6 +213,7 @@ function App() {
                         element={<AdminCourseRegistrations />}
                     />
                     <Route path="/admin/messages" element={<AdminMessages />} />
+
                     <Route
                         path="/admin/all-batches"
                         element={
@@ -219,8 +221,14 @@ function App() {
                                 <AllBatches />
                             </AdminRoute>
                         }
+                        />
+                    <Route
+                        path="/auth/forgot-password"
+                        element={<ForgotPassword />}
                     />
                 </Routes>
+
+
             </main>
 
             {!isAdmin && <Footer />}

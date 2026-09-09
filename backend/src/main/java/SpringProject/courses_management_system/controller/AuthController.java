@@ -5,6 +5,9 @@ import SpringProject.courses_management_system.dto.auth.Login.LoginResponse;
 import SpringProject.courses_management_system.dto.auth.Register.RegisterRequest;
 import SpringProject.courses_management_system.dto.auth.Register.RegisterResponse;
 import SpringProject.courses_management_system.dto.auth.ResendCode.ResendCodeRequest;
+import SpringProject.courses_management_system.dto.auth.ResetPassword.ForgotPasswordRequest;
+import SpringProject.courses_management_system.dto.auth.ResetPassword.ResetPasswordRequest;
+import SpringProject.courses_management_system.dto.auth.ResetPassword.VerifyResetCodeRequest;
 import SpringProject.courses_management_system.dto.auth.SetPassword.SetPasswordRequest;
 import SpringProject.courses_management_system.dto.auth.SetPassword.SetPasswordResponse;
 import SpringProject.courses_management_system.dto.auth.VerifyEmail.VerifyEmailRequest;
@@ -67,5 +70,29 @@ public class AuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        try {
+            authenticationService.forgotPassword(request);
+            return ResponseEntity.ok(Map.of("message", "A reset code has been sent to your email."));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+    @PostMapping("/verify-reset-code")
+    public ResponseEntity<?> verifyResetCode(@Valid @RequestBody VerifyResetCodeRequest request) {
+        try {
+            authenticationService.verifyResetCode(request);
+            return ResponseEntity.ok(Map.of("message", "Code verified successfully."));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<SetPasswordResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return ResponseEntity.ok(authenticationService.resetPassword(request));
     }
 }

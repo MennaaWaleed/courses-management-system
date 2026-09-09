@@ -18,18 +18,18 @@ function SetPassword({ setIsLoggedIn }) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const email =
-        location.state?.email ||
-        sessionStorage.getItem("pendingEmail") ||
-        "";
+    const email = location.state?.email || sessionStorage.getItem("pendingEmail") || "";
+    const isReset = location.state?.isReset || false;
+    const verificationCode = location.state?.code || "";
 
     useEffect(() => {
-        if (!email) {
+        // If it's a reset operation, require the code.
+        if (!email || (isReset && !verificationCode)) {
             navigate("/auth/register");
-        } else {
+        } else if (!isReset) {
             sessionStorage.setItem("pendingEmail", email);
         }
-    }, [email, navigate]);
+    }, [email, isReset, verificationCode, navigate]);
 
     const passwordRules = {
         minLength: password.length >= 8,
@@ -72,11 +72,22 @@ function SetPassword({ setIsLoggedIn }) {
 
         try {
             setIsLoading(true);
+            let response;
 
-            const response = await api.post("/auth/set-password", {
-                email,
-                password
-            });
+            if (isReset) {
+                // Call the new Reset endpoint
+                response = await api.post("/auth/reset-password", { 
+                    email, 
+                    code: verificationCode, 
+                    password 
+                });
+            } else {
+                // Call the existing Registration Set-Password endpoint
+                response = await api.post("/auth/set-password", { 
+                    email, 
+                    password 
+                });
+            }
 
             sessionStorage.setItem(
                 "token",
@@ -105,30 +116,21 @@ function SetPassword({ setIsLoggedIn }) {
             }, 1000);
 
         } catch (error) {
-            const backendMessage =
-                error.response?.data?.message ||
-                error.response?.data ||
-                "";
+            const backendMessage = error.response?.data?.message || error.response?.data || "";
+            
+            // Handle specific case where code expires while typing password
+            if (isReset && typeof backendMessage === "string" && backendMessage.toLowerCase().includes("expired")) {
+                setErrorMessage("Your verification code has expired. Please request a new one.");
+                setTimeout(() => navigate("/auth/forgot-password"), 2000);
+                return;
+            }
 
-            if (
-                typeof backendMessage === "string" &&
-                backendMessage.includes("already been set")
-            ) {
-                if (typeof setIsLoggedIn === "function") {
-                    setIsLoggedIn(true);
-                }
-
-                navigate("/", {
-                    replace: true
-                });
-
-            } else if (
-                error.response?.status === 400 &&
-                error.response?.data &&
-                typeof error.response.data === "object"
-            ) {
+            if (!isReset && typeof backendMessage === "string" && backendMessage.includes("already been set")) {
+                if (typeof setIsLoggedIn === "function") setIsLoggedIn(true);
+                navigate("/", { replace: true });
+            } else if (error.response?.status === 400 && error.response?.data && !backendMessage) {
+                // Catch @StrongPassword validation errors specifically
                 setFieldErrors(error.response.data);
-
             } else {
                 setErrorMessage(
                     typeof backendMessage === "string" &&
@@ -146,20 +148,9 @@ function SetPassword({ setIsLoggedIn }) {
     return (
         <section className="register">
             <div className="register__card">
-
-                <img
-                    src={logo}
-                    alt="MTC Logo"
-                    className="register__logo"
-                />
-
-                <h1 className="register__title">
-                    Set Password
-                </h1>
-
-                <p className="register__subtitle">
-                    Create a secure password for your account.
-                </p>
+                <img src={logo} alt="MTC Logo" className="register__logo" />
+                <h1 className="register__title">{isReset ? "Enter New Password" : "Set Password"}</h1>
+                <p className="register__subtitle">Create a secure password for your account.</p>
 
                 {errorMessage && (
                     <div
@@ -361,14 +352,8 @@ function SetPassword({ setIsLoggedIn }) {
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={isLoading || !isPasswordValid}
-                        style={{ marginTop: "20px" }}
-                    >
-                        {isLoading
-                            ? "Saving..."
-                            : "Complete Registration"}
+                    <button type="submit" disabled={isLoading} style={{ marginTop: '20px' }}>
+                        {isLoading ? "Saving..." : (isReset ? "Reset Password" : "Complete Registration")}
                     </button>
 
                 </form>

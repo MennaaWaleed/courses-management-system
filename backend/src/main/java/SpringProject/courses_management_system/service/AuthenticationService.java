@@ -4,6 +4,9 @@ import SpringProject.courses_management_system.dto.auth.Login.LoginRequest;
 import SpringProject.courses_management_system.dto.auth.Login.LoginResponse;
 import SpringProject.courses_management_system.dto.auth.Register.RegisterRequest;
 import SpringProject.courses_management_system.dto.auth.Register.RegisterResponse;
+import SpringProject.courses_management_system.dto.auth.ResetPassword.ForgotPasswordRequest;
+import SpringProject.courses_management_system.dto.auth.ResetPassword.ResetPasswordRequest;
+import SpringProject.courses_management_system.dto.auth.ResetPassword.VerifyResetCodeRequest;
 import SpringProject.courses_management_system.dto.auth.SetPassword.SetPasswordRequest;
 import SpringProject.courses_management_system.dto.auth.SetPassword.SetPasswordResponse;
 import SpringProject.courses_management_system.dto.auth.VerifyEmail.VerifyEmailRequest;
@@ -243,6 +246,61 @@ public class AuthenticationService {
         userRepository.save(user);
 
         emailService.sendVerificationCode(user.getEmail(), newCode);
+    }
+
+
+
+    public void forgotPassword(ForgotPasswordRequest request) {
+        // Throw an explicit error instead of returning silently
+        User user = userRepository.findByEmailAndIsDeletedFalse(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("This email is not registered."));
+
+        String resetCode = String.format("%06d", new java.util.Random().nextInt(1000000));
+        user.setVerificationCode(resetCode);
+        user.setVerificationCodeExpiry(ZonedDateTime.now().plusMinutes(10));
+        userRepository.save(user);
+
+        // Reuse the existing verification email template
+        emailService.sendVerificationCode(user.getEmail(), resetCode);
+    }
+    public void verifyResetCode(VerifyResetCodeRequest request) {
+        User user = userRepository.findByEmailAndIsDeletedFalse(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or verification code."));
+
+        if (user.getVerificationCodeExpiry() == null || user.getVerificationCodeExpiry().isBefore(ZonedDateTime.now())) {
+            throw new IllegalArgumentException("Verification code has expired.");
+        }
+
+        if (user.getVerificationCode() == null || !user.getVerificationCode().equals(request.getCode())) {
+            throw new IllegalArgumentException("Invalid verification code.");
+        }
+        // Notice we DO NOT clear the code here. We need it for the final Set Password step.
+    }
+
+    public SetPasswordResponse resetPassword(ResetPasswordRequest request) {
+        User user = userRepository.findByEmailAndIsDeletedFalse(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid request."));
+
+        // Final security check: Re-verify the code at the exact moment the password is changed
+        if (user.getVerificationCodeExpiry() == null || user.getVerificationCodeExpiry().isBefore(ZonedDateTime.now())) {
+            throw new IllegalArgumentException("Verification code has expired. Please request a new one.");
+        }
+        if (user.getVerificationCode() == null || !user.getVerificationCode().equals(request.getCode())) {
+            throw new IllegalArgumentException("Invalid verification code.");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setVerificationCode(null);
+        user.setVerificationCodeExpiry(null);
+        userRepository.save(user);
+
+        String token = jwtService.generateToken(new CustomUserDetails(user));
+        SetPasswordResponse response = new SetPasswordResponse();
+        response.setMessage("Password reset successfully.");
+        response.setToken(token);
+        response.setRole(user.getRole().name());
+
+        return response;
     }
 }
 

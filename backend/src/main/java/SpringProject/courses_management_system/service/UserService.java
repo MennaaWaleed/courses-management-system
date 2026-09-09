@@ -131,11 +131,15 @@ public class UserService {
         User user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+
         // Verify that the current password matches
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Incorrect current password.");
         }
-
+        // Prevent the user from reusing their exact current password
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("New password must be different from the current password.");
+        }
         // Encode and set the new password
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);

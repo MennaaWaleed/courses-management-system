@@ -1,5 +1,6 @@
 package SpringProject.courses_management_system.dto.User;
 
+import SpringProject.courses_management_system.validation.StrongPassword;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -9,5 +10,6 @@ public class ChangePasswordRequest {
     private String currentPassword;
 
     @NotBlank(message = "New password is required")
+    @StrongPassword
     private String newPassword;
 }
