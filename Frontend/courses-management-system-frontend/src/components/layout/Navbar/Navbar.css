@@ -2,11 +2,11 @@
     --nav-bg: #ffffff;
     --text-primary: #111827;
     --text-secondary: #4b5563;
-    --brand-primary: #0d9488;
-    --brand-primary-hover: #0f766e;
+    --brand-primary: #14b8a6;
+    --brand-primary-hover: #0d9488;
     --nav-border: #e5e7eb;
-    --btn-outline-text: #0d9488;
-    --btn-outline-border: #0d9488;
+    --btn-outline-text: #14b8a6;
+    --btn-outline-border: #14b8a6;
     --overlay-bg: rgba(0, 0, 0, 0.5);
     --drawer-bg: #ffffff;
 }
@@ -124,14 +124,17 @@
     background: rgba(128, 128, 128, 0.05);
 }
 
-.navbar__register {
-    background-color: var(--brand-primary);
-    color: #ffffff;
-    border: 1px solid var(--brand-primary);
+.navbar a.navbar__register {
+    background-color: #14b8a6 !important;
+    color: #ffffff !important;
+    border: 1px solid #14b8a6 !important;
+    text-decoration: none !important;
 }
 
-.navbar__register:hover {
-    background-color: var(--brand-primary-hover);
+.navbar a.navbar__register:hover {
+    background-color: #2dd4bf !important;
+    color: #ffffff !important;
+    border-color: #2dd4bf !important;
 }
 
 .navbar__user-actions {
@@ -226,6 +229,11 @@
     font-size: 1.1rem;
     font-weight: 500;
     display: block;
+    transition: color 0.2s ease;
+}
+
+.navbar__drawer-links a:hover {
+    color: var(--brand-primary);
 }
 
 .navbar__drawer-actions {
@@ -273,11 +281,16 @@
     font-size: 1rem;
 }
 
+.navbar__drawer-profile:hover {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
 .navbar__drawer-actions .navbar__logout {
     width: 100%;
     padding: 12px 16px;
     background-color: #ef4444;
-    color: white;
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-size: 1rem;
@@ -285,11 +298,29 @@
     text-align: center;
 }
 
+.navbar__drawer-actions .navbar__logout:hover {
+    background-color: #dc2626;
+}
+
 .navbar__drawer-actions .navbar__login,
 .navbar__drawer-actions .navbar__register {
     width: 100%;
     text-align: center;
     padding: 12px 16px;
+    box-sizing: border-box;
+}
+
+.navbar__drawer-actions a.navbar__register {
+    background-color: #14b8a6 !important;
+    color: #ffffff !important;
+    border: 1px solid #14b8a6 !important;
+    text-decoration: none !important;
+}
+
+.navbar__drawer-actions a.navbar__register:hover {
+    background-color: #2dd4bf !important;
+    color: #ffffff !important;
+    border-color: #2dd4bf !important;
 }
 
 .navbar__overlay {
