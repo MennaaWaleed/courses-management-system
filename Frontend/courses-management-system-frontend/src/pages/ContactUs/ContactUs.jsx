@@ -1,6 +1,6 @@
 import "../../styles/ContactUs.css";
 import { useState } from "react";
-
+import "./ContactUs.css"
 function ContactUs() {
     const [formData, setFormData] = useState({
         name: "",
@@ -200,4 +200,3 @@ function ContactUs() {
 }
 
 export default ContactUs;
-
