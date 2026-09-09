@@ -13,10 +13,11 @@ import java.util.UUID;
 public interface WishlistRepository extends JpaRepository<Wishlist, WishlistKey> {
 
     @Query("""
-        SELECT w
-        FROM Wishlist w
-        WHERE w.id.userId = :userId
-    """)
+    SELECT w
+    FROM Wishlist w
+    WHERE w.id.userId = :userId
+      AND w.course.isDeleted = false
+""")
     List<Wishlist> findByUserId(@Param("userId") UUID userId);
 
 

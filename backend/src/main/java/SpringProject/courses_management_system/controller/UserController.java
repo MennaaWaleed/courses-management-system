@@ -37,7 +37,6 @@ public class UserController {
     }
     @PutMapping("/profile/password")
     public ResponseEntity<?> changePassword(Principal principal, @Valid @RequestBody ChangePasswordRequest request) {
-        // principal.getName() extracts the authenticated user's email from the JWT
         userService.changePassword(principal.getName(), request);
         return ResponseEntity.ok(Map.of("message", "Password updated successfully."));
     }
