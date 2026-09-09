@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "./HomeIntro.css";
 
-import introImage from "../../../assets/images/intro_img.png";
+import introImage from "../../../assets/images/intro_img.jfif";
+import introImage_dark from "../../../assets/images/intro_img-dark.jfif";
 import autodeskIcon from "../../../assets/images/autodesk-icon.svg";
 
 import {
@@ -93,10 +94,19 @@ function HomeIntro() {
                         <div className="visual__glow"></div>
 
                         <div className="visual__image-wrapper">
+                            
+                            {/* LIGHT MODE IMAGE */}
                             <img
                                 src={introImage}
                                 alt="Professional Engineering Training"
-                                className="visual__hero-image"
+                                className="visual__hero-image visual__hero-image--light"
+                            />
+
+                            {/* DARK MODE IMAGE */}
+                            <img
+                                src={introImage_dark}
+                                alt="Professional Engineering Training"
+                                className="visual__hero-image visual__hero-image--dark"
                             />
                             
                             <div className="visual__floating-card visual__floating-card--top">
