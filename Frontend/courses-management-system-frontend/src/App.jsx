@@ -29,6 +29,7 @@ import AdminLecturesPage from './features/Admin/ManageLectures/pages/AdminLectur
 import AdminInstructors from "./features/Admin/AdminInstructors/AdminInstructors";
 import VerifyEmail from './features/auth/VerifyEmail/VerifyEmail';
 import SetPassword from './features/auth/SetPassword/SetPassword';
+import AllBatches from "./features/Admin/BatchesManagement/AllBatches/AllBatches.jsx";
 
 function ProtectedRoute({ isLoggedIn, children }) {
     if (!isLoggedIn) {
@@ -211,6 +212,14 @@ function App() {
                         element={<AdminCourseRegistrations />}
                     />
                     <Route path="/admin/messages" element={<AdminMessages />} />
+                    <Route
+                        path="/admin/all-batches"
+                        element={
+                            <AdminRoute>
+                                <AllBatches />
+                            </AdminRoute>
+                        }
+                    />
                 </Routes>
             </main>
 

@@ -125,4 +125,10 @@ public class CourseBatchController {
         return ResponseEntity.ok(updatedBatch);
     }
 
+    @GetMapping("/batches/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<CourseBatchResponse>> getAllActiveBatches() {
+        return ResponseEntity.ok(courseBatchService.getAllActiveBatches());
+    }
+
 }

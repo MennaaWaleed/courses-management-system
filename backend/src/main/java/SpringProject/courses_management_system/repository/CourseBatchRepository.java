@@ -34,4 +34,13 @@ public interface CourseBatchRepository extends JpaRepository<CourseBatch, UUID> 
 
     Optional<CourseBatch> findByBatchCode(String batchCode);
     Optional<CourseBatch> findByIdAndDeletedFalse(UUID id);
+
+    @Query("""
+    SELECT b FROM CourseBatch b
+    JOIN FETCH b.course c
+    LEFT JOIN FETCH b.instructor i
+    WHERE b.deleted = false
+    ORDER BY c.courseName ASC, b.startDate ASC
+""")
+    List<CourseBatch> findAllActiveBatches();
 }

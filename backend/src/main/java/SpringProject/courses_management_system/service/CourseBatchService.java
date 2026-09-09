@@ -245,4 +245,12 @@ public class CourseBatchService {
         CourseBatch savedBatch = courseBatchRepository.save(batch);
         return mapToDTO(savedBatch);
     }
+
+    @Transactional(readOnly = true)
+    public List<CourseBatchResponse> getAllActiveBatches() {
+        return courseBatchRepository.findAllActiveBatches()
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
 }
