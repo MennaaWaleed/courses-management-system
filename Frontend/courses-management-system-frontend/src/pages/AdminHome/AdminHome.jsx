@@ -16,40 +16,7 @@ function AdminHome() {
                     <p className="admin-dashboard-header__subtitle">System overview and management controls</p>
                 </div>
 
-                <div className="admin-dashboard-header__actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
 
-                    <button
-                        className="admin-dashboard-header__btn"
-                        onClick={() => navigate('/admin/all-batches')}
-                    >
-                        <Layers size={18} strokeWidth={2.5} />
-                        All Batches
-                    </button>
-
-                    <button
-                        className="admin-dashboard-header__btn"
-                        onClick={() => navigate('/admin/messages')}
-                    >
-                        <MessageSquare size={18} strokeWidth={2.5} />
-                        View Messages
-                    </button>
-
-                    <button
-                        className="admin-dashboard-header__btn"
-                        onClick={() => navigate("/admin/course-registrations")}
-                    >
-                        <ClipboardList size={18} strokeWidth={2.5} />
-                        Course Registrations
-                    </button>
-
-                    <button
-                        className="admin-dashboard-header__btn"
-                        onClick={() => navigate('/admin/instructors')}
-                    >
-                        <Users size={18} strokeWidth={2.5} />
-                        Manage Instructors
-                    </button>
-                </div>
             </header>
 
             <AdminCategories />
