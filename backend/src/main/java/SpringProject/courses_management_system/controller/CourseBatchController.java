@@ -17,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class CourseBatchController {
 
     private final CourseBatchService courseBatchService;
