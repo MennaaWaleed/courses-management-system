@@ -2,7 +2,7 @@
     import { deleteCategory, getCategories, toggleCategoryPublished } from "../../../api/categoryApi.js";
     import "./AdminCategories.css";
     import { useNavigate } from "react-router-dom";
-
+    import { BASE_URL } from "../../../api/axios.js";
     function AdminCategories() {
         const [categories, setCategories] = useState([]);
         const [loading, setLoading] = useState(true);
@@ -82,7 +82,7 @@
                         >
                             <div className="card-image-container">
                                 <img
-                                    src={category.imageUrl ? `http://localhost:8080${category.imageUrl}` : "/default-category.png"}
+                                    src={category.imageUrl ? `${BASE_URL}${category.imageUrl}` : "/default-category.png"}
                                     alt={category.categoryName}
                                     className="category-image"
                                 />

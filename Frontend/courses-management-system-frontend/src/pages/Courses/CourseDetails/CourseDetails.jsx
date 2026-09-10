@@ -17,14 +17,14 @@ import {
     X,
     Heart
 } from "lucide-react";
-import CourseCard from "../../../features/Home/FeaturedCourses/CourseCard";
+import CourseCard from "../../../features/home/FeaturedCourses/CourseCard";
 import CourseRegistration from "../../../features/CourseRegistration/CourseRegistration";
 import {
     addToWishlist,
     removeFromWishlist,
     checkWishlist
 } from "../../../api/wishlistApi";
-
+import { BASE_URL } from "../../../api/axios.js";
 function CourseDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ function CourseDetails() {
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const BASE_URL = "http://localhost:8080";
+
 
     useEffect(() => {
         const token = sessionStorage.getItem("token");

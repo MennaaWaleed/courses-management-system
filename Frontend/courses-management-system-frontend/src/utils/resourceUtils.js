@@ -1,6 +1,5 @@
 // src/utils/resourceUtils.js
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+import { BASE_URL } from "../api/axios.js";
 
 export const resolveResourceUrl = (url) => {
   if (!url) return '';
@@ -9,7 +8,7 @@ export const resolveResourceUrl = (url) => {
     return url;
   }
   // Otherwise, prepend the backend base URL (e.g., Uploaded files)
-  return `${API_BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+  return `${BASE_URL}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
 export const formatBytes = (bytes, decimals = 2) => {

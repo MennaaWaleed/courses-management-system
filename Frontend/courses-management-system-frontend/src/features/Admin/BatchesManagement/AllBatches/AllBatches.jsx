@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { softDeleteBatch, regenerateBatchCode } from "../../../../api/batchApi.js";
 import { enrollmentRequestApi } from "../../../../api/enrollmentRequestApi";
+import { BASE_URL } from "../../../../api/axios.js";
 import { CheckCircle, XCircle, RefreshCw } from "lucide-react";
 
 import BatchStudents from "../BatchStudents/BatchStudents.jsx";
@@ -36,7 +37,7 @@ export default function AllBatches() {
         try {
             setLoading(true);
             const token = sessionStorage.getItem("token");
-            const response = await fetch('http://localhost:8080/api/courses/batches/all', {
+            const response = await fetch(`${BASE_URL}/api/courses/batches/all`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

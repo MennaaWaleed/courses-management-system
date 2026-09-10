@@ -1,6 +1,7 @@
 import "./Courses.css";
 import { useEffect, useState, useRef } from "react";
 import { getCourses } from "../../../api/courseApi.js";
+import { BASE_URL } from "../../../api/axios.js";
 import { getPublishedCategories } from "../../../api/categoryApi.js";
 import CourseCard from "../../../features/home/FeaturedCourses/CourseCard.jsx";
 import { useSearchParams } from "react-router-dom";
@@ -199,8 +200,8 @@ function Courses() {
                                         ...course,
                                         title: course.courseName,
                                         duration: `${course.courseHours} Hours`,
-                                        image: `http://localhost:8080${course.imageUrl}`,
-                                        icon: `http://localhost:8080${course.iconUrl}`,
+                                        image: `${BASE_URL}${course.imageUrl}`,
+                                        icon: `${BASE_URL}${course.iconUrl}`,
                                     }}
                                     variant="compact"
                                 />

@@ -1,11 +1,9 @@
 import "./CourseCard.css";
 import { useNavigate } from "react-router-dom";
-
+import { BASE_URL } from "../../../api/axios.js";
 function CourseCard({ course, variant = "default" }) {
 
     const navigate = useNavigate();
-
-    const BASE_URL = "http://localhost:8080";
 
     const handleOpenCourse = () => {
         navigate(`/courses/${course.id}`);

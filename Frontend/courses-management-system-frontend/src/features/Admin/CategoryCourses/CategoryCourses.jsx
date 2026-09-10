@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCoursesByCategory } from "../../../api/courseApi";
 import { getCategoryById } from "../../../api/categoryApi";
+import { BASE_URL } from "../../../api/axios.js";
 import { getAdminCoursesByCategory, publishCourse, featureCourse, deleteCourse } from "../../../api/courseApi";
 import "./CategoryCourses.css";
 
@@ -111,7 +112,7 @@ useEffect(() => {
                         <div className="course-card" key={course.id}>
                             <div className="course-image-container" onClick={() => navigate(`/admin/courses/${course.id}/batches`)} title="View Batches">
                                 <img
-                                    src={course.imageUrl ? `http://localhost:8080${course.imageUrl}` : "/default-course.png"}
+                                    src={course.imageUrl ? `${BASE_URL}${course.imageUrl}` : "/default-course.png"}
                                     alt={course.courseName}
                                     className="course-image"
                                 />
@@ -130,7 +131,7 @@ useEffect(() => {
                                         title="View Batches"
                                     >
                                         <img
-                                            src={course.iconUrl ? `http://localhost:8080${course.iconUrl}` : "/default-course-icon.png"}
+                                            src={course.iconUrl ? `${BASE_URL}${course.iconUrl}` : "/default-course-icon.png"}
                                             alt={course.courseName}
                                             className="course-icon"
                                         />

@@ -1,7 +1,7 @@
 import "../../styles/ContactUs.css";
 import { useState } from "react";
 import "./ContactUs.css";
-
+import { BASE_URL } from "../../api/axios.js";
 function ContactUs() {
     const [formData, setFormData] = useState({
         name: "",
@@ -35,7 +35,7 @@ function ContactUs() {
         setResponseMessage("");
 
         try {
-            const response = await fetch("http://localhost:8080/api/contact", {
+            const response = await fetch(`${BASE_URL}/api/contact`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

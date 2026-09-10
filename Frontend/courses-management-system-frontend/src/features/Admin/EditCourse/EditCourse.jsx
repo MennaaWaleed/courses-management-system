@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // Note: Using getAdminCourseById to bypass student-facing visibility restrictions
 import { getAdminCourseById, updateCourse } from "../../../api/courseApi";
 import { getCategories } from "../../../api/categoryApi";
+import { BASE_URL } from "../../../api/axios.js";
 import "./EditCourse.css";
 
 function EditCourse() {
@@ -208,7 +209,7 @@ function EditCourse() {
                     {imageUrl && (
                         <div>
                             <p>Current Image:</p>
-                            <img src={`http://localhost:8080${imageUrl}`} alt="Current course" className="current-image" />
+                            <img src={`${BASE_URL}${imageUrl}`} alt="Current course" className="current-image" />
                         </div>
                     )}
                     <input type="file" accept="image/*" onChange={handleImageChange} />
@@ -220,7 +221,7 @@ function EditCourse() {
                     {iconUrl && (
                         <div>
                             <p>Current Icon:</p>
-                            <img src={`http://localhost:8080${iconUrl}`} alt="Current icon" className="current-icon" />
+                            <img src={`${BASE_URL}${iconUrl}`} alt="Current icon" className="current-icon" />
                         </div>
                     )}
                     <input type="file" accept="image/*" onChange={handleIconChange} />

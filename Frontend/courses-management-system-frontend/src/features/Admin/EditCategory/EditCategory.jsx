@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategoryById, updateCategory } from "../../../api/categoryApi.js";
+import { BASE_URL } from "../../../api/axios.js";
 import "./EditCategory.css";
 
 function EditCategory() {
@@ -118,7 +119,7 @@ function EditCategory() {
                     ) : currentImageUrl ? (
                         <>
                             <p>Current Image:</p>
-                            <img src={`http://localhost:8080${currentImageUrl}`} alt="Current category" className="image-preview" />
+                            <img src={`${BASE_URL}${currentImageUrl}`} alt="Current category" className="image-preview" />
                         </>
                     ) : (
                         <p>No image available</p>
