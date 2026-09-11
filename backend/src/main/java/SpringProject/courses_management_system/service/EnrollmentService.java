@@ -47,7 +47,8 @@ public class EnrollmentService {
                         new RuntimeException("User not found.")
                 );
 
-        if (!"STUDENT".equals(user.getRole())) {
+        if (user.getRole() != Role.STUDENT) {
+            System.out.println("wrong --------------------------------------------------------------------------");
             throw new AccessDeniedException(
                     "Only students can access My Courses."
             );
