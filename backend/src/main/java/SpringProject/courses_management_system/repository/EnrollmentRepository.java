@@ -103,4 +103,15 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
             UUID batchId
     );
 
+    @Query("""
+    SELECT e
+    FROM Enrollment e
+    JOIN FETCH e.courseBatch b
+    JOIN FETCH b.course c
+    WHERE e.user.id = :userId
+      AND e.removed = false
+      AND b.deleted = false
+      AND c.isDeleted = false
+""")
+    List<Enrollment> findActiveEnrollmentsByUserId(@Param("userId") UUID userId);
 }

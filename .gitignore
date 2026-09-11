@@ -54,3 +54,6 @@ pnpm-debug.log*
 
 .specify/
 .opencode/
+.vercel
+.env*
+.vercel

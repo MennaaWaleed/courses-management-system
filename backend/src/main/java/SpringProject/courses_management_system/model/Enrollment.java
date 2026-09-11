@@ -52,5 +52,4 @@ public class Enrollment {
     @Column(name = "removed", nullable = false)
     private boolean removed = false;
 
-
 }

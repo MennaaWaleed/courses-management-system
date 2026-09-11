@@ -26,12 +26,21 @@ function Navbar({ isLoggedIn, handleLogout }) {
 
     const role = sessionStorage.getItem("role");
     const isAdmin = isLoggedIn && role === "ADMIN";
+    const isStudent = isLoggedIn && role === "STUDENT";
 
     const normalLinks = [
         { title: "Home", href: "/" },
         { title: "Courses", href: "/courses" },
-        { title: "About", href: "/about" }, // Updated to typical route
+        { title: "About", href: "/about" },
         { title: "Contact", href: "/contact" }
+    ];
+
+    const studentLinks = [
+        ...normalLinks,
+        {
+            title: "My Courses",
+            href: "/my-courses"
+        }
     ];
 
     const adminLinks = [
@@ -57,7 +66,11 @@ function Navbar({ isLoggedIn, handleLogout }) {
         }
     ];
 
-    const links = isAdmin ? adminLinks : normalLinks;
+    const links = isAdmin
+        ? adminLinks
+        : isStudent
+            ? studentLinks
+            : normalLinks;
 
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme);
@@ -139,8 +152,10 @@ function Navbar({ isLoggedIn, handleLogout }) {
                             <li key={link.title}>
                                 <NavLink
                                     to={link.href}
-                                    className={({ isActive }) => 
-                                        isActive ? "navbar__link active" : "navbar__link"
+                                    className={({ isActive }) =>
+                                        isActive
+                                            ? "navbar__link active"
+                                            : "navbar__link"
                                     }
                                 >
                                     {isAdmin && link.icon && (
@@ -148,6 +163,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
                                             {link.icon}
                                         </span>
                                     )}
+
                                     {link.title}
                                 </NavLink>
                             </li>
@@ -159,7 +175,11 @@ function Navbar({ isLoggedIn, handleLogout }) {
                             className="navbar__icon-btn"
                             onClick={toggleTheme}
                             aria-label="Toggle Theme"
-                            title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+                            title={
+                                theme === "light"
+                                    ? "Switch to Dark Mode"
+                                    : "Switch to Light Mode"
+                            }
                         >
                             {theme === "light" ? (
                                 <Moon size={20} strokeWidth={2.5} />
@@ -194,6 +214,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
                                 >
                                     Login
                                 </button>
+
                                 <Link
                                     to="/auth/register"
                                     className="navbar__btn navbar__btn--primary"
@@ -215,11 +236,16 @@ function Navbar({ isLoggedIn, handleLogout }) {
             </nav>
 
             {/* Mobile Drawer */}
-            <div className={`navbar__drawer ${menuOpen ? "active" : ""}`} aria-hidden={!menuOpen}>
-                
+            <div
+                className={`navbar__drawer ${
+    menuOpen ? "active" : ""
+}`}
+                aria-hidden={!menuOpen}
+            >
                 {/* 1. Header Area (Fixed) */}
                 <div className="navbar__drawer-header">
                     <img src={logo} alt="MTC Logo" />
+
                     <button
                         className="navbar__icon-btn"
                         onClick={() => setMenuOpen(false)}
@@ -235,8 +261,10 @@ function Navbar({ isLoggedIn, handleLogout }) {
                         <li key={link.title}>
                             <NavLink
                                 to={link.href}
-                                className={({ isActive }) => 
-                                    isActive ? "drawer__link active" : "drawer__link"
+                                className={({ isActive }) =>
+                                    isActive
+                                        ? "drawer__link active"
+                                        : "drawer__link"
                                 }
                                 onClick={() => setMenuOpen(false)}
                             >
@@ -245,6 +273,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
                                         {link.icon}
                                     </span>
                                 )}
+
                                 <span>{link.title}</span>
                             </NavLink>
                         </li>
@@ -260,12 +289,20 @@ function Navbar({ isLoggedIn, handleLogout }) {
                     >
                         {theme === "light" ? (
                             <>
-                                <Moon size={20} strokeWidth={2.5} className="drawer__action-icon" />
+                                <Moon
+                                    size={20}
+                                    strokeWidth={2.5}
+                                    className="drawer__action-icon"
+                                />
                                 <span>Dark Mode</span>
                             </>
                         ) : (
                             <>
-                                <Sun size={20} strokeWidth={2.5} className="drawer__action-icon" />
+                                <Sun
+                                    size={20}
+                                    strokeWidth={2.5}
+                                    className="drawer__action-icon"
+                                />
                                 <span>Light Mode</span>
                             </>
                         )}
@@ -280,9 +317,14 @@ function Navbar({ isLoggedIn, handleLogout }) {
                                     navigate("/profile");
                                 }}
                             >
-                                <User size={20} strokeWidth={2.5} className="drawer__action-icon" />
+                                <User
+                                    size={20}
+                                    strokeWidth={2.5}
+                                    className="drawer__action-icon"
+                                />
                                 <span>My Profile</span>
                             </button>
+
                             <button
                                 className="drawer__btn drawer__btn--logout"
                                 onClick={handleLogoutClick}
@@ -301,6 +343,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
                             >
                                 Login
                             </button>
+
                             <Link
                                 to="/auth/register"
                                 className="drawer__btn drawer__btn--primary"
@@ -336,9 +379,13 @@ function Navbar({ isLoggedIn, handleLogout }) {
                         <div className="logout-modal__icon">
                             <User size={28} strokeWidth={2} />
                         </div>
+
                         <h2>Confirm Logout</h2>
-                        <p>Are you sure you want to end your current session?</p>
-                        
+
+                        <p>
+                            Are you sure you want to end your current session?
+                        </p>
+
                         <div className="logout-modal__actions">
                             <button
                                 className="modal__btn modal__btn--cancel"
@@ -346,6 +393,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
                             >
                                 Cancel
                             </button>
+
                             <button
                                 className="modal__btn modal__btn--confirm"
                                 onClick={confirmLogout}
