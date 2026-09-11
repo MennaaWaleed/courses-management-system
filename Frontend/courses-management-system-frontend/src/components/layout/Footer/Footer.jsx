@@ -120,7 +120,7 @@ function Footer() {
                         </a>
 
                         <a
-                            href="https://www.google.com/maps/dir/?api=1&destination=Nasr%20City%2C%20Cairo%2C%20Egypt"
+                            href="https://maps.app.goo.gl/WiWsJnHwZ2BhmQPD7?g_st=aw"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="footer__contact-item"

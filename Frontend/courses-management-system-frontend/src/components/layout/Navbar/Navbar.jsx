@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import logo from "../../../assets/images/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
     Menu,
     X,
@@ -30,7 +30,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
     const normalLinks = [
         { title: "Home", href: "/" },
         { title: "Courses", href: "/courses" },
-        { title: "About", href: "/" },
+        { title: "About", href: "/about" }, // Updated to typical route
         { title: "Contact", href: "/contact" }
     ];
 
@@ -88,6 +88,7 @@ function Navbar({ isLoggedIn, handleLogout }) {
     };
 
     useEffect(() => {
+        // Prevent body scroll when overlay/drawer is open
         document.body.style.overflow =
             menuOpen || showLogoutModal ? "hidden" : "auto";
 
@@ -129,21 +130,17 @@ function Navbar({ isLoggedIn, handleLogout }) {
         <>
             <nav className="navbar">
                 <div className="navbar__container">
-
-                    <Link to="/" className="navbar__logo">
+                    <Link to="/" className="navbar__logo" aria-label="Home">
                         <img src={logo} alt="MTC Logo" />
                     </Link>
 
                     <ul className="navbar__links">
                         {links.map((link) => (
                             <li key={link.title}>
-                                <Link
+                                <NavLink
                                     to={link.href}
-                                    onClick={() =>
-                                        console.log(
-                                            "Clicked:",
-                                            link.title
-                                        )
+                                    className={({ isActive }) => 
+                                        isActive ? "navbar__link active" : "navbar__link"
                                     }
                                 >
                                     {isAdmin && link.icon && (
@@ -151,67 +148,59 @@ function Navbar({ isLoggedIn, handleLogout }) {
                                             {link.icon}
                                         </span>
                                     )}
-
                                     {link.title}
-                                </Link>
+                                </NavLink>
                             </li>
                         ))}
                     </ul>
 
                     <div className="navbar__actions">
-
                         <button
-                            className="navbar__theme-btn"
+                            className="navbar__icon-btn"
                             onClick={toggleTheme}
-                            aria-label="Toggle Dark Mode"
+                            aria-label="Toggle Theme"
+                            title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
                         >
                             {theme === "light" ? (
-                                <Moon size={22} />
+                                <Moon size={20} strokeWidth={2.5} />
                             ) : (
-                                <Sun size={22} />
+                                <Sun size={20} strokeWidth={2.5} />
                             )}
                         </button>
 
                         {isLoggedIn ? (
                             <div className="navbar__user-actions">
-
                                 <button
-                                    className="navbar__profile-btn"
-                                    onClick={() =>
-                                        navigate("/profile")
-                                    }
+                                    className="navbar__icon-btn"
+                                    onClick={() => navigate("/profile")}
                                     title="View Profile"
                                     aria-label="Profile"
                                 >
-                                    <User size={22} />
+                                    <User size={20} strokeWidth={2.5} />
                                 </button>
 
                                 <button
-                                    className="navbar__logout"
+                                    className="navbar__btn navbar__btn--outline"
                                     onClick={handleLogoutClick}
                                 >
                                     Logout
                                 </button>
-
                             </div>
                         ) : (
-                            <>
+                            <div className="navbar__auth-actions">
                                 <button
-                                    className="navbar__login"
-                                    onClick={() =>
-                                        navigate("/auth/login")
-                                    }
+                                    className="navbar__btn navbar__btn--ghost"
+                                    onClick={() => navigate("/auth/login")}
                                 >
                                     Login
                                 </button>
-
                                 <Link
                                     to="/auth/register"
-                                    className="navbar__register"
+                                    className="navbar__btn navbar__btn--primary"
                                 >
                                     Register
                                 </Link>
-                            </>
+                            </div>
                         )}
                     </div>
 
@@ -220,95 +209,91 @@ function Navbar({ isLoggedIn, handleLogout }) {
                         onClick={() => setMenuOpen(true)}
                         aria-label="Open menu"
                     >
-                        <Menu size={28} />
+                        <Menu size={24} strokeWidth={2.5} />
                     </button>
                 </div>
             </nav>
 
-            <div
-                className={`navbar__drawer ${
-                    menuOpen ? "active" : ""
-                }`}
-            >
+            {/* Mobile Drawer */}
+            <div className={`navbar__drawer ${menuOpen ? "active" : ""}`} aria-hidden={!menuOpen}>
+                
+                {/* 1. Header Area (Fixed) */}
                 <div className="navbar__drawer-header">
-                    <img src={logo} alt="MTC" />
-
+                    <img src={logo} alt="MTC Logo" />
                     <button
-                        className="navbar__drawer-close"
+                        className="navbar__icon-btn"
                         onClick={() => setMenuOpen(false)}
                         aria-label="Close menu"
                     >
-                        <X size={28} />
+                        <X size={24} strokeWidth={2.5} />
                     </button>
                 </div>
 
+                {/* 2. Scrollable Navigation Area */}
                 <ul className="navbar__drawer-links">
                     {links.map((link) => (
                         <li key={link.title}>
-                            <Link
+                            <NavLink
                                 to={link.href}
-                                onClick={() =>
-                                    setMenuOpen(false)
+                                className={({ isActive }) => 
+                                    isActive ? "drawer__link active" : "drawer__link"
                                 }
+                                onClick={() => setMenuOpen(false)}
                             >
                                 {isAdmin && link.icon && (
-                                    <span className="navbar__admin-icon">
+                                    <span className="drawer__admin-icon">
                                         {link.icon}
                                     </span>
                                 )}
-
-                                {link.title}
-                            </Link>
+                                <span>{link.title}</span>
+                            </NavLink>
                         </li>
                     ))}
                 </ul>
 
+                {/* 3. Bottom Actions Area (Fixed) */}
                 <div className="navbar__drawer-actions">
-
                     <button
-                        className="navbar__theme-btn drawer-theme-btn"
+                        className="drawer__action-btn"
                         onClick={toggleTheme}
-                        aria-label="Toggle Dark Mode"
+                        aria-label="Toggle Theme"
                     >
                         {theme === "light" ? (
                             <>
-                                <Moon size={20} />
+                                <Moon size={20} strokeWidth={2.5} className="drawer__action-icon" />
                                 <span>Dark Mode</span>
                             </>
                         ) : (
                             <>
-                                <Sun size={20} />
+                                <Sun size={20} strokeWidth={2.5} className="drawer__action-icon" />
                                 <span>Light Mode</span>
                             </>
                         )}
                     </button>
 
                     {isLoggedIn ? (
-                        <div className="navbar__drawer-user">
-
+                        <>
                             <button
-                                className="navbar__drawer-profile"
+                                className="drawer__action-btn"
                                 onClick={() => {
                                     setMenuOpen(false);
                                     navigate("/profile");
                                 }}
                             >
-                                <User size={20} />
+                                <User size={20} strokeWidth={2.5} className="drawer__action-icon" />
                                 <span>My Profile</span>
                             </button>
-
                             <button
-                                className="navbar__logout"
+                                className="drawer__btn drawer__btn--logout"
                                 onClick={handleLogoutClick}
                             >
                                 Logout
                             </button>
-
-                        </div>
+                        </>
                     ) : (
-                        <>
+                        <div className="drawer__auth-group">
                             <button
-                                className="navbar__login"
+                                className="drawer__btn drawer__btn--ghost"
                                 onClick={() => {
                                     setMenuOpen(false);
                                     navigate("/auth/login");
@@ -316,25 +301,24 @@ function Navbar({ isLoggedIn, handleLogout }) {
                             >
                                 Login
                             </button>
-
                             <Link
                                 to="/auth/register"
-                                className="navbar__register"
-                                onClick={() =>
-                                    setMenuOpen(false)
-                                }
+                                className="drawer__btn drawer__btn--primary"
+                                onClick={() => setMenuOpen(false)}
                             >
                                 Register
                             </Link>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
 
+            {/* Overlays and Modals */}
             {menuOpen && (
                 <div
                     className="navbar__overlay"
                     onClick={() => setMenuOpen(false)}
+                    aria-label="Close menu overlay"
                 />
             )}
 
@@ -342,37 +326,32 @@ function Navbar({ isLoggedIn, handleLogout }) {
                 <div
                     className="logout-modal-overlay"
                     onClick={cancelLogout}
+                    role="dialog"
+                    aria-modal="true"
                 >
                     <div
                         className="logout-modal"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="logout-modal__icon">
-                            <User size={25} />
+                            <User size={28} strokeWidth={2} />
                         </div>
-
-                        <h2>Logout</h2>
-
-                        <p>
-                            Are you sure you want to logout?
-                        </p>
-
+                        <h2>Confirm Logout</h2>
+                        <p>Are you sure you want to end your current session?</p>
+                        
                         <div className="logout-modal__actions">
-
                             <button
-                                className="logout-modal__no"
+                                className="modal__btn modal__btn--cancel"
                                 onClick={cancelLogout}
                             >
-                                No
+                                Cancel
                             </button>
-
                             <button
-                                className="logout-modal__yes"
+                                className="modal__btn modal__btn--confirm"
                                 onClick={confirmLogout}
                             >
-                                Yes
+                                Logout
                             </button>
-
                         </div>
                     </div>
                 </div>
