@@ -30,7 +30,7 @@
     --inst-border: #3f3f46;
     --inst-divider: #27272a;
 
-    --inst-правляющий: #2a2a2e;
+    --inst-правляющий: #2a2a2e; /* Preserved from original */
     --inst-input-bg: #2a2a2e;
     --inst-input-border: #52525b;
     --inst-toolbar-btn-bg: #27272a;
@@ -42,6 +42,16 @@
     --inst-btn-cancel-text: #e4e4e7;
 }
 
+/* Base structural fixes for mobile padding & sizing */
+.admin-instructors,
+.admin-instructors__search,
+.admin-instructors__modal,
+.message-box,
+.admin-instructors__modal-overlay,
+.message-overlay {
+    box-sizing: border-box;
+}
+
 .admin-instructors {
     padding: 24px;
     background: var(--inst-bg);
@@ -49,6 +59,7 @@
     font-family: 'Inter', sans-serif;
     color: var(--inst-text-main);
     transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%;
 }
 
 .admin-instructors__header {
@@ -56,6 +67,8 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap; /* Helps gracefully fall back before the mobile MQ */
 }
 
 .admin-instructors__header h2 {
@@ -76,6 +89,7 @@
 .admin-instructors__btn-primary {
     display: flex;
     align-items: center;
+    justify-content: center; /* Ensures center alignment on mobile */
     gap: 8px;
     background-color: var(--primary-color, #0fa88f);
     color: white;
@@ -86,6 +100,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(15, 168, 143, 0.15);
+    flex-shrink: 0;
 }
 
 .admin-instructors__btn-primary:hover {
@@ -143,16 +158,22 @@
     color: var(--inst-text-main);
 }
 
+/* =======================================================
+   TABLE RESPONSIVENESS FIXES
+======================================================= */
 .admin-instructors__table-container {
     background: var(--inst-card-bg);
     border: 1px solid var(--inst-border);
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto; /* Changed from hidden to auto */
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
 }
 
 .admin-instructors__table {
     width: 100%;
+    min-width: 800px; /* Forces horizontal scroll on small screens instead of clipping */
     border-collapse: collapse;
 }
 
@@ -166,6 +187,7 @@
     border-bottom: 1px solid var(--inst-border);
     text-transform: uppercase;
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    white-space: nowrap; /* Prevent headers from squishing */
 }
 
 .admin-instructors__table td {
@@ -190,6 +212,7 @@
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .badge-active {
@@ -217,6 +240,7 @@
     display: flex;
     align-items: center;
     transition: all 0.2s;
+    flex-shrink: 0;
 }
 
 .admin-instructors__actions button:hover {
@@ -238,6 +262,9 @@
     color: #34d399;
 }
 
+/* =======================================================
+   MODAL RESPONSIVENESS FIXES
+======================================================= */
 .admin-instructors__modal-overlay {
     position: fixed;
     inset: 0;
@@ -258,6 +285,9 @@
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
     border: 1px solid var(--inst-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* Added to ensure modal doesn't bleed off screen height */
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .admin-instructors__modal-header {
@@ -274,6 +304,7 @@
     font-size: 1.25rem;
     color: var(--inst-modal-header-text);
     transition: color 0.3s ease;
+    word-break: break-word;
 }
 
 .admin-instructors__modal-header button {
@@ -284,6 +315,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .admin-instructors__modal-header button:hover {
@@ -302,6 +334,7 @@
 .form-group {
     flex: 1;
     margin-bottom: 16px;
+    min-width: 0; /* Prevents flex child from breaking layout */
 }
 
 .form-group label {
@@ -402,6 +435,9 @@
     animation: messageBoxSlideDown 0.2s ease-out;
     border: 1px solid var(--inst-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    /* Added to ensure long alert text is scrollable if needed */
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .message-box__content {
@@ -423,6 +459,11 @@
     color: var(--inst-text-sub);
     word-break: break-word;
     transition: color 0.3s ease;
+}
+
+.message-box__content strong {
+    color: var(--inst-text-main);
+    word-break: break-word;
 }
 
 .message-box__ok {
@@ -505,6 +546,7 @@
 .message-box__delete:active {
     transform: scale(0.97);
 }
+
 @keyframes messageBoxSlideDown {
     from {
         opacity: 0;
@@ -516,14 +558,23 @@
     }
 }
 
-@media (max-width: 600px) {
+/* =======================================================
+   MOBILE & TABLET BREAKPOINTS
+======================================================= */
+@media (max-width: 768px) {
     .admin-instructors {
         padding: 16px;
     }
+    
+    .admin-instructors__search {
+        max-width: 100%;
+    }
+}
 
+@media (max-width: 600px) {
     .admin-instructors__header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 16px;
     }
 
@@ -535,14 +586,6 @@
     .form-row {
         flex-direction: column;
         gap: 0;
-    }
-
-    .admin-instructors__modal {
-        max-width: 100%;
-    }
-
-    .message-box {
-        width: calc(100% - 32px);
     }
 
     .message-box__content {
@@ -561,6 +604,31 @@
         padding: 0 20px 18px;
     }
 }
+
+/* Handle extra small screens by stacking modal buttons */
+@media (max-width: 500px) {
+    .admin-instructors__modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-cancel,
+    .admin-instructors__modal-footer .admin-instructors__btn-primary {
+        width: 100%;
+    }
+    
+    .message-box__actions {
+        flex-direction: column;
+    }
+    
+    .message-box__cancel, 
+    .message-box__delete,
+    .message-box__ok {
+        width: 100%;
+        margin: 0;
+    }
+}
+
 [data-theme="dark"] input:-webkit-autofill,
 [data-theme="dark"] input:-webkit-autofill:hover,
 [data-theme="dark"] input:-webkit-autofill:focus,

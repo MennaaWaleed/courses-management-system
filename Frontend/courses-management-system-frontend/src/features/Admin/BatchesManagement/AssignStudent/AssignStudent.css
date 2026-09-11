@@ -1,10 +1,255 @@
+/* =========================================================
+   VARIABLES & DARK MODE
+========================================================= */
+:root {
+    --as-bg: #ffffff;
+    --as-text-main: #1e293b;
+    --as-text-sub: #64748b;
+    --as-border: #cbd5e1;
+    
+    --as-input-bg: #ffffff;
+    --as-dropdown-bg: #ffffff;
+    --as-hover: #f1f5f9;
+    
+    --as-primary: #007bff;
+    --as-primary-hover: #0056b3;
+    
+    --as-success-bg: #d4edda;
+    --as-success-text: #155724;
+    --as-success-border: #c3e6cb;
+    
+    --as-overlay: rgba(15, 23, 42, 0.75);
+}
+
+[data-theme="dark"] {
+    --as-bg: #1f1f23;
+    --as-text-main: #f8fafc;
+    --as-text-sub: #9ca3af;
+    --as-border: #3f3f46;
+    
+    --as-input-bg: #2a2a2e;
+    --as-dropdown-bg: #2a2a2e;
+    --as-hover: #3f3f46;
+    
+    --as-primary: #3b82f6;
+    --as-primary-hover: #2563eb;
+    
+    --as-success-bg: rgba(40, 167, 69, 0.15);
+    --as-success-text: #4ade80;
+    --as-success-border: rgba(40, 167, 69, 0.3);
+    
+    --as-overlay: rgba(0, 0, 0, 0.75);
+}
+
+/* =========================================================
+   MODAL LAYOUT & RESPONSIVENESS
+========================================================= */
+.confirm-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--as-overlay);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.confirm-modal-content {
+    background: var(--as-bg);
+    width: 100%;
+    max-width: 500px; /* Constrains width on desktop, 100% takes over on mobile */
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--as-border);
+    box-sizing: border-box;
+    /* Ensures modal becomes scrollable if screen is very short */
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.students-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--as-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.students-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--as-text-main);
+    word-break: break-word; /* Allows long batch names to wrap instead of pushing layout */
+    line-height: 1.4;
+}
+
+.students-modal-header span {
+    font-weight: 400;
+}
+
+.students-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--as-text-sub);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.students-close-btn:hover {
+    color: #ef4444;
+}
+
+/* =========================================================
+   FORM & DROPDOWN (Replacing Inline Styles)
+========================================================= */
+.assign-student-form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.assign-student-group {
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.assign-student-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--as-text-main);
+}
+
+.assign-student-input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--as-border);
+    font-size: 14px;
+    background: var(--as-input-bg);
+    color: var(--as-text-main);
+    box-sizing: border-box;
+    outline: none;
+}
+
+.assign-student-input:focus {
+    border-color: var(--as-primary);
+}
+
+.assign-student-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 180px;
+    overflow-y: auto;
+    background-color: var(--as-dropdown-bg);
+    border: 1px solid var(--as-border);
+    border-radius: 0 0 6px 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+}
+
+.assign-student-dropdown-empty {
+    padding: 12px;
+    color: var(--as-text-sub);
+    text-align: center;
+    font-size: 14px;
+}
+
+.assign-student-dropdown-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--as-border);
+    font-size: 14px;
+    color: var(--as-text-main);
+    transition: background-color 0.2s ease;
+    word-break: break-word; /* Wrap long emails gracefully */
+}
+
+.assign-student-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.assign-student-dropdown-item:hover {
+    background-color: var(--as-hover);
+}
+
+/* =========================================================
+   ACTIONS & BUTTONS
+========================================================= */
+.confirm-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.confirm-cancel-btn {
+    background: transparent;
+    border: 1px solid var(--as-border);
+    color: var(--as-text-main);
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.confirm-cancel-btn:hover {
+    background: var(--as-hover);
+}
+
+.assign-submit-btn {
+    background: var(--as-primary);
+    border: 1px solid var(--as-primary);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.assign-submit-btn:hover:not(:disabled) {
+    background: var(--as-primary-hover);
+}
+
+.assign-submit-btn:disabled, 
+.confirm-cancel-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   SUCCESS & LOADING STATES
+========================================================= */
 .assign-success-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px 20px;
+    padding: 30px 24px;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .assign-success-icon {
@@ -22,12 +267,12 @@
 }
 
 .assign-success-message {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: var(--as-success-bg);
+    color: var(--as-success-text);
     padding: 12px 20px;
     border-radius: 6px;
     font-weight: bold;
-    border: 1px solid #c3e6cb;
+    border: 1px solid var(--as-success-border);
     margin-bottom: 20px;
     width: 100%;
     box-sizing: border-box;
@@ -38,12 +283,46 @@
     color: white;
     border: none;
     padding: 10px 35px;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    transition: background-color 0.2s ease;
 }
 
 .assign-success-ok-btn:hover {
     background-color: #218838;
+}
+
+.students-loading {
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--as-text-sub);
+    font-size: 15px;
+}
+
+/* =========================================================
+   MOBILE BREAKPOINTS
+========================================================= */
+@media (max-width: 500px) {
+    .students-modal-header {
+        padding: 16px;
+    }
+    
+    .assign-student-form {
+        padding: 16px;
+    }
+
+    .confirm-modal-actions {
+        flex-direction: column; /* Stacks buttons on tiny screens to avoid clipping */
+    }
+
+    .confirm-cancel-btn,
+    .assign-submit-btn,
+    .assign-success-ok-btn {
+        width: 100%;
+        max-width: 100%;
+    }
 }

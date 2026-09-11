@@ -1,5 +1,5 @@
 import "../Register/Register.css";
-import logo from "../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.webp";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../../../api/axios";

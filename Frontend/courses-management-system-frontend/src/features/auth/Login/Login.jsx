@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./Login.css";
 import api from "../../../api/axios.js";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import logo from "../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.webp";
 
 function Login({ setIsLoggedIn }) {
     const [email, setEmail] = useState("");

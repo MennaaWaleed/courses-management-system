@@ -37,6 +37,7 @@
     background-color: var(--msg-bg);
     min-height: 100vh;
     transition: background-color 0.3s ease;
+    box-sizing: border-box; /* Ensures padding doesn't push width out */
 }
 
 .admin-messages-header {
@@ -66,6 +67,7 @@
     cursor: pointer;
     color: var(--msg-text-sub);
     transition: all 0.2s;
+    flex-shrink: 0; /* Prevents button from squishing on tiny screens */
 }
 
 .back-btn:hover {
@@ -94,14 +96,17 @@
     border: 1px solid var(--msg-border);
     border-radius: 8px;
     padding: 10px 16px;
-    width: 350px;
+    width: 100%; /* Changed from fixed 350px for responsiveness */
+    max-width: 350px; 
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-sizing: border-box;
 }
 
 .search-icon {
     color: var(--msg-text-muted);
     margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .search-bar input {
@@ -114,17 +119,21 @@
     transition: color 0.3s ease;
 }
 
+/* TABLE RESPONSIVENESS FIXES */
 .admin-table-container {
     background: var(--msg-card-bg);
     border: 1px solid var(--msg-border);
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto; /* Changed from hidden to auto to allow scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
 }
 
 .admin-table {
     width: 100%;
+    min-width: 800px; /* Forces table to hold its shape. Container will scroll. */
     border-collapse: collapse;
     text-align: left;
 }
@@ -176,6 +185,7 @@
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 .badge-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; }
 .badge-warning { background: rgba(217, 119, 6, 0.15); color: #fbbf24; }
@@ -216,6 +226,7 @@
     color: #ef4444;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .btn-delete-message:hover {
@@ -224,6 +235,7 @@
     color: #dc2626;
 }
 
+/* MODAL RESPONSIVENESS FIXES */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -234,6 +246,7 @@
     justify-content: center;
     z-index: 1000;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .message-modal {
@@ -246,6 +259,7 @@
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--msg-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-sizing: border-box; /* Keeps padding inside bounds */
 }
 
 .modal-header {
@@ -271,6 +285,7 @@
     color: var(--msg-text-sub);
     cursor: pointer;
     padding: 4px;
+    flex-shrink: 0;
 }
 
 .close-btn:hover { color: #ef4444; }
@@ -287,12 +302,18 @@
 
 .meta-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Better alignment for wrapped text */
     gap: 8px;
     font-size: 14px;
+    flex-wrap: wrap; /* Allows text to drop to next line */
+    word-break: break-word; /* Prevents long emails from breaking layout */
 }
 
-.meta-label { color: var(--msg-text-sub); width: 50px; }
+.meta-label { 
+    color: var(--msg-text-sub); 
+    width: 50px; 
+    flex-shrink: 0; 
+}
 
 .flex-group { gap: 16px; }
 
@@ -303,6 +324,7 @@
     color: #3b82f6;
     text-decoration: none;
     font-weight: 500;
+    word-break: break-all; /* Prevents overflow of very long emails */
 }
 
 .contact-link:hover { text-decoration: underline; }
@@ -314,6 +336,8 @@
     line-height: 1.7;
     white-space: pre-wrap;
     transition: color 0.3s ease;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .delete-modal-overlay {
@@ -326,6 +350,7 @@
     justify-content: center;
     z-index: 2000;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 .delete-confirm-modal {
@@ -339,17 +364,12 @@
     animation: deleteModalAppear 0.2s ease-out;
     border: 1px solid var(--msg-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-sizing: border-box;
 }
 
 @keyframes deleteModalAppear {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .delete-confirm-modal h2 {
@@ -367,6 +387,7 @@
     line-height: 1.5;
     color: var(--msg-text-sub);
     transition: color 0.3s ease;
+    overflow-wrap: break-word; /* Wrap long names safely */
 }
 
 .delete-confirm-text strong {
@@ -455,7 +476,41 @@
     border: 1px solid rgba(4, 120, 87, 0.3);
 }
 
+/* =========================================================
+   MEDIA QUERIES FOR MOBILE/TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+    .admin-messages-page {
+        padding: 16px; /* Free up edge space on mobile */
+    }
+
+    .admin-messages-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .admin-messages-header-left {
+        align-items: center;
+    }
+
+    .search-bar {
+        max-width: 100%; /* Expands neatly to screen limits */
+    }
+
+    /* Slightly reduce table padding to make columns more visible on tablet */
+    .admin-table th, .admin-table td {
+        padding: 12px 14px;
+    }
+}
+
 @media (max-width: 500px) {
+    /* Modal internal space adjustments */
+    .modal-header, .modal-meta, .modal-body {
+        padding: 16px;
+    }
+    
     .delete-confirm-modal {
         padding: 24px 20px;
     }
@@ -469,7 +524,7 @@
     }
 
     .delete-modal-actions {
-        flex-direction: column;
+        flex-direction: column; /* Stack buttons vertically on small screens */
     }
 
     .delete-cancel-btn,

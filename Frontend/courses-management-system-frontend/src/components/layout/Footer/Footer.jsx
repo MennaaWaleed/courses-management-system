@@ -3,7 +3,7 @@ import "./Footer.css";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock , MessageCircle} from "lucide-react";
 import { getFeaturedCourses } from "../../../api/courseApi";
-import logo from "../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.webp";
 function Footer() {
     const [featuredCourses, setFeaturedCourses] = useState([]);
     const [loading, setLoading] = useState(true);

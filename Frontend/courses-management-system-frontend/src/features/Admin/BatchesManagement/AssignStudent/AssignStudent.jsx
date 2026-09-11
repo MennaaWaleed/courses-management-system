@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import {
     getAssignableStudents,
@@ -198,27 +197,17 @@ function AssignStudent({ batch, onClose, onAssigned }) {
 
                                 {/* Search & Select Student */}
                                 <div
-                                    className="form-group"
-                                    style={{
-                                        marginBottom: "20px",
-                                        position: "relative"
-                                    }}
+                                    className="assign-student-group"
                                     ref={dropdownRef}
                                 >
 
-                                    <label
-                                        style={{
-                                            display: "block",
-                                            marginBottom: "8px",
-                                            fontWeight: "bold",
-                                            fontSize: "14px"
-                                        }}
-                                    >
+                                    <label className="assign-student-label">
                                         Search & Select Student by Email or Name
                                     </label>
 
                                     <input
                                         type="text"
+                                        className="assign-student-input"
                                         placeholder="Type name or email to search..."
                                         value={searchQuery}
                                         onChange={(e) => {
@@ -234,52 +223,16 @@ function AssignStudent({ batch, onClose, onAssigned }) {
                                             setIsDropdownOpen(true)
                                         }
                                         disabled={submitting}
-                                        style={{
-                                            width: "100%",
-                                            padding: "10px",
-                                            borderRadius: "5px",
-                                            border: "1px solid #ccc",
-                                            fontSize: "14px",
-                                            boxSizing: "border-box"
-                                        }}
                                         required
                                     />
 
                                     {isDropdownOpen && (
-                                        <ul
-                                            style={{
-                                                position: "absolute",
-                                                top: "100%",
-                                                left: 0,
-                                                right: 0,
-                                                maxHeight: "180px",
-                                                overflowY: "auto",
-                                                backgroundColor: "white",
-                                                border: "1px solid #ccc",
-                                                borderRadius:
-                                                    "0 0 5px 5px",
-                                                listStyle: "none",
-                                                padding: 0,
-                                                margin: 0,
-                                                zIndex: 1000,
-                                                boxShadow:
-                                                    "0px 4px 6px rgba(0,0,0,0.1)"
-                                            }}
-                                        >
+                                        <ul className="assign-student-dropdown">
 
-                                            {filteredStudents.length ===
-                                            0 ? (
+                                            {filteredStudents.length === 0 ? (
 
-                                                <li
-                                                    style={{
-                                                        padding: "10px",
-                                                        color: "#888",
-                                                        textAlign:
-                                                            "center"
-                                                    }}
-                                                >
-                                                    No matching students
-                                                    found
+                                                <li className="assign-student-dropdown-empty">
+                                                    No matching students found
                                                 </li>
 
                                             ) : (
@@ -291,33 +244,12 @@ function AssignStudent({ batch, onClose, onAssigned }) {
                                                                 student.studentId ||
                                                                 student.id
                                                             }
+                                                            className="assign-student-dropdown-item"
                                                             onClick={() =>
                                                                 handleSelectStudent(
                                                                     student
                                                                 )
                                                             }
-                                                            style={{
-                                                                padding:
-                                                                    "10px 12px",
-                                                                cursor:
-                                                                    "pointer",
-                                                                borderBottom:
-                                                                    "1px solid #eee",
-                                                                fontSize:
-                                                                    "14px"
-                                                            }}
-                                                            onMouseEnter={(
-                                                                e
-                                                            ) => {
-                                                                e.currentTarget.style.backgroundColor =
-                                                                    "#f1f1f1";
-                                                            }}
-                                                            onMouseLeave={(
-                                                                e
-                                                            ) => {
-                                                                e.currentTarget.style.backgroundColor =
-                                                                    "white";
-                                                            }}
                                                         >
                                                             <strong>
                                                                 {
@@ -354,16 +286,11 @@ function AssignStudent({ batch, onClose, onAssigned }) {
 
                                     <button
                                         type="submit"
-                                        className="confirm-delete-btn"
+                                        className="assign-submit-btn"
                                         disabled={
                                             submitting ||
                                             !selectedStudent
                                         }
-                                        style={{
-                                            backgroundColor:
-                                                "#007bff",
-                                            color: "white"
-                                        }}
                                     >
                                         {submitting
                                             ? "Assigning..."

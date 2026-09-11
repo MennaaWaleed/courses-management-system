@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "./HomeIntro.css";
 
-import introImage from "../../../assets/images/intro_img.jfif";
-import introImage_dark from "../../../assets/images/intro_img-dark.jfif";
+import introImage from "../../../assets/images/intro_img.webp";
+import introImage_dark from "../../../assets/images/intro_img-dark.webp";
 import autodeskIcon from "../../../assets/images/autodesk-icon.svg";
 
 import {
