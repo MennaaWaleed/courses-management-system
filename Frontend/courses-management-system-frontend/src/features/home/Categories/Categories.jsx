@@ -15,20 +15,40 @@ function Categories() {
         threshold: 0.2,
     });
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await getPublishedCategories();
-                setCategories(response.data);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+useEffect(() => {
+    const fetchCategories = async () => {
+        try {
+            const response = await getPublishedCategories();
+            const data = response.data;
 
-        fetchCategories();
-    }, []);
+            const imagePromises = data
+                .filter((category) => category.imageUrl)
+                .map(
+                    (category) =>
+                        new Promise((resolve) => {
+                            const img = new Image();
+
+                            img.onload = resolve;
+                            img.onerror = resolve;
+
+                            img.src = category.imageUrl.startsWith("http")
+                                ? category.imageUrl
+                                : `${BASE_URL}${category.imageUrl}`;
+                        })
+                );
+
+            await Promise.all(imagePromises);
+
+            setCategories(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    fetchCategories();
+}, []);
 
     return (
         <section ref={ref} className={`categories ${inView ? "show" : ""}`}>

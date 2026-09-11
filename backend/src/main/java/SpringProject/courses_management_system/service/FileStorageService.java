@@ -23,20 +23,39 @@ public class FileStorageService {
             Paths.get("src/main/resources/static/images/courses/icons");
 
     private final Path lectureResourcesDirectory =
-            Paths.get( "src/main/resources/static/resources/lecture-resources");
-    public FileStorageService() {
+            Paths.get("src/main/resources/static/resources/lecture-resources");
+
+    private final ImageService imageService;
+
+
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
+
+    public FileStorageService(ImageService imageService) {
+
+        this.imageService = imageService;
 
         try {
+
             Files.createDirectories(contentDirectory);
             Files.createDirectories(courseImagesDirectory);
             Files.createDirectories(courseIconsDirectory);
+            Files.createDirectories(lectureResourcesDirectory);
 
         } catch (IOException e) {
-            throw new RuntimeException("Could not create upload directories", e);
+
+            throw new RuntimeException(
+                    "Could not create upload directories",
+                    e
+            );
         }
     }
 
 
+    // =========================================================
+    // COURSE PDF
+    // =========================================================
 
     public String saveContentFile(MultipartFile file) {
 
@@ -47,10 +66,13 @@ public class FileStorageService {
             );
         }
 
+        String originalFileName =
+                file.getOriginalFilename();
+
         String fileName =
                 UUID.randomUUID()
                         + "_"
-                        + file.getOriginalFilename();
+                        + originalFileName;
 
         try {
 
@@ -75,32 +97,53 @@ public class FileStorageService {
         }
     }
 
+
+    // =========================================================
+    // COURSE IMAGE
+    // =========================================================
+
     public String saveCourseImage(MultipartFile file) {
 
         if (file == null || file.isEmpty()) {
-            throw new RuntimeException("Course image is required");
-        }
 
-        String fileName =
-                UUID.randomUUID() + "_" + file.getOriginalFilename();
+            throw new RuntimeException(
+                    "Course image is required"
+            );
+        }
 
         try {
 
-            Path filePath = courseImagesDirectory.resolve(fileName);
+            // Compress + Resize + Convert to WebP
+            byte[] webpImage =
+                    imageService.compressToWebP(file);
 
-            Files.copy(
-                    file.getInputStream(),
+            // Always save as WebP
+            String fileName =
+                    UUID.randomUUID() + ".webp";
+
+            Path filePath =
+                    courseImagesDirectory.resolve(fileName);
+
+            Files.write(
                     filePath,
-                    StandardCopyOption.REPLACE_EXISTING
+                    webpImage
             );
 
             return "/images/courses/images/" + fileName;
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save course image", e);
+
+            throw new RuntimeException(
+                    "Failed to save course image",
+                    e
+            );
         }
     }
 
+
+    // =========================================================
+    // COURSE ICON
+    // =========================================================
 
     public String saveCourseIcon(MultipartFile file) {
 
@@ -108,37 +151,58 @@ public class FileStorageService {
             return null;
         }
 
-        String fileName =
-                UUID.randomUUID() + "_" + file.getOriginalFilename();
-
         try {
 
-            Path filePath = courseIconsDirectory.resolve(fileName);
+            // Compress + Resize + Convert to WebP
+            byte[] webpImage =
+                    imageService.compressToWebP(file);
 
-            Files.copy(
-                    file.getInputStream(),
+            // Always save as WebP
+            String fileName =
+                    UUID.randomUUID() + ".webp";
+
+            Path filePath =
+                    courseIconsDirectory.resolve(fileName);
+
+            Files.write(
                     filePath,
-                    StandardCopyOption.REPLACE_EXISTING
+                    webpImage
             );
 
             return "/images/courses/icons/" + fileName;
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save course icon", e);
+
+            throw new RuntimeException(
+                    "Failed to save course icon",
+                    e
+            );
         }
     }
 
 
+    // =========================================================
+    // LECTURE RESOURCE
+    // =========================================================
+
     public String saveLectureResource(MultipartFile file) {
 
         if (file == null || file.isEmpty()) {
-            throw new RuntimeException("Lecture resource is required");
+
+            throw new RuntimeException(
+                    "Lecture resource is required"
+            );
         }
 
-        String originalFileName = file.getOriginalFilename();
+        String originalFileName =
+                file.getOriginalFilename();
 
-        if (originalFileName == null || originalFileName.isBlank()) {
-            throw new RuntimeException("Invalid lecture resource file name");
+        if (originalFileName == null ||
+                originalFileName.isBlank()) {
+
+            throw new RuntimeException(
+                    "Invalid lecture resource file name"
+            );
         }
 
         String fileName =
@@ -150,24 +214,29 @@ public class FileStorageService {
 
         try {
 
-            Path lectureResourcesDirectory = Paths.get(
-                    System.getProperty("user.dir"),
-                    "src",
-                    "main",
-                    "resources",
-                    "static",
-                    "resources",
-                    "lecture-resources"
-            );
+            Path lectureResourcesDirectory =
+                    Paths.get(
+                            System.getProperty("user.dir"),
+                            "src",
+                            "main",
+                            "resources",
+                            "static",
+                            "resources",
+                            "lecture-resources"
+                    );
 
-            // تأكد إن الفولدر موجود
-            Files.createDirectories(lectureResourcesDirectory);
+            // Make sure directory exists
+            Files.createDirectories(
+                    lectureResourcesDirectory
+            );
 
             Path filePath =
                     lectureResourcesDirectory.resolve(fileName);
 
-            // تأكد إن الـ parent موجود
-            Files.createDirectories(filePath.getParent());
+            // Make sure parent exists
+            Files.createDirectories(
+                    filePath.getParent()
+            );
 
             Files.copy(
                     file.getInputStream(),
@@ -175,7 +244,8 @@ public class FileStorageService {
                     StandardCopyOption.REPLACE_EXISTING
             );
 
-            return "/resources/lecture-resources/" + fileName;
+            return "/resources/lecture-resources/"
+                    + fileName;
 
         } catch (IOException e) {
 
@@ -185,6 +255,12 @@ public class FileStorageService {
             );
         }
     }
+
+
+    // =========================================================
+    // DELETE LECTURE RESOURCE
+    // =========================================================
+
     public void deleteLectureResource(String fileUrl) {
 
         if (fileUrl == null || fileUrl.isBlank()) {
@@ -193,7 +269,8 @@ public class FileStorageService {
 
         try {
 
-            String prefix = "/resources/lecture-resources/";
+            String prefix =
+                    "/resources/lecture-resources/";
 
             if (!fileUrl.startsWith(prefix)) {
                 return;
@@ -217,5 +294,4 @@ public class FileStorageService {
             );
         }
     }
-
 }

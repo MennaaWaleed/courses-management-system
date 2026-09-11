@@ -1,7 +1,8 @@
 import "./CourseCard.css";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../api/axios.js";
-function CourseCard({ course, variant = "default" }) {
+
+function CourseCard({ course, variant = "default", categories = [] }) {
 
     const navigate = useNavigate();
 
@@ -47,8 +48,11 @@ function CourseCard({ course, variant = "default" }) {
                 <div className="mcc-course-card__content">
 
                     <span className="mcc-course-card__category">
-                        {course.categories
-                            ?.map(category => category.categoryName)
+                        {categories
+                            .filter(category =>
+                                course.categoryIds?.includes(category.id)
+                            )
+                            .map(category => category.categoryName)
                             .join(" • ")}
                     </span>
 

@@ -137,47 +137,62 @@ public class CourseService {
             MultipartFile courseImage,
             MultipartFile iconImage
     ) {
-        try {
-            Course course = new Course();
-            course.setCourseName(courseName);
-            course.setDescription(description);
-            course.setShortDescription(shortDescription);
-            course.setCourseHours(courseHours);
-            course.setLectureCount(lectureCount);
-            course.setPrice(price);
-            course.setPublished(false);
-            course.setFeatured(false);
-            course.setDeleted(false);
 
-            List<Category> categories = categoryRepository.findAllById(categoryIds);
-            if (categories.size() != categoryIds.size()) {
-                throw new RuntimeException("One or more categories not found");
-            }
-            course.setCategories(new HashSet<>(categories));
+        Course course = new Course();
 
-            if (contentFile == null || contentFile.isEmpty()) {
-                throw new RuntimeException("Course PDF is required");
-            }
-            String contentUrl = saveFile(contentFile, "courses/CoursesContent");
-            course.setContent_url(contentUrl);
+        course.setCourseName(courseName);
+        course.setDescription(description);
+        course.setShortDescription(shortDescription);
+        course.setCourseHours(courseHours);
+        course.setLectureCount(lectureCount);
+        course.setPrice(price);
+        course.setPublished(false);
+        course.setFeatured(false);
+        course.setDeleted(false);
 
-            if (courseImage == null || courseImage.isEmpty()) {
-                throw new RuntimeException("Course image is required");
-            }
-            String imageUrl = saveFile(courseImage, "courses/images");
-            course.setImageUrl(imageUrl);
+        List<Category> categories = categoryRepository.findAllById(categoryIds);
 
-            if (iconImage != null && !iconImage.isEmpty()) {
-                String iconUrl = saveFile(iconImage, "courses/icons");
-                course.setIconUrl(iconUrl);
-            }
-
-            Course savedCourse = courseRepository.save(course);
-            return convertToResponse(savedCourse);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save course files", e);
+        if (categories.size() != categoryIds.size()) {
+            throw new RuntimeException("One or more categories not found");
         }
+
+        course.setCategories(new HashSet<>(categories));
+
+        // =========================
+        // Course PDF
+        // =========================
+
+        if (contentFile == null || contentFile.isEmpty()) {
+            throw new RuntimeException("Course PDF is required");
+        }
+
+        String contentUrl = fileStorageService.saveContentFile(contentFile);
+        course.setContent_url(contentUrl);
+
+        // =========================
+        // Course Image
+        // =========================
+
+        if (courseImage == null || courseImage.isEmpty()) {
+            throw new RuntimeException("Course image is required");
+        }
+
+        String imageUrl = fileStorageService.saveCourseImage(courseImage);
+        course.setImageUrl(imageUrl);
+
+        // =========================
+        // Course Icon
+        // =========================
+
+        if (iconImage != null && !iconImage.isEmpty()) {
+
+            String iconUrl = fileStorageService.saveCourseIcon(iconImage);
+            course.setIconUrl(iconUrl);
+        }
+
+        Course savedCourse = courseRepository.save(course);
+
+        return convertToResponse(savedCourse);
     }
 
     public CourseResponse updateCourse(
@@ -255,23 +270,7 @@ public class CourseService {
         return convertToResponse(savedCourse);
     }
 
-    private String saveFile(MultipartFile file, String folder) throws IOException {
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
-        String originalFileName = file.getOriginalFilename();
-        String extension = "";
-        if (originalFileName != null && originalFileName.contains(".")) {
-            extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        }
-        String fileName = UUID.randomUUID() + extension;
-        String projectDir = System.getProperty("user.dir");
-        Path uploadPath = Paths.get(projectDir, "src/main/resources/static/images", folder);
-        Files.createDirectories(uploadPath);
-        Path filePath = uploadPath.resolve(fileName);
-        file.transferTo(filePath.toFile());
-        return "/images/" + folder + "/" + fileName;
-    }
+
 
     // ==================================================
     // ADMIN LOGIC

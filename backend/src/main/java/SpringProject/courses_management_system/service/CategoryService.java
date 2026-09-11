@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,10 +21,16 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CourseRepository courseRepository;
+    private final ImageService imageService;
 
-    public CategoryService(CategoryRepository categoryRepository, CourseRepository courseRepository) {
+    public CategoryService(
+            CategoryRepository categoryRepository,
+            CourseRepository courseRepository,
+            ImageService imageService
+    ) {
         this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
+        this.imageService = imageService;
     }
 
     public List<Category> getAllCategories() {
@@ -33,74 +38,144 @@ public class CategoryService {
     }
 
     private CategoryResponse convertToResponse(Category category) {
+
         CategoryResponse response = new CategoryResponse();
+
         response.setId(category.getId());
         response.setCategoryName(category.getCategoryName());
         response.setCategoryDescription(category.getDescription());
         response.setCategoryImageUrl(category.getImageUrl());
-        response.setCategoryShortDescription(category.getShortDescription());
+        response.setCategoryShortDescription(
+                category.getShortDescription()
+        );
         response.setPublished(category.isPublished());
+
         return response;
     }
 
+    // =========================================================
+    // CREATE CATEGORY
+    // =========================================================
+
     public CategoryResponse createCategory(
-            String categoryName, String categoryDescription,
-            String shortDescription, MultipartFile image
+            String categoryName,
+            String categoryDescription,
+            String shortDescription,
+            MultipartFile image
     ) {
+
         Category category = new Category();
+
         category.setCategoryName(categoryName);
         category.setDescription(categoryDescription);
         category.setShortDescription(shortDescription);
 
         if (image != null && !image.isEmpty()) {
+
             try {
-                Path uploadPath = Paths.get("images/categories");
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-                String originalFileName = image.getOriginalFilename();
-                String fileName = UUID.randomUUID() + "_" + originalFileName;
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                category.setImageUrl("/images/categories/" + fileName);
+
+                byte[] webpImage =
+                        imageService.compressToWebP(image);
+
+                Path uploadPath =
+                        Paths.get(
+                                "src/main/resources/static/images/categories"
+                        );
+
+                Files.createDirectories(uploadPath);
+
+                String fileName =
+                        UUID.randomUUID() + ".webp";
+
+                Path filePath =
+                        uploadPath.resolve(fileName);
+
+                Files.write(filePath, webpImage);
+
+                category.setImageUrl(
+                        "/images/categories/" + fileName
+                );
+
             } catch (IOException e) {
-                throw new RuntimeException("Could not save image", e);
+
+                throw new RuntimeException(
+                        "Could not save image",
+                        e
+                );
             }
+
         } else {
+
             category.setImageUrl("");
         }
 
-        Category savedCategory = categoryRepository.save(category);
+        Category savedCategory =
+                categoryRepository.save(category);
+
         return convertToResponse(savedCategory);
     }
 
+    // =========================================================
+    // GET CATEGORY BY ID
+    // =========================================================
+
     public CategoryResponse getCategoryById(UUID id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "Category not found"
+                                )
+                        );
+
         return convertToResponse(category);
     }
 
-    // ==========================================
-    // تم التعديل هنا للتحكم في حالة الكورس عند عمل Unpublish
-    // ==========================================
+    // =========================================================
+    // TOGGLE PUBLISHED
+    // =========================================================
+
     @Transactional
     public CategoryResponse togglePublished(UUID id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        boolean isNowPublished = !category.isPublished();
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "Category not found"
+                                )
+                        );
+
+        boolean isNowPublished =
+                !category.isPublished();
+
         category.setPublished(isNowPublished);
-        Category savedCategory = categoryRepository.save(category);
+
+        Category savedCategory =
+                categoryRepository.save(category);
 
         if (!isNowPublished) {
-            List<Course> courses = courseRepository.findAdminCoursesByCategoryId(id);
+
+            List<Course> courses =
+                    courseRepository.findAdminCoursesByCategoryId(id);
 
             for (Course course : courses) {
-                boolean hasOtherPublishedCategories = course.getCategories().stream()
-                        .anyMatch(c -> !c.getId().equals(id) && c.isPublished() && !c.isDeleted());
+
+                boolean hasOtherPublishedCategories =
+                        course.getCategories()
+                                .stream()
+                                .anyMatch(
+                                        c ->
+                                                !c.getId().equals(id)
+                                                        && c.isPublished()
+                                                        && !c.isDeleted()
+                                );
 
                 if (!hasOtherPublishedCategories) {
+
                     course.setPublished(false);
+
                     courseRepository.save(course);
                 }
             }
@@ -109,58 +184,113 @@ public class CategoryService {
         return convertToResponse(savedCategory);
     }
 
+    // =========================================================
+    // UPDATE CATEGORY
+    // =========================================================
+
     public CategoryResponse updateCategory(
-            UUID id, String categoryName, String categoryDescription,
-            String shortDescription, MultipartFile image
+            UUID id,
+            String categoryName,
+            String categoryDescription,
+            String shortDescription,
+            MultipartFile image
     ) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "Category not found"
+                                )
+                        );
 
         category.setCategoryName(categoryName);
         category.setDescription(categoryDescription);
         category.setShortDescription(shortDescription);
 
+        // If a new image was uploaded
         if (image != null && !image.isEmpty()) {
+
             try {
-                Path uploadPath = Paths.get("src/main/resources/static/images/categories");
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-                String originalFileName = image.getOriginalFilename();
-                String extension = "";
-                if (originalFileName != null && originalFileName.contains(".")) {
-                    extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-                }
-                String fileName = UUID.randomUUID() + extension;
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-                category.setImageUrl("/images/categories/" + fileName);
+
+                // Compress + resize + convert to WebP
+                byte[] webpImage =
+                        imageService.compressToWebP(image);
+
+                Path uploadPath =
+                        Paths.get(
+                                "src/main/resources/static/images/categories"
+                        );
+
+                Files.createDirectories(uploadPath);
+
+                // Always save as WebP
+                String fileName =
+                        UUID.randomUUID() + ".webp";
+
+                Path filePath =
+                        uploadPath.resolve(fileName);
+
+                Files.write(filePath, webpImage);
+
+                // Update database URL
+                category.setImageUrl(
+                        "/images/categories/" + fileName
+                );
+
             } catch (IOException e) {
-                throw new RuntimeException("Could not save image", e);
+
+                throw new RuntimeException(
+                        "Could not save image",
+                        e
+                );
             }
         }
 
-        Category updatedCategory = categoryRepository.save(category);
+        Category updatedCategory =
+                categoryRepository.save(category);
+
         return convertToResponse(updatedCategory);
     }
 
+    // =========================================================
+    // DELETE CATEGORY
+    // =========================================================
+
     @Transactional
     public void deleteCategory(UUID id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "Category not found"
+                                )
+                        );
 
         category.setDeleted(true);
+
         categoryRepository.save(category);
 
-        List<Course> courses = courseRepository.findAdminCoursesByCategoryId(id);
+        List<Course> courses =
+                courseRepository.findAdminCoursesByCategoryId(id);
 
         for (Course course : courses) {
-            course.getCategories().removeIf(c -> c.getId().equals(id));
 
-            boolean hasOtherActiveCategories = course.getCategories().stream()
-                    .anyMatch(c -> !c.isDeleted());
+            course.getCategories()
+                    .removeIf(
+                            c -> c.getId().equals(id)
+                    );
+
+            boolean hasOtherActiveCategories =
+                    course.getCategories()
+                            .stream()
+                            .anyMatch(
+                                    c -> !c.isDeleted()
+                            );
 
             if (!hasOtherActiveCategories) {
+
                 course.setDeleted(true);
             }
 
@@ -168,26 +298,58 @@ public class CategoryService {
         }
     }
 
+    // =========================================================
+    // GET PUBLISHED CATEGORIES
+    // =========================================================
+
     public List<CategoryResponse> getPublishedCategories() {
-        List<Category> categories = categoryRepository.findByPublishedTrueAndIsDeletedFalse();
-        return categories.stream().map(this::convertToResponse).toList();
+
+        List<Category> categories =
+                categoryRepository
+                        .findByPublishedTrueAndIsDeletedFalse();
+
+        return categories
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
+    // =========================================================
+    // UPLOAD IMAGE
+    // =========================================================
+
     public String uploadImage(MultipartFile image) {
+
         try {
-            String originalFileName = image.getOriginalFilename();
-            String extension = "";
-            if (originalFileName != null && originalFileName.contains(".")) {
-                extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            }
-            String fileName = UUID.randomUUID() + extension;
-            Path uploadPath = Paths.get("src/main/resources/static/images/categories");
+
+            // Compress + resize + convert to WebP
+            byte[] webpImage =
+                    imageService.compressToWebP(image);
+
+            Path uploadPath =
+                    Paths.get(
+                            "src/main/resources/static/images/categories"
+                    );
+
             Files.createDirectories(uploadPath);
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Always save as WebP
+            String fileName =
+                    UUID.randomUUID() + ".webp";
+
+            Path filePath =
+                    uploadPath.resolve(fileName);
+
+            Files.write(filePath, webpImage);
+
             return "/images/categories/" + fileName;
+
         } catch (IOException e) {
-            throw new RuntimeException("Could not upload image", e);
+
+            throw new RuntimeException(
+                    "Could not upload image",
+                    e
+            );
         }
     }
 }

@@ -204,6 +204,7 @@ function Courses() {
                                         icon: `${BASE_URL}${course.iconUrl}`,
                                     }}
                                     variant="compact"
+                                    // categories={categories}
                                 />
                             ))}
                         </div>

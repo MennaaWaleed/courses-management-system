@@ -2,6 +2,7 @@ import "./CourseDetails.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCourseById, getRelatedCourses } from "../../../api/courseApi";
+import { getPublishedCategories } from "../../../api/categoryApi";
 import {
     Clock,
     BookOpen,
@@ -31,6 +32,7 @@ function CourseDetails() {
 
     const [course, setCourse] = useState(null);
     const [relatedCourses, setRelatedCourses] = useState([]);
+    const [categories_related, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [relatedLoading, setRelatedLoading] = useState(true);
     const [showRegistration, setShowRegistration] = useState(false);
@@ -71,9 +73,15 @@ function CourseDetails() {
                 const courseResponse = await getCourseById(id);
                 setCourse(courseResponse.data);
 
+
+
+
                 try {
                     const relatedResponse = await getRelatedCourses(id);
                     setRelatedCourses(relatedResponse.data);
+
+                      const [ categoriesResponse] = await Promise.all([ getPublishedCategories(),]);
+                     setCategories(categoriesResponse.data);
                 } catch (error) {
                     console.error("Failed to fetch related courses:", error);
                     setRelatedCourses([]);
@@ -511,6 +519,7 @@ function CourseDetails() {
                                     <CourseCard
                                         course={relatedCourse}
                                         variant="compact"
+                                        // categories={categories_related}
                                     />
                                 </div>
                             ))}

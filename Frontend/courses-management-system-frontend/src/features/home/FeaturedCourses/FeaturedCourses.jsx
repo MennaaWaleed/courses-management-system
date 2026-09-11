@@ -2,16 +2,23 @@ import "./FeaturedCourses.css";
 import CourseCard from "./CourseCard";
 import { useEffect, useState } from "react";
 import { getFeaturedCourses } from "../../../api/courseApi";
+import { getPublishedCategories } from "../../../api/categoryApi";
 
 function FeaturedCourses() {
     const [courses, setCourses] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await getFeaturedCourses();
-                setCourses(response.data);
+                const [coursesResponse, categoriesResponse] = await Promise.all([
+                    getFeaturedCourses(),
+                    getPublishedCategories(),
+                ]);
+
+                setCourses(coursesResponse.data);
+                setCategories(categoriesResponse.data);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -52,6 +59,7 @@ function FeaturedCourses() {
                         <CourseCard
                             key={course.id}
                             course={course}
+                            categories={categories}
                         />
                     ))}
                 </div>

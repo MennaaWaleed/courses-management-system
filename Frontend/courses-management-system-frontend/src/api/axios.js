@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // export const BASE_URL = "http://localhost:8080";
-export const BASE_URL = "https://laboratories-syndicate-immediate-expires.trycloudflare.com";
+export const BASE_URL = "https://presidential-eos-will-levels.trycloudflare.com";
 const api = axios.create({
     baseURL: BASE_URL,
 });
