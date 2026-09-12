@@ -10,7 +10,8 @@ import {
     Layers,
     MessageSquare,
     ClipboardList,
-    Users
+    Users,
+    GraduationCap
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -63,7 +64,12 @@ function Navbar({ isLoggedIn, handleLogout }) {
             title: "Manage Instructors",
             href: "/admin/instructors",
             icon: <Users size={18} strokeWidth={2.5} />
-        }
+        },
+        {
+            title: "Students",
+            href: "/admin/students",
+            icon: <GraduationCap size={18} strokeWidth={2.5} />
+        },
     ];
 
     const links = isAdmin
@@ -101,7 +107,6 @@ function Navbar({ isLoggedIn, handleLogout }) {
     };
 
     useEffect(() => {
-        // Prevent body scroll when overlay/drawer is open
         document.body.style.overflow =
             menuOpen || showLogoutModal ? "hidden" : "auto";
 

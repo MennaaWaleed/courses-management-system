@@ -114,4 +114,66 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Enrollme
       AND c.isDeleted = false
 """)
     List<Enrollment> findActiveEnrollmentsByUserId(@Param("userId") UUID userId);
+
+    @Query("""
+    SELECT e
+    FROM Enrollment e
+    JOIN FETCH e.courseBatch b
+    JOIN FETCH b.course c
+    LEFT JOIN FETCH b.instructor i
+    WHERE e.user.id = :userId
+      AND e.removed = false
+      AND b.deleted = false
+      AND c.isDeleted = false
+""")
+    List<Enrollment> findActiveEnrollmentsWithDetails(
+            @Param("userId") UUID userId
+    );
+
+    @Query("""
+    SELECT COUNT(e)
+    FROM Enrollment e
+    WHERE e.courseBatch.id = :batchId
+      AND e.removed = false
+""")
+    long countActiveStudentsInBatch(
+            @Param("batchId") UUID batchId
+    );
+
+    @Query("""
+    SELECT COUNT(e)
+    FROM Enrollment e
+    WHERE e.user.id = :userId
+      AND e.courseBatch.course.id = :courseId
+      AND e.removed = false
+""")
+    long countActiveEnrollmentsForCourse(
+            @Param("userId") UUID userId,
+            @Param("courseId") UUID courseId
+    );
+
+    @Query("""
+    SELECT e
+    FROM Enrollment e
+    WHERE e.user.id = :userId
+      AND e.courseBatch.id = :batchId
+""")
+    Optional<Enrollment> findEnrollment(
+            @Param("userId") UUID userId,
+            @Param("batchId") UUID batchId
+    );
+
+    @Query("""
+        SELECT COUNT(e) > 0
+        FROM Enrollment e
+        WHERE e.user.id = :userId
+          AND e.courseBatch.id = :batchId
+          AND e.removed = false
+    """)
+    boolean existsActiveEnrollment(
+            @Param("userId") UUID userId,
+            @Param("batchId") UUID batchId
+    );
+
+
 }

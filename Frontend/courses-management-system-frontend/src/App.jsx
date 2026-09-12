@@ -32,6 +32,8 @@ import SetPassword from './features/auth/SetPassword/SetPassword';
 import AllBatches from "./features/Admin/BatchesManagement/AllBatches/AllBatches.jsx";
 import ForgotPassword from './features/auth/ForgotPassword/ForgotPassword';
 import MyCourses from "./pages/MyCourses/MyCourses";
+import AdminStudents from "./pages/AdminStudents/AdminStudents";
+import AdminStudentDetails from "./pages/AdminStudentDetails/AdminStudentDetails";
 import { useEffect } from "react";
 
 function ProtectedRoute({ isLoggedIn, children }) {
@@ -239,6 +241,23 @@ function App() {
                     <Route
                         path="/my-courses"
                         element={<MyCourses />}
+                    />
+                    <Route
+                        path="/admin/students"
+                        element={
+                            <AdminRoute>
+                                <AdminStudents />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/students/:studentId"
+                        element={
+                            <AdminRoute>
+                                <AdminStudentDetails />
+                            </AdminRoute>
+                        }
                     />
                 </Routes>
 

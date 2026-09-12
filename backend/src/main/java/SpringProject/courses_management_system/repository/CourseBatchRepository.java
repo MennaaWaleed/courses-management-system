@@ -43,4 +43,19 @@ public interface CourseBatchRepository extends JpaRepository<CourseBatch, UUID> 
     ORDER BY c.courseName ASC, b.startDate ASC
 """)
     List<CourseBatch> findAllActiveBatches();
+
+    @Query("""
+    SELECT b
+    FROM CourseBatch b
+    JOIN FETCH b.course c
+    LEFT JOIN FETCH b.instructor i
+    WHERE c.id = :courseId
+      AND b.deleted = false
+    ORDER BY b.startDate ASC
+""")
+    List<CourseBatch> findActiveBatchesByCourseId(
+            @Param("courseId") UUID courseId
+    );
+
+
 }
