@@ -1,734 +1,399 @@
 :root {
-    --admin-bg-primary: #ffffff;
-    --admin-bg-secondary: #f8fafc;
-    --admin-text-primary: #0f172a;
-    --admin-text-secondary: #64748b;
-    --admin-text-inverse: #ffffff;
-    --admin-border: #e2e8f0;
+    --catalog-bg: #f7f7f5;
+    --catalog-text-main: #111111;
+    --catalog-text-muted: #666666;
 
-    --admin-brand: #0b9f8a;
-    --admin-brand-focus: rgba(11, 159, 138, 0.08);
+    --catalog-hero-bg: linear-gradient(135deg, #0f172a 0%, #115e59 100%);
+    --catalog-hero-text: #ffffff;
+    --catalog-hero-text-muted: #cbd5e1;
 
-    --admin-success-text: #16a34a;
-    --admin-success-bg: rgba(34, 197, 94, 0.12);
-    --admin-success-border: rgba(34, 197, 94, 0.25);
-    --admin-success-bg-hover: rgba(34, 197, 94, 0.14);
-    --admin-success-border-hover: rgba(34, 197, 94, 0.4);
-    --admin-success-solid: #16a34a;
-    --admin-success-solid-hover: #15803d;
+    --catalog-card-bg: #ffffff;
+    --catalog-border: rgba(0, 0, 0, 0.08);
+    --catalog-shadow: rgba(0, 0, 0, 0.06);
 
-    --admin-danger-text: #dc2626;
-    --admin-danger-bg: rgba(239, 68, 68, 0.12);
-    --admin-danger-border: rgba(239, 68, 68, 0.25);
-    --admin-danger-bg-hover: rgba(239, 68, 68, 0.14);
-    --admin-danger-border-hover: rgba(239, 68, 68, 0.4);
-    --admin-danger-solid: #dc2626;
-    --admin-danger-solid-hover: #b91c1c;
+    --catalog-brand: #0A9F8F;
+    --catalog-brand-hover: #078F80;
+    --catalog-brand-light: rgba(10, 159, 143, 0.08);
 
-    --admin-warning-text: #b45309;
-    --admin-warning-bg: rgba(245, 158, 11, 0.1);
-    --admin-warning-border: rgba(245, 158, 11, 0.2);
-
-    --admin-overlay: rgba(15, 23, 42, 0.55);
-    --admin-modal-shadow: rgba(0, 0, 0, 0.18);
+    --catalog-skeleton-bg: linear-gradient(90deg, #f4f4f2 25%, #eaeae6 50%, #f4f4f2 75%);
 }
 
 [data-theme="dark"] {
-    --admin-bg-primary: #1f1f23;
-    --admin-bg-secondary: #18181b;
-    --admin-text-primary: #f8fafc;
-    --admin-text-secondary: #9ca3af;
-    --admin-text-inverse: #ffffff;
-    --admin-border: rgba(255, 255, 255, 0.1);
+    --catalog-bg: #18181b; /* Matches global dark background */
+    --catalog-text-main: #f8fafc;
+    --catalog-text-muted: #9ca3af;
 
-    --admin-brand: #0ca592;
-    --admin-brand-focus: rgba(12, 165, 146, 0.25);
+    /* Hero Section (Tweaked slightly for dark mode depth) */
+    --catalog-hero-bg: linear-gradient(135deg, #09090b 0%, #064e3b 100%);
+    --catalog-hero-text: #ffffff;
+    --catalog-hero-text-muted: #9ca3af;
 
-    --admin-success-text: #4ade80;
-    --admin-success-bg: rgba(74, 222, 128, 0.15);
-    --admin-success-border: rgba(74, 222, 128, 0.25);
-    --admin-success-bg-hover: rgba(74, 222, 128, 0.25);
-    --admin-success-border-hover: rgba(74, 222, 128, 0.4);
-    --admin-success-solid: #22c55e;
-    --admin-success-solid-hover: #16a34a;
+    /* Cards & Containers */
+    --catalog-card-bg: #1f1f23; /* Elevated dark card */
+    --catalog-border: rgba(255, 255, 255, 0.1);
+    --catalog-shadow: rgba(0, 0, 0, 0.3);
 
-    --admin-danger-text: #f87171;
-    --admin-danger-bg: rgba(248, 113, 113, 0.15);
-    --admin-danger-border: rgba(248, 113, 113, 0.25);
-    --admin-danger-bg-hover: rgba(248, 113, 113, 0.25);
-    --admin-danger-border-hover: rgba(248, 113, 113, 0.4);
-    --admin-danger-solid: #ef4444;
-    --admin-danger-solid-hover: #dc2626;
+    /* Brand Colors */
+    --catalog-brand: #0ca592; /* Vibrant MTC Teal */
+    --catalog-brand-hover: #098f7e;
+    --catalog-brand-light: rgba(12, 165, 146, 0.15);
 
-    --admin-warning-text: #fbbf24;
-    --admin-warning-bg: rgba(251, 191, 36, 0.15);
-    --admin-warning-border: rgba(251, 191, 36, 0.25);
-
-    --admin-overlay: rgba(0, 0, 0, 0.7);
-    --admin-modal-shadow: rgba(0, 0, 0, 0.4);
+    /* Skeleton Loader Colors (Darkened for dark mode) */
+    --catalog-skeleton-bg: linear-gradient(90deg, #2a2a2e 25%, #3f3f46 50%, #2a2a2e 75%);
 }
 
-.admin-students-page {
-    min-height: calc(100vh - 80px);
-    padding: 40px;
-    background: var(--admin-bg-secondary);
-    color: var(--admin-text-primary);
+/* =========================================
+   Base Layout
+========================================= */
+.course-catalog-page {
+    min-height: 100vh;
+    background: var(--catalog-bg);
+    color: var(--catalog-text-main);
+    font-family: inherit;
+    -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.admin-students-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 30px;
+.course-catalog-page__container {
+    width: min(1200px, calc(100% - 48px));
+    margin: 0 auto;
 }
 
-.admin-students-title-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+/* =========================================
+   Hero Section
+========================================= */
+.course-catalog-page__hero {
+    padding: 125px 0 85px;
+    background: var(--catalog-hero-bg);
+    color: var(--catalog-hero-text);
+    text-align: center;
+    transition: background 0.3s ease;
 }
 
-.admin-students-title-row > svg {
-    color: var(--admin-brand);
-}
-
-.admin-students-title-row h1 {
-    margin: 0;
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.admin-students-title-row p {
-    margin: 5px 0 0;
-    color: var(--admin-text-secondary);
-    font-size: 14px;
-}
-
-.admin-students-refresh-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    border: 1px solid var(--admin-border);
-    background: var(--admin-bg-primary);
-    color: var(--admin-text-primary);
-
-    padding: 10px 16px;
-    border-radius: 9px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-}
-
-.admin-students-refresh-btn:hover {
-    border-color: var(--admin-brand);
-    color: var(--admin-brand);
-}
-
-.admin-students-refresh-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.admin-students-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.admin-students-search {
-    width: 100%;
-    max-width: 500px;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    background: var(--admin-bg-primary);
-    border: 1px solid var(--admin-border);
-    border-radius: 10px;
-    padding: 11px 14px;
-
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-}
-
-.admin-students-search:focus-within {
-    border-color: var(--admin-brand);
-    box-shadow: 0 0 0 3px var(--admin-brand-focus);
-}
-
-.admin-students-search svg {
-    color: var(--admin-text-secondary);
-    flex-shrink: 0;
-}
-
-.admin-students-search input {
-    width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: var(--admin-text-primary);
-    font-size: 14px;
-}
-
-.admin-students-search input::placeholder {
-    color: var(--admin-text-secondary);
-}
-
-.admin-students-count {
-    color: var(--admin-text-secondary);
-    font-size: 14px;
-    white-space: nowrap;
-}
-
-.admin-students-table-container {
-    overflow-x: auto;
-    background: var(--admin-bg-primary);
-    border: 1px solid var(--admin-border);
-    border-radius: 14px;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.admin-students-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1100px;
-}
-
-.admin-students-table th {
-    text-align: left;
-    padding: 16px 18px;
-    background: var(--admin-bg-secondary);
-    border-bottom: 1px solid var(--admin-border);
-    color: var(--admin-text-secondary);
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.admin-students-table td {
-    padding: 17px 18px;
-    border-bottom: 1px solid var(--admin-border);
-    font-size: 14px;
-    vertical-align: middle;
-}
-
-.admin-students-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.admin-students-table tbody tr {
-    transition: background 0.2s ease;
-}
-
-.admin-students-table tbody tr:hover {
-    background: var(--admin-bg-secondary);
-}
-
-.student-name-cell {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.student-avatar {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-    background: var(--admin-brand);
-    color: var(--admin-text-inverse);
-    font-weight: 700;
-}
-
-.student-name-cell strong {
-    white-space: nowrap;
-}
-
-.student-contact {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--admin-text-secondary);
-}
-
-.student-contact svg {
-    flex-shrink: 0;
-}
-
-.student-status {
+.course-catalog-page__badge {
     display: inline-flex;
     align-items: center;
-    padding: 5px 10px;
+    padding: 8px 16px;
     border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.student-status.active {
-    background: var(--admin-success-bg);
-    color: var(--admin-success-text);
-}
-
-.student-status.inactive {
-    background: var(--admin-danger-bg);
-    color: var(--admin-danger-text);
-}
-
-.student-courses-count {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-weight: 600;
-}
-
-.student-courses-count svg {
-    color: var(--admin-brand);
-}
-
-.student-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-}
-
-.student-view-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-
-    padding: 8px 13px;
-    border: none;
-    border-radius: 8px;
-
-    background: var(--admin-brand);
-    color: var(--admin-text-inverse);
-
+    background: rgba(20, 184, 166, 0.2);
+    border: 1px solid rgba(45, 212, 191, 0.3);
+    color: #5eead4;
     font-size: 13px;
     font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-.student-view-btn:hover {
-    transform: translateY(-1px);
-    opacity: 0.9;
+.course-catalog-page__hero h1 {
+    margin: 0;
+    font-size: clamp(42px, 6vw, 68px);
+    line-height: 1;
+    letter-spacing: -2px;
+    font-weight: 800;
 }
 
-.student-view-btn:active {
-    transform: translateY(0);
+.course-catalog-page__hero p {
+    max-width: 650px;
+    margin: 25px auto 0;
+    color: var(--catalog-hero-text-muted);
+    font-size: 17px;
+    line-height: 1.7;
+    transition: color 0.3s ease;
 }
 
-.student-status-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-
-    padding: 8px 13px;
-    border-radius: 8px;
-
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
+/* =========================================
+   Content & Grid
+========================================= */
+.course-catalog-page__content {
+    padding: 70px 0 110px;
 }
 
-.student-status-btn.disable {
-    background: var(--admin-danger-bg);
-    color: var(--admin-danger-text);
-    border: 1px solid var(--admin-danger-border);
+.course-catalog-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
 }
 
-.student-status-btn.disable:hover {
-    background: var(--admin-danger-bg-hover);
-    border-color: var(--admin-danger-border-hover);
-    transform: translateY(-1px);
-}
-
-.student-status-btn.enable {
-    background: var(--admin-success-bg);
-    color: var(--admin-success-text);
-    border: 1px solid var(--admin-success-border);
-}
-
-.student-status-btn.enable:hover {
-    background: var(--admin-success-bg-hover);
-    border-color: var(--admin-success-border-hover);
-    transform: translateY(-1px);
-}
-
-.student-status-btn:active {
-    transform: translateY(0);
-}
-
-.admin-students-loading {
+.course-catalog-page__state {
     min-height: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    color: var(--admin-text-secondary);
-}
-
-.admin-students-spinner {
-    width: 35px;
-    height: 35px;
-    border: 3px solid var(--admin-border);
-    border-top-color: var(--admin-brand);
-    border-radius: 50%;
-    animation: studentSpinner 0.8s linear infinite;
-}
-
-@keyframes studentSpinner {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.spinning {
-    animation: studentSpinner 0.8s linear infinite;
-}
-
-.admin-students-empty {
-    min-height: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     text-align: center;
-    color: var(--admin-text-secondary);
 }
 
-.admin-students-empty svg {
-    color: var(--admin-brand);
+.course-catalog-page__state h3 {
+    margin: 0;
+    font-size: 28px;
+    color: var(--catalog-text-main);
+    transition: color 0.3s ease;
+}
+
+.course-catalog-page__state p {
+    margin-top: 12px;
+    color: var(--catalog-text-muted);
+    transition: color 0.3s ease;
+}
+
+/* =========================================
+   Skeleton Loading Cards
+========================================= */
+.course-catalog-skeleton-card {
+    position: relative;
+    height: 290px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--catalog-card-bg);
+    border: 1px solid var(--catalog-border);
+    box-shadow: 0 20px 40px var(--catalog-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-catalog-skeleton-card__content {
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+}
+
+.course-catalog-skeleton {
+    display: block;
+    background: var(--catalog-skeleton-bg);
+    background-size: 200% 100%;
+    animation: course-catalog-skeleton-loading 1.5s infinite;
+    border-radius: 8px;
+}
+
+.course-catalog-skeleton--category {
+    width: 90px;
+    height: 26px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+}
+
+.course-catalog-skeleton--title {
+    width: 75%;
+    height: 28px;
     margin-bottom: 10px;
 }
 
-.admin-students-empty h2 {
-    margin: 5px 0;
-    color: var(--admin-text-primary);
+.course-catalog-skeleton--title-short {
+    width: 48%;
 }
 
-.admin-students-empty p {
-    margin: 5px 0;
-}
-
-.admin-students-error {
-    padding: 14px 18px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    background: var(--admin-danger-bg);
-    color: var(--admin-danger-text);
-    border: 1px solid var(--admin-danger-border);
-    font-size: 14px;
-}
-
-.student-status-modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
+.course-catalog-skeleton-card__footer {
+    margin-top: 25px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: var(--admin-overlay);
-    backdrop-filter: blur(4px);
-    animation: statusModalOverlayIn 0.2s ease;
+    justify-content: space-between;
 }
 
-@keyframes statusModalOverlayIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.course-catalog-skeleton--duration {
+    width: 100px;
+    height: 18px;
 }
 
-.student-status-modal {
-    position: relative;
-    width: 100%;
-    max-width: 450px;
-    padding: 32px;
-
-    background: var(--admin-bg-primary);
-    border: 1px solid var(--admin-border);
-    border-radius: 16px;
-    box-shadow: 0 20px 50px var(--admin-modal-shadow);
-
-    text-align: center;
-    animation: statusModalIn 0.25s ease;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-@keyframes statusModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.student-status-modal-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 34px;
-    height: 34px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-
-    color: var(--admin-text-secondary);
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.student-status-modal-close:hover {
-    background: var(--admin-bg-secondary);
-    color: var(--admin-text-primary);
-}
-
-.student-status-modal-close:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.student-status-modal-icon {
-    width: 58px;
-    height: 58px;
-    margin: 0 auto 18px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.course-catalog-skeleton--button {
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
 }
 
-.student-status-modal-icon.disable {
-    background: var(--admin-danger-bg);
-    color: var(--admin-danger-text);
+@keyframes course-catalog-skeleton-loading {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
 }
 
-.student-status-modal-icon.enable {
-    background: var(--admin-success-bg);
-    color: var(--admin-success-text);
+/* =========================================
+   Category Filters
+========================================= */
+.course-catalog-page__categories {
+    width: 100%;
+    margin-bottom: 45px;
+    /* Removed flex centering on the parent to avoid the flexbox overflow bug */
 }
 
-.student-status-modal h2 {
-    margin: 0 0 10px;
-    color: var(--admin-text-primary);
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.student-status-modal > p {
-    margin: 0 auto;
-    max-width: 360px;
-    color: var(--admin-text-secondary);
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.student-status-modal > p strong {
-    color: var(--admin-text-primary);
-}
-
-.student-status-warning {
+.course-catalog-page__categories-list {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 20px;
-    padding: 12px 14px;
-    border-radius: 10px;
+    align-items: center;
+    gap: 4px;
+    padding: 5px;
+    background: var(--catalog-card-bg);
+    border: 1px solid var(--catalog-border);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px var(--catalog-shadow);
 
-    background: var(--admin-warning-bg);
-    border: 1px solid var(--admin-warning-border);
-    color: var(--admin-warning-text);
-
-    font-size: 13px;
-    line-height: 1.5;
-    text-align: left;
+    /* Native Scroll Configuration */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    position: relative;
+    max-width: 100%;
+    width: fit-content;
+    margin: 0 auto; /* Centers the block elegantly when items are few */
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.student-status-warning svg {
+.course-catalog-page__categories-list::-webkit-scrollbar {
+    display: none; /* Chrome, Edge, Safari */
+}
+
+/* Scroll Navigation Arrows (Sticky over scrolling content) */
+.course-catalog-page__filter-nav {
+    position: sticky;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    background: var(--catalog-card-bg);
+    padding: 0 10px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Let clicks pass through if invisible */
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+    align-self: stretch; /* Fills container height for perfect cover */
+}
+
+.course-catalog-page__filter-nav.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.course-catalog-page__filter-nav--left {
+    left: -5px; /* Pulls slightly over the padding to perfectly cover */
+    /* Solid matching shadow fakes a fade effect as text rolls under */
+    box-shadow: 12px 0 15px -5px var(--catalog-card-bg);
+}
+
+.course-catalog-page__filter-nav--right {
+    right: -5px;
+    box-shadow: -12px 0 15px -5px var(--catalog-card-bg);
+}
+
+.course-catalog-page__filter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--catalog-border);
+    background: var(--catalog-bg);
+    color: var(--catalog-text-main);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px var(--catalog-shadow);
     flex-shrink: 0;
-    margin-top: 1px;
 }
 
-.student-status-modal-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 25px;
+.course-catalog-page__filter-btn:hover {
+    background: var(--catalog-brand-light);
+    color: var(--catalog-brand);
+    border-color: var(--catalog-brand);
+    transform: scale(1.05);
 }
 
-.student-status-cancel-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 100px;
-
-    padding: 10px 16px;
-    border-radius: 9px;
-    border: 1px solid var(--admin-border);
-    background: var(--admin-bg-primary);
-    color: var(--admin-text-primary);
-
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
+.course-catalog-page__filter-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(10, 159, 143, 0.25);
 }
 
-.student-status-cancel-btn:hover {
-    background: var(--admin-bg-secondary);
-    border-color: var(--admin-text-secondary);
+.course-catalog-page__filter-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
-.student-status-cancel-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.student-status-confirm-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 145px;
-
-    padding: 10px 16px;
-    border-radius: 9px;
+.course-catalog-page__category {
+    position: relative;
     border: none;
-    color: var(--admin-text-inverse);
-
+    outline: none;
+    background: transparent;
+    color: var(--catalog-text-muted);
+    padding: 12px 24px;
+    min-height: 44px;
+    border-radius: 11px;
+    font-family: inherit;
     font-size: 14px;
     font-weight: 600;
+    white-space: nowrap;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    flex-shrink: 0; /* Prevents pill from squishing */
 }
 
-.student-status-confirm-btn.disable {
-    background: var(--admin-danger-solid);
+.course-catalog-page__category:hover:not(.course-catalog-page__category--active) {
+    background: var(--catalog-brand-light);
+    color: var(--catalog-brand);
 }
 
-.student-status-confirm-btn.disable:hover {
-    background: var(--admin-danger-solid-hover);
-    transform: translateY(-1px);
+.course-catalog-page__category--active {
+    background: var(--catalog-brand);
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(10, 159, 143, 0.25);
 }
 
-.student-status-confirm-btn.enable {
-    background: var(--admin-success-solid);
+.course-catalog-page__category--active:hover {
+    background: var(--catalog-brand-hover);
+    color: #ffffff;
 }
 
-.student-status-confirm-btn.enable:hover {
-    background: var(--admin-success-solid-hover);
-    transform: translateY(-1px);
+.course-catalog-page__category:focus-visible {
+    box-shadow: 0 0 0 3px rgba(10, 159, 143, 0.2);
 }
-
-.student-status-confirm-btn:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-    transform: none;
-}
-
-@media (max-width: 900px) {
-
-    .admin-students-page {
-        padding: 30px 22px;
-    }
-
-    .student-actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .student-view-btn,
-    .student-status-btn {
-        width: 100%;
+/* =========================================
+   Responsive Design
+========================================= */
+@media (max-width: 1000px) {
+    .course-catalog-page__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 768px) {
-
-    .admin-students-page {
-        padding: 25px 18px;
+    .course-catalog-page__hero {
+        padding: 105px 0 70px;
     }
-
-    .admin-students-header {
-        align-items: flex-start;
-        flex-direction: column;
+    .course-catalog-page__content {
+        padding: 55px 0 80px;
     }
-
-    .admin-students-refresh-btn {
+    .course-catalog-page__grid {
+        grid-template-columns: 1fr;
+        gap: 26px;
+    }
+    .course-catalog-page__categories {
+        margin-bottom: 35px;
+    }
+    .course-catalog-page__categories-list {
+        padding: 4px;
+        border-radius: 14px;
+        margin: 0;
         width: 100%;
-        justify-content: center;
+        /* Hardware acceleration for ultra-smooth mobile swiping */
+        -webkit-overflow-scrolling: touch;
     }
-
-    .admin-students-toolbar {
-        align-items: stretch;
-        flex-direction: column;
+    .course-catalog-page__filter-nav {
+        padding: 0 5px; /* Slimmer navigation on tablets */
     }
-
-    .admin-students-search {
-        max-width: none;
-    }
-
-    .admin-students-count {
-        align-self: flex-end;
-    }
-
-    .student-status-modal {
-        padding: 28px 22px;
+    .course-catalog-page__category {
+        padding: 11px 19px;
+        min-height: 42px;
+        font-size: 13px;
     }
 }
 
-@media (max-width: 480px) {
-
-    .admin-students-title-row h1 {
-        font-size: 25px;
+@media (max-width: 576px) {
+    .course-catalog-page__categories-list {
+        width: auto;
+        margin: 0 15px; /* Avoids flush touches to screen edges */
     }
-
-    .admin-students-title-row p {
+    .course-catalog-page__filter-nav {
+        padding: 0 2px; /* Very slim for smallest mobile */
+    }
+    .course-catalog-page__category {
+        padding: 10px 17px;
+        min-height: 40px;
         font-size: 13px;
-    }
-
-    .student-status-modal-actions {
-        flex-direction: column-reverse;
-    }
-
-    .student-status-cancel-btn,
-    .student-status-confirm-btn {
-        width: 100%;
     }
 }

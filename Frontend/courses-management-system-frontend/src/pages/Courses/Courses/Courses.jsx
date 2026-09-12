@@ -13,7 +13,6 @@ function Courses() {
     const [error, setError] = useState("");
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Category Navigation State
     const scrollContainerRef = useRef(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
@@ -25,15 +24,15 @@ function Courses() {
             try {
                 setLoading(true);
                 setError("");
-                
+
                 const [coursesResponse, categoriesResponse] = await Promise.all([
                     getCourses(),
                     getPublishedCategories()
                 ]);
-                
+
                 setCourses(coursesResponse.data);
                 setCategories(categoriesResponse.data);
-                
+
             } catch (error) {
                 console.error("Failed to fetch data:", error);
                 setError("Failed to load courses.");
@@ -45,7 +44,6 @@ function Courses() {
         fetchData();
     }, []);
 
-    // Category Scroll Logic
     const checkScroll = () => {
         if (scrollContainerRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
@@ -56,12 +54,10 @@ function Courses() {
     };
 
     useEffect(() => {
-        // Run check on mount, after categories load, and on window resize
         checkScroll();
-        // A slight timeout guarantees the DOM is fully painted with the new categories
-        const timeout = setTimeout(checkScroll, 100); 
+        const timeout = setTimeout(checkScroll, 100);
         window.addEventListener("resize", checkScroll);
-        
+
         return () => {
             clearTimeout(timeout);
             window.removeEventListener("resize", checkScroll);
@@ -107,11 +103,11 @@ function Courses() {
 
             <section className="course-catalog-page__content">
                 <div className="course-catalog-page__container">
-                    
+
                     {!loading && !error && (
                         <div className="course-catalog-page__categories">
-                            <div 
-                                className="course-catalog-page__categories-list" 
+                            <div
+                                className="course-catalog-page__categories-list"
                                 ref={scrollContainerRef}
                                 onScroll={checkScroll}
                             >
@@ -147,7 +143,6 @@ function Courses() {
                                     </button>
                                 ))}
 
-                                {/* Right Scroll Arrow */}
                                 <div className={`course-catalog-page__filter-nav course-catalog-page__filter-nav--right ${canScrollRight ? 'is-visible' : ''}`}>
                                     <button type="button" className="course-catalog-page__filter-btn" onClick={() => scrollCategories('right')} aria-label="Scroll right">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
